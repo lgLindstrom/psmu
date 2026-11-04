@@ -1,0 +1,12 @@
+{
+  "$schema": "https://opencode.ai/config.json",
+  "mcp": {
+    "servers": {
+      "esp-idf": {
+        "type": "local",
+        "command": ["bash", ".opencode/esp-idf-mcp.sh"],
+        "cwd": "."
+      }
+    }
+  }
+}

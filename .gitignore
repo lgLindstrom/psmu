@@ -1,0 +1,6 @@
+# CodeGraph index + daemon state (local to each machine)
+.codegraph/
+
+# Python cache from the Matter text extraction
+__pycache__/
+*.pyc
