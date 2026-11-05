@@ -10,6 +10,12 @@
 > [`decisions.md`](../project/decisions.md),
 > [`glossary.md`](../reference/glossary.md)
 
+> **Äger:** driftlägen, övergångar, knapp, lysdioder, `Power-up`, mätning och
+> lokal styrning.
+> **Läs vid behov:** [`architecture.md`](architecture.md) för datamodell och
+> Matter, samt [`../project/decisions.md`](../project/decisions.md) för okända
+> värden.
+
 ## 1. Syfte
 
 Det här dokumentet specificerar PSMU:s mjukvarubeteende: `Operation Mode`,

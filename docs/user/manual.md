@@ -5,6 +5,13 @@
 > Status: Utkast. Avsnitt markerade med `[...]` behöver fyllas i när produktens
 > funktioner och beteende är fastställda. Öppna frågor och varifrån de kommer
 > samlas i [`decisions.md`](../project/decisions.md).
+>
+> **Äger:** användarens väg genom produkten – komma igång, användning,
+> felsökning och tekniska data.
+> **Läs vid behov:**
+> [`specification/specification.md`](../specification/specification.md) för exakt
+> beteende och [`project/decisions.md`](../project/decisions.md) för värden som
+> ännu är `[...]`.
 
 ## 1. Om denna handbok
 

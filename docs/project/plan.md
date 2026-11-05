@@ -9,6 +9,10 @@
 > Relaterade: [`requirements.md`](requirements.md),
 > [`decisions.md`](decisions.md)
 
+> **Äger:** mål, omfattning, roller, milstolpar, risker och release.
+> **Läs vid behov:** [`requirements.md`](requirements.md) för kraven och
+> [`decisions.md`](decisions.md) för öppna frågor.
+
 ## 1. Syfte
 
 Det här dokumentet beskriver projektet som tar fram PSMU: mål, omfattning,

@@ -9,6 +9,11 @@
 > Relaterade: [`plan.md`](plan.md), [`decisions.md`](decisions.md),
 > [`specification.md`](../specification/specification.md)
 
+> **Äger:** krav med ID, acceptanskriterier och spårbarhet.
+> **Läs vid behov:**
+> [`specification/specification.md`](../specification/specification.md) för
+> beteendet bakom kraven och [`decisions.md`](decisions.md) för öppna frågor.
+
 ## 1. Syfte
 
 Det här dokumentet samlar produkt- och systemkrav med ID, acceptanskriterier och

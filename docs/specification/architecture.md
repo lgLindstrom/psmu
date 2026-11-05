@@ -10,6 +10,12 @@
 > [`decisions.md`](../project/decisions.md),
 > [`glossary.md`](../reference/glossary.md)
 
+> **Äger:** systemöversikt, komponenter, datamodell, Matter-integration och
+> byggmiljö.
+> **Läs vid behov:** [`specification.md`](specification.md) för beteende och
+> [`../reference/external/matter-1.6.1/INDEX.md`](../reference/external/matter-1.6.1/INDEX.md)
+> för Matter-utdragen (sök där, läs inte hela textfilerna).
+
 ## 1. Syfte
 
 Det här dokumentet beskriver mjukvarans övergripande uppbyggnad: komponenter,

@@ -13,6 +13,12 @@ Det här dokumentet listar kända luckor i dokumentationen och vad som behöver 
 fram. Det är en arbetslista – inte fastställda krav. Beslut och öppna frågor
 hanteras i [`project/decisions.md`](project/decisions.md).
 
+> **Äger:** kända luckor och nästa steg (arbetslista, inte fastställda krav).
+> **Läs vid behov:** [`project/decisions.md`](project/decisions.md) för besluten
+> bakom luckorna och
+> [`specification/architecture.md`](specification/architecture.md) för var de ska
+> fyllas i.
+
 ## Prioriterade luckor
 
 | ID | Prio | Område | Vad som saknas | Dokument |

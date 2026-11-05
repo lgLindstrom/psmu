@@ -12,6 +12,10 @@ I text och mjukvara används de beskrivande namnen **`Operation Mode LED`** och
 **`Output State LED`**. Godkända förkortningar när det passar: **`Mode LED`** och
 **`Output LED`**.
 
+> **Äger:** terminologi och godkända begrepp.
+> **Läs vid behov:** [`../project/decisions.md`](../project/decisions.md) för
+> terminologifrågor. Sök i tabellerna i stället för att läsa hela filen.
+
 ## Driftlägen (Operation Modes)
 
 | Term (EN) | Svenska | Definition | Status |

@@ -10,6 +10,9 @@
 
 Det här dokumentet beskriver hur vi arbetar med branches och commits.
 
+> **Äger:** branching, branchnamn, Conventional Commits och pull requests.
+> **Läs vid behov:** – detta dokument är självständigt.
+
 ## Branching
 
 Vi använder en enkel **GitHub Flow**-modell:

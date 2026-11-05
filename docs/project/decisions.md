@@ -12,6 +12,10 @@ ett beslut fattats, och berörda dokument uppdateras.
   [`architecture.md`](../specification/architecture.md),
   [`specification.md`](../specification/specification.md)
 
+> **Äger:** beslut och öppna frågor med källa (`K1`–`K6`).
+> **Läs vid behov:** det dokument frågan gäller – sök på ID eller ämne i stället
+> för att läsa hela filen.
+
 ## Statusar
 
 | Status | Betydelse |
