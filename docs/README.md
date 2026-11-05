@@ -18,6 +18,25 @@ engelska.
 | Reference | [`reference/glossary.md`](reference/glossary.md) | Terminologi och godkända begrepp. | Utkast |
 | Reference | [`reference/external/matter-1.6.1/`](reference/external/matter-1.6.1/) | Matter 1.6.1-utdrag (read-only). | – |
 
+## Ämneskarta
+
+Sök på nyckelordet i stället för att läsa alla dokument. Varje dokument inleds
+med en **Äger** / **Läs vid behov**-rad som räcker för att avgöra om filen
+behövs.
+
+| Fråga eller sökord | Läs |
+|---|---|
+| Driftläge, övergång, knapp, lysdiod, `Power-up`, mätning, lokal styrning | [`specification/specification.md`](specification/specification.md) §2–8 |
+| Komponent, datamodell, Matter, Home Assistant, provisionering, byggmiljö, säkerhet | [`specification/architecture.md`](specification/architecture.md) §3–8 |
+| Krav, acceptanskriterium, spårbarhet, teststrategi | [`project/requirements.md`](project/requirements.md) |
+| Mål, omfattning, roll, milstolpe, risk, release | [`project/plan.md`](project/plan.md) |
+| Beslut, öppen fråga, källa `K1`–`K6` | [`project/decisions.md`](project/decisions.md) |
+| Term, benämning, `Operation Mode LED`, `Output State LED` | [`reference/glossary.md`](reference/glossary.md) |
+| Lucka, nästa steg, `GAP-01`–`GAP-06` | [`gaps.md`](gaps.md) |
+| Komma igång, användning, felsökning, teknisk data | [`user/manual.md`](user/manual.md) |
+| Attribut-ID, kluster, device type, cluster revision | [`reference/external/matter-1.6.1/INDEX.md`](reference/external/matter-1.6.1/INDEX.md), därefter `grep` i `text/*.txt` |
+| Branch, commit, pull request | [`workflow.md`](workflow.md) |
+
 ## Arbetssätt
 
 - Branching och commit-format finns i [`workflow.md`](workflow.md).

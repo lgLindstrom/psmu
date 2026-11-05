@@ -25,6 +25,35 @@ build, or test suite here.
   not edit the PDFs, `text/`, or `extract_text.py`; search `text/*.txt` with grep
   rather than reading whole files (they are large).
 
+## Reading budget
+
+Load only what the task needs. The internal docs total ~50 kB; the Matter text
+extracts total ~5 MB (≈1.3 M tokens). Reading the wrong file costs orders of
+magnitude more than reading too few.
+
+| Task | Always read | Read on demand | Do not read |
+| --- | --- | --- | --- |
+| Manual text | `docs/user/manual.md`, `docs/reference/glossary.md` | `specification/specification.md` (behaviour), `project/decisions.md` (unknown values) | Matter extracts, `plan.md`, `requirements.md`, `gaps.md` |
+| Behaviour / specification | `docs/specification/specification.md` | `architecture.md`, `project/decisions.md` | `user/manual.md`, Matter extracts |
+| Architecture / Matter | `docs/specification/architecture.md`, `docs/reference/external/matter-1.6.1/INDEX.md` | targeted `grep` in `text/*.txt` | whole `text/*.txt`, `user/manual.md` |
+| Requirements / plan | `project/requirements.md` or `project/plan.md` | `project/decisions.md` | Matter extracts, `user/manual.md` |
+| Terminology | only the matching `grep` hits in `reference/glossary.md` | – | `reference/glossary.md` in full |
+| Branch / commit | `docs/workflow.md` | – | everything else |
+
+Rules:
+
+- Never read `docs/reference/external/matter-1.6.1/text/*.txt` in full. Start at
+  `INDEX.md`, then `grep -n` with `-A`/`-B` context and `read` only those line
+  ranges (`offset`/`limit`).
+- Read sections, not files: `grep -n '^##' file.md` first, then `read` with
+  `offset`/`limit`.
+- Grep `project/decisions.md` and `reference/glossary.md` for the specific ID or
+  term instead of loading the whole file.
+- Do not read `plan.md`, `requirements.md` or `gaps.md` unless the task is
+  explicitly about project management.
+- Every document starts with an **Äger** / **Läs vid behov** line. The first
+  paragraph is enough to decide whether the file is needed for the task.
+
 ## Writing conventions
 
 - Write documentation in **Swedish**. Keep filenames, folder names, protocol and
