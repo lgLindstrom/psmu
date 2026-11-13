@@ -28,17 +28,33 @@ alltid har samma version som kompilatorn.
 | ESP-Matter | `$ESP_MATTER_PATH/docs/en/**/*.rst` | Matter-kluster, device types, provisioning |
 | ESP-Matter, HTML | `https://docs.espressif.com/projects/esp-matter/en/latest/` | Översikt; avsnittet *Getting the Repositories* |
 
-Maskinen har i dag `~/esp/esp-idf-v4.3` och `~/esp/esp-idf-v5.5`. **v6.1 saknas**
-och måste installeras innan firmware kan byggas:
+ESP-IDF 6.1 är installerad med **ESP-IDF Installation Manager (EIM)**, inte som
+git-klon i hemkatalogen:
 
-```sh
-cd ~/esp
-git clone -b v6.1 --depth 1 --recursive https://github.com/espressif/esp-idf.git esp-idf-v6.1
-cd esp-idf-v6.1 && ./install.sh
+```text
+$IDF_PATH              /home/lasse/.espressif/v6.1/esp-idf          (734 MB)
+$IDF_PYTHON_ENV_PATH   /home/lasse/.espressif/tools/python/v6.1/venv
+dokumentation          $IDF_PATH/docs/en                            (6,9 MB reST)
+aktivering             ~/.espressif/tools/activate_idf_v6.1.sh
 ```
 
+Samma maskin har även `~/esp/esp-idf-v4.3` och `~/esp/esp-idf-v5.5` från äldre
+installationer. De används inte av PSMU.
+
 `esp-idf`-MCP-servern (`.opencode/esp-idf-mcp.sh`) väljer automatiskt den högsta
-`~/esp/esp-idf-v*`-katalogen, så v6.1 tas i bruk utan konfigurationsändring.
+versionen av båda layouterna (`~/esp/esp-idf-v*` och `~/.espressif/v*/esp-idf`)
+och härleder versionen ur `tools/cmake/version.cmake`, eftersom EIM-installationen
+saknar `version.txt`. Verifierat: launchern rapporterar `ESP-IDF v6.1`.
+
+Aktiveringsskriptet `activate_idf_v6.1.sh` skriver till stdout och får därför
+**inte** sourcas av en MCP-server — MCP-protokollet går över stdout och skulle
+brytas. Launchern sätter i stället `IDF_PATH`, `IDF_PYTHON_ENV_PATH`,
+`ESP_IDF_VERSION` och `PATH` själv.
+
+**ESP-Matter är ännu inte hämtat** på maskinen: `$ESP_MATTER_PATH` är inte satt
+och ingen `esp-matter`-checkout finns. Grenen `release/v1.6.1` hämtas enligt
+avsnittet *Getting the Repositories* i ESP-Matters Programming Guide när
+firmware-arbetet börjar.
 
 ## Var i dokumentationen PSMU behöver leta
 
@@ -71,8 +87,8 @@ rg -n "^LED Control" "$IDF_PATH/docs/en/api-reference/peripherals"
 rg -n "CONFIG_ESP_TASK_WDT" "$IDF_PATH/docs/en/api-reference"
 ```
 
-Samma regel som för Matter: **läs aldrig ett helt träd**. `docs/en` är 6,0 MB
-reST och hela `$IDF_PATH` är 3,6 GB — inkludera aldrig den sökvägen i ett
+Samma regel som för Matter: **läs aldrig ett helt träd**. `docs/en` är 6,9 MB
+reST och hela `$IDF_PATH` är 734 MB — inkludera aldrig den sökvägen i ett
 codegraph-index eller i en läsning utan `rg` och radintervall.
 
 Rubriken är inte normativ i sig: kontrollera signaturer i

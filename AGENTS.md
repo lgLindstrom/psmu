@@ -39,7 +39,7 @@ orders of magnitude more than reading too few.
 | Manual text | `docs/user/manual.md` | `specification/specification.md` (behaviour), `project/decisions.md` (unknown values), `grep` on the term in `reference/glossary.md` | Matter extracts, `plan.md`, `requirements.md`, `gaps.md` |
 | Behaviour / specification | `docs/specification/specification.md` | `architecture.md`, `project/decisions.md` | `user/manual.md`, Matter extracts |
 | Architecture / Matter | `docs/specification/architecture.md`, `docs/reference/external/matter-1.6.1/INDEX.md` | targeted `grep` in `text/*.txt` | whole `text/*.txt`, PDFs, `*.tar`, `user/manual.md` |
-| ESP-IDF / ESP-Matter API | `docs/reference/external/esp-idf/INDEX.md` | targeted `grep` in `$IDF_PATH/docs/en/` or `$ESP_MATTER_PATH/docs/en/` | whole doc trees, `$IDF_PATH` in a codegraph index (3.6 GB) |
+| ESP-IDF / ESP-Matter API | `docs/reference/external/esp-idf/INDEX.md` | targeted `grep` in `$IDF_PATH/docs/en/` or `$ESP_MATTER_PATH/docs/en/` | whole doc trees, `$IDF_PATH` in a codegraph index (734 MB) |
 | Requirements / plan | `project/requirements.md` or `project/plan.md` | `project/decisions.md` | Matter extracts, `user/manual.md` |
 | Decision / open question | `project/decisions.md` (grep on the ID or topic) | the document the question concerns | everything else |
 | Gap / next step | `gaps.md` | `project/decisions.md`, `specification/architecture.md` (where the gap gets filled in) | `user/manual.md`, Matter extracts |
