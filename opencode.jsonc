@@ -8,5 +8,12 @@
         "cwd": "."
       }
     }
-  }
+  },
+  "plugins": [
+    "@dietrichgebert/ponytail"
+  ],
+  "skills": [
+    "~/tools/awesome-esp-ai/skills",
+    "~/tools/trailofbits-skills/plugins/modern-cpp/skills"
+  ]
 }
