@@ -27,32 +27,42 @@ build, or test suite here.
 
 ## Reading budget
 
-Load only what the task needs. The internal docs total ~50 kB; the Matter text
-extracts total ~5 MB (≈1.3 M tokens). Reading the wrong file costs orders of
-magnitude more than reading too few.
+Load only what the task needs. The internal docs total ~55 kB; the Matter text
+extracts total ~5 MB (≈1.3 M tokens); the PDFs (33 MB) and `matter-1.6.1.tar`
+(38 MB) are binary and are never worth reading. Reading the wrong file costs
+orders of magnitude more than reading too few.
 
 | Task | Always read | Read on demand | Do not read |
 | --- | --- | --- | --- |
-| Manual text | `docs/user/manual.md`, `docs/reference/glossary.md` | `specification/specification.md` (behaviour), `project/decisions.md` (unknown values) | Matter extracts, `plan.md`, `requirements.md`, `gaps.md` |
+| Manual text | `docs/user/manual.md` | `specification/specification.md` (behaviour), `project/decisions.md` (unknown values), `grep` on the term in `reference/glossary.md` | Matter extracts, `plan.md`, `requirements.md`, `gaps.md` |
 | Behaviour / specification | `docs/specification/specification.md` | `architecture.md`, `project/decisions.md` | `user/manual.md`, Matter extracts |
-| Architecture / Matter | `docs/specification/architecture.md`, `docs/reference/external/matter-1.6.1/INDEX.md` | targeted `grep` in `text/*.txt` | whole `text/*.txt`, `user/manual.md` |
+| Architecture / Matter | `docs/specification/architecture.md`, `docs/reference/external/matter-1.6.1/INDEX.md` | targeted `grep` in `text/*.txt` | whole `text/*.txt`, PDFs, `*.tar`, `user/manual.md` |
 | Requirements / plan | `project/requirements.md` or `project/plan.md` | `project/decisions.md` | Matter extracts, `user/manual.md` |
+| Decision / open question | `project/decisions.md` (grep on the ID or topic) | the document the question concerns | everything else |
+| Gap / next step | `gaps.md` | `project/decisions.md`, `specification/architecture.md` (where the gap gets filled in) | `user/manual.md`, Matter extracts |
+| Index / structure | `docs/README.md` | – | everything else |
 | Terminology | only the matching `grep` hits in `reference/glossary.md` | – | `reference/glossary.md` in full |
 | Branch / commit | `docs/workflow.md` | – | everything else |
+| Unfamiliar task | `docs/README.md` §Ämneskarta, then the document it points to | – | Matter extracts, PDFs, `*.tar` |
 
 Rules:
 
 - Never read `docs/reference/external/matter-1.6.1/text/*.txt` in full. Start at
   `INDEX.md`, then `grep -n` with `-A`/`-B` context and `read` only those line
   ranges (`offset`/`limit`).
+- Never read the Matter PDFs or `matter-1.6.1.tar`; the text extracts exist and
+  the binaries are not readable anyway.
 - Read sections, not files: `grep -n '^##' file.md` first, then `read` with
   `offset`/`limit`.
 - Grep `project/decisions.md` and `reference/glossary.md` for the specific ID or
   term instead of loading the whole file.
 - Do not read `plan.md`, `requirements.md` or `gaps.md` unless the task is
-  explicitly about project management.
-- Every document starts with an **Äger** / **Läs vid behov** line. The first
-  paragraph is enough to decide whether the file is needed for the task.
+  explicitly about project management, requirements or gaps.
+- Every document except `docs/README.md` and `matter-1.6.1/INDEX.md` has an
+  **Äger** / **Läs vid behov** block (around lines 9–17). That block is enough to
+  decide whether the file is needed.
+- `docs/README.md` §Ämneskarta is the human view (keyword → document); where it
+  disagrees with the table above, the table above wins.
 
 ## Writing conventions
 
