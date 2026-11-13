@@ -26,6 +26,9 @@ build, or test suite here.
   rather than reading whole files (they are large).
 - `docs/reference/external/esp-idf/INDEX.md` – where the installed ESP-IDF 6.1
   and ESP-Matter documentation lives. It is never copied into this repository.
+  Builds and flashing go through the `esp-idf` MCP, which activates the EIM
+  installation that `eim select` points at; do not source `activate_idf_v*.sh`
+  or wrap commands in `eim run` (both print to stdout).
 
 ## Reading budget
 

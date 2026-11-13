@@ -41,15 +41,36 @@ aktivering             ~/.espressif/tools/activate_idf_v6.1.sh
 Samma maskin har även `~/esp/esp-idf-v4.3` och `~/esp/esp-idf-v5.5` från äldre
 installationer. De används inte av PSMU.
 
-`esp-idf`-MCP-servern (`.opencode/esp-idf-mcp.sh`) väljer automatiskt den högsta
-versionen av båda layouterna (`~/esp/esp-idf-v*` och `~/.espressif/v*/esp-idf`)
-och härleder versionen ur `tools/cmake/version.cmake`, eftersom EIM-installationen
-saknar `version.txt`. Verifierat: launchern rapporterar `ESP-IDF v6.1`.
+## Aktivera miljön
 
-Aktiveringsskriptet `activate_idf_v6.1.sh` skriver till stdout och får därför
-**inte** sourcas av en MCP-server — MCP-protokollet går över stdout och skulle
-brytas. Launchern sätter i stället `IDF_PATH`, `IDF_PYTHON_ENV_PATH`,
-`ESP_IDF_VERSION` och `PATH` själv.
+| Behov | Kommando |
+|---|---|
+| Interaktivt skal | `eim shell v6.1` |
+| Ett enskilt kommando | `eim run 'idf.py build' v6.1` |
+| Se installerade versioner och vald version | `eim list` |
+| Byta vald version | `eim select v6.1` |
+
+`eim` registrerar varje installation i `~/.espressif/tools/eim_idf.json` och
+genererar ett aktiveringsskript per version. Skriptet har ett tyst läge,
+`bash ~/.espressif/tools/activate_idf_v6.1.sh -e`, som bara skriver
+`NYCKEL=VÄRDE`-rader — det är den formen MCP-launchern använder.
+
+`esp-idf`-MCP-servern (`.opencode/esp-idf-mcp.sh`) gör alltså detta automatiskt
+vid start:
+
+1. läser `eim_idf.json` och tar den installation som `eim select` pekar ut
+   (`idfSelectedId`), annars den högsta versionen; `EIM_IDF_VERSION` överrider,
+2. kör aktiveringsskriptets `-e` och exporterar alla variabler, inklusive
+   `OPENOCD_SCRIPTS`, `ESP_ROM_ELF_DIR` och esp-clang-sökvägarna,
+3. faller tillbaka på `~/esp/esp-idf-v*` (högsta versionen) om EIM saknas.
+
+Verifierat: launchern rapporterar `ESP-IDF v6.1`, och med `eim_idf.json` borta
+faller den tillbaka på `ESP-IDF v5.5`.
+
+**Två saker som inte får göras:** sourca `activate_idf_v6.1.sh` utan `-e`, och
+köra MCP-servern genom `eim run`/`eim shell`. Alla tre skriver en banner till
+stdout — MCP-protokollet går över stdout och skulle brytas. `eim run` är av samma
+skäl olämpligt som generell omslutning av agentkommandon.
 
 **ESP-Matter är ännu inte hämtat** på maskinen: `$ESP_MATTER_PATH` är inte satt
 och ingen `esp-matter`-checkout finns. Grenen `release/v1.6.1` hämtas enligt

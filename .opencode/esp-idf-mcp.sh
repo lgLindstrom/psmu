@@ -7,8 +7,60 @@ if [ -n "${ESP_IDF_MCP_CMD:-}" ]; then
   exec bash -lc "${ESP_IDF_MCP_CMD}"
 fi
 
-# Print the version of one ESP-IDF installation: version.cmake first, then
-# version.txt, then the directory name.
+# --- 1. EIM installations -----------------------------------------------------
+# `eim` writes ~/.espressif/tools/eim_idf.json with every install and the id that
+# `eim select` marked. Each install also has a generated activation script; its
+# `-e` mode prints KEY=VALUE and nothing else, which is what we need here:
+# `eim shell` is interactive and both it and `eim run` print a banner to stdout,
+# and a banner on stdout would corrupt the MCP JSON-RPC stream.
+eim_json="${EIM_IDF_JSON:-$HOME/.espressif/tools/eim_idf.json}"
+eim_activation=""
+if [ -f "$eim_json" ] && command -v python3 >/dev/null 2>&1; then
+  read -r eim_activation _ignored < <(
+    python3 - "$eim_json" "${EIM_IDF_VERSION:-}" 2>/dev/null <<'PY' || true
+import json, sys
+
+path, want = sys.argv[1], sys.argv[2]
+with open(path, encoding="utf-8") as fh:
+    data = json.load(fh)
+items = [i for i in data.get("idfInstalled", []) if i.get("status") == "finished"]
+
+
+def version(item):
+    parts = item.get("name", "").lstrip("v").split("-")[0].split(".")
+    return tuple(int(p) for p in parts if p.isdigit())
+
+
+if want:
+    items = [i for i in items if i.get("name") in (want, "v" + want)]
+else:
+    selected = [i for i in items if i.get("id") == data.get("idfSelectedId")]
+    items = selected or sorted(items, key=version)
+
+if items:
+    print(items[-1].get("activationScript", "-"), items[-1].get("path", "-"))
+PY
+  ) || true
+fi
+
+if [ -n "$eim_activation" ] && [ "$eim_activation" != "-" ] && [ -f "$eim_activation" ]; then
+  _tools_path=""
+  while IFS='=' read -r key value; do
+    case "$key" in
+      '' | SYSTEM_PATH) continue ;;
+      PATH) _tools_path="$value" ;;
+      *[!A-Za-z0-9_]*) continue ;;
+      *) export "$key=$value" ;;
+    esac
+  done < <(bash "$eim_activation" -e 2>/dev/null || true)
+  # The activation script prepends to PATH instead of replacing it, so do the same.
+  if [ -n "$_tools_path" ]; then
+    export PATH="$_tools_path:$PATH"
+  fi
+fi
+
+# --- 2. Git-clone installations ----------------------------------------------
+# Used only when EIM did not provide IDF_PATH: ~/esp/esp-idf-v<ver>, highest wins.
 idf_version_of() {
   _p="$1"
   _v=""
@@ -23,71 +75,41 @@ idf_version_of() {
     _v="$(sed -n '1s/^v\{0,1\}\([0-9][0-9.]*\).*/\1/p' "$_p/version.txt")"
   fi
   if [ -z "$_v" ]; then
-    _v="$(basename "$(dirname "$_p")" | sed -n 's/^v\{0,1\}\([0-9][0-9.]*\)$/\1/p')"
-  fi
-  if [ -z "$_v" ]; then
     _v="$(basename "$_p" | sed -n 's/^esp-idf-v\{0,1\}\([0-9][0-9.]*\)$/\1/p')"
   fi
   printf '%s\n' "$_v"
 }
 
-# Print "version path" for every installation found.
-idf_candidates() {
-  { ls -1d "$HOME"/esp/esp-idf-v* 2>/dev/null || true
-    ls -1d "$HOME"/.espressif/v*/esp-idf 2>/dev/null || true
-  } | while read -r p; do
-    v="$(idf_version_of "$p")"
-    [ -n "$v" ] || continue
-    printf '%s %s\n' "$v" "$p"
-  done
-}
-
-idf_ver=""
 if [ -z "${IDF_PATH:-}" ]; then
-  latest_idf="$(idf_candidates | sort -V -k1,1 | tail -n 1)"
+  latest_idf="$(
+    for candidate in "$HOME"/esp/esp-idf-v*; do
+      [ -d "$candidate" ] || continue
+      version="$(idf_version_of "$candidate")"
+      [ -n "$version" ] || continue
+      printf '%s %s\n' "$version" "$candidate"
+    done | sort -V -k1,1 | tail -n 1 | cut -d' ' -f2- || true
+  )"
   if [ -n "$latest_idf" ]; then
-    export IDF_PATH="${latest_idf#* }"
+    export IDF_PATH="$latest_idf"
   fi
 fi
 
-# Auto-detect Espressif tools dir
 if [ -z "${IDF_TOOLS_PATH:-}" ] && [ -d "$HOME/.espressif" ]; then
   export IDF_TOOLS_PATH="$HOME/.espressif"
 fi
 
-# Version of the selected installation, used for the venv, the shims and the
-# ESP_IDF_VERSION variable that idf_component_manager expects.
-if [ -n "${IDF_PATH:-}" ]; then
+# Python env for a git-clone install: classic installer layout.
+if [ -z "${IDF_PYTHON_ENV_PATH:-}" ] && [ -n "${IDF_PATH:-}" ]; then
   idf_ver="$(idf_version_of "$IDF_PATH")"
-fi
-
-# Auto-detect matching python env for the selected IDF version. EIM keeps its
-# venv under $IDF_TOOLS_PATH/python/v<ver>/venv, the classic installer under
-# $HOME/.espressif/python_env/idf<ver>_*_env.
-if [ -z "${IDF_PYTHON_ENV_PATH:-}" ] && [ -n "$idf_ver" ]; then
-  for cand in \
-    "$IDF_TOOLS_PATH/python/v$idf_ver/venv" \
-    "$HOME/.espressif/tools/python/v$idf_ver/venv" \
-    "$HOME/.espressif/python_env/idf${idf_ver}_"*_env; do
-    if [ -d "$cand" ]; then
-      export IDF_PYTHON_ENV_PATH="$cand"
-      break
-    fi
-  done
-fi
-
-if [ -n "$idf_ver" ]; then
-  export ESP_IDF_VERSION="${ESP_IDF_VERSION:-$idf_ver}"
-  export IDF_VERSION="${IDF_VERSION:-$idf_ver}"
-fi
-
-# idf.py needs the venv and the version's shims on PATH. export.sh normally does
-# this, but it also prints to stdout, which would corrupt the MCP stdio protocol.
-if [ -n "${IDF_PYTHON_ENV_PATH:-}" ]; then
-  export PATH="$IDF_PYTHON_ENV_PATH/bin:$PATH"
-fi
-if [ -n "$idf_ver" ] && [ -d "$IDF_TOOLS_PATH/shims/v$idf_ver" ]; then
-  export PATH="$IDF_TOOLS_PATH/shims/v$idf_ver:$PATH"
+  if [ -n "$idf_ver" ]; then
+    for candidate in "$HOME/.espressif/python_env/idf${idf_ver}_"*_env; do
+      if [ -d "$candidate" ]; then
+        export IDF_PYTHON_ENV_PATH="$candidate"
+        export ESP_IDF_VERSION="${ESP_IDF_VERSION:-$idf_ver}"
+        break
+      fi
+    done
+  fi
 fi
 
 if command -v uvx >/dev/null 2>&1; then
