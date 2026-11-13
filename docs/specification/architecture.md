@@ -5,7 +5,7 @@
 > Status: Utkast
 > Version: 0.1
 > Ansvarig: [ ]
-> Senast uppdaterad: 2026-11-04
+> Senast uppdaterad: 2026-11-13
 > Relaterade: [`specification.md`](specification.md),
 > [`decisions.md`](../project/decisions.md),
 > [`glossary.md`](../reference/glossary.md)
@@ -99,10 +99,67 @@ var värdet skapas och `Storage` var det lagras.
   Assistant.
 - `Operation Mode` och övergångar specificeras i
   [`specification.md`](specification.md).
-- Mätning sker endast i `OPERATIONAL`; vilka kluster och attribut som exponeras
-  är inte fastställt (`TBD-10`, `TBD-11`).
+- Mätning sker endast i `OPERATIONAL`. Vilka mätvärden som exponeras är delvis
+  fastställt (`TBD-10`, `TBD-11`).
 - `Pairing Timeout`, `Commissioning Timeout`, `Reconnect` och hantering av flera
   `Fabric` är öppna frågor (`TBD-01`, `TBD-02`, `TBD-06`, `TBD-07`, `TBD-09`).
+
+### 5.1 Enhetstyper
+
+PSMU exponeras som två enhetstyper på samma endpoint (`TBD-C9`):
+
+| Enhetstyp | ID | Klass | Roll |
+|---|---|---|---|
+| **On/Off Plug-in Unit** | `0x010A` | Simple | Växlar `Output`. |
+| **Electrical Sensor** | `0x0510` | Utility | Mäter den anslutna `Load`. |
+
+Core §9.2 tillåter flera enhetstyper i `DeviceTypeList` på samma endpoint. Ett
+kluster som är gemensamt för flera enhetstyper på endpointen ska finnas som en
+delad instans.
+
+Om PSMU i stället utförs som en fast monterad enhet gäller Matter 1.4+ kravet
+att använda **Mounted On/Off Control** (`0x010F`), med On/Off Plug-in Unit som
+valfri extra post i `DeviceTypeList`. Monteringssättet är inte fastställt
+(`TBD-23`).
+
+### 5.2 Kluster
+
+| Kluster | ID | Krävs av | Conformance | Användning |
+|---|---|---|---|---|
+| Identify | `0x0003` | On/Off Plug-in Unit | M | Identifiering vid `Commissioning`. |
+| Groups | `0x0004` | On/Off Plug-in Unit | M | Gruppstyrning. |
+| On/Off | `0x0006` | On/Off Plug-in Unit | M | `OnOff` speglar `Output State`. |
+| Level Control | `0x0008` | On/Off Plug-in Unit | O | Rekommenderad för gruppstyrning; får inte påverka `Output` utöver av/på. |
+| Scenes Management | `0x0062` | On/Off Plug-in Unit | M | Scener i Home Assistant. |
+| Occupancy Sensing | `0x0406` | On/Off Plug-in Unit | O (client) | Används inte av PSMU. |
+| Electrical Power Measurement | `0x0090` | Electrical Sensor | O.a+ | Momentana mätvärden. |
+| Electrical Energy Measurement | `0x0091` | Electrical Sensor | O.a+ | Energimätning. |
+| Power Topology | `0x009C` | Electrical Sensor | M | Anger vilka endpoints mätningen avser (Core §11.8). |
+
+Electrical Sensor kräver minst ett av Electrical Power Measurement och
+Electrical Energy Measurement (`O.a+`); PSMU använder båda.
+
+### 5.3 Mappning
+
+Tabellen är ett förslag. Vilka mätvärden som faktiskt exponeras avgörs i
+`TBD-10`. Att `phase_delay` rapporteras som `PowerFactor` är beslutat
+(`TBD-C10`), men enhet och skalning är öppna (`TBD-22`).
+
+| Datamodell | Matter-attribut | Enhet i Matter |
+|---|---|---|
+| `ac_switch` | `OnOff` (On/Off) | bool |
+| `vac` | `Voltage` eller `RMSVoltage` (Electrical Power Measurement) | mV |
+| `iac` | `ActiveCurrent` eller `RMSCurrent` | mA |
+| `pact` | `ActivePower` | mW |
+| `papp` | `ApparentPower` | mVA |
+| `preact` | `ReactivePower` | mVAR |
+| `frequency` | `Frequency` | mHz |
+| `energy` | `CumulativeEnergyImported` (Electrical Energy Measurement) | mWh |
+| `phase_delay` | `PowerFactor` | percent100ths (öppen, `TBD-22`) |
+
+Matter skalar mätvärden i mV, mA, mW och mHz, medan datamodellen anger `int64`
+utan enhet. Skalningen ska fastställas (`TBD-20`). Om energimätningen ska
+ackumuleras över `Power-up` är öppet (`TBD-12`).
 
 ## 6. Nätverk och provisionering
 

@@ -92,9 +92,13 @@ Mätningen är aktiv även när `Output State` är `OFF`.
 | Frekvens | Inte fastställd (`TBD-10`). |
 | Effektfaktor | Inte fastställd (`TBD-10`). |
 
-`Measurement Interval` och vilka värden som rapporteras till Matter är inte
-fastställda (`TBD-11`). Fältnamn och skalning finns i
+`Measurement Interval` är inte fastställt (`TBD-11`), och vilka värden som
+rapporteras till Matter avgörs i `TBD-10`. Fältnamn och skalning finns i
 [`architecture.md`](architecture.md#4-datamodell).
+
+`phase_delay` rapporteras som `PowerFactor` (`TBD-C10`); enhet och skalning är
+inte fastställda (`TBD-22`). Mappningen mellan datamodellens fält och
+Matter-attributen finns i [`architecture.md`](architecture.md#53-mappning).
 
 ## 8. Lokal och extern styrning
 

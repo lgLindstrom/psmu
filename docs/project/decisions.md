@@ -59,6 +59,7 @@ ett beslut fattats, och berörda dokument uppdateras.
 | TBD-10 | Vilka mätvärden exponeras: spänning, ström, aktiv effekt, energi, frekvens, effektfaktor? | K4 | Handbok 6.2, Matter-kluster | Väntar beslut |
 | TBD-11 | Vilket `Measurement Interval` ska användas? | K4 | Mätning, HA-rapportering | Väntar beslut |
 | TBD-12 | Ska energimätning ackumuleras över strömavbrott (`Persisted State`)? | K4 | Energimätning | Väntar beslut |
+| TBD-22 | Vilken enhet och skalning ska `PowerFactor`-rapporteringen av `phase_delay` använda (percent100ths enligt Matter eller grader)? | K4 | Matter-rapportering, `architecture.md` §5.3 | Väntar beslut |
 
 ### Hårdvara och elsäkerhet
 
@@ -67,6 +68,7 @@ ett beslut fattats, och berörda dokument uppdateras.
 | TBD-13 | Vilken typ av anslutningsdon har ingång och utgång? | K1 (uppskjutet), K4 | Handbok 4.2/5.1 | Väntar beslut |
 | TBD-14 | Max belastning (A/W) och elsäkerhetsklassning? | K4 | Handbok 3, tekniska data | Väntar beslut |
 | TBD-15 | Ska enheten vara avsedd för inomhusbruk endast? | K4 | Handbok 3 | Väntar beslut |
+| TBD-23 | Ska PSMU vara en plug-in-enhet eller fast monterad? Fast montering kräver Mounted On/Off Control (`0x010F`) enligt Matter 1.4+. | K4 | `architecture.md` §5.1, `DeviceTypeList` | Väntar beslut |
 
 ### Terminologi
 
@@ -96,6 +98,8 @@ ett beslut fattats, och berörda dokument uppdateras.
 | TBD-C6 | Ska `Long Press` i `PAIRING` avbryta till `LOCAL`? | Ja. | K1 |
 | TBD-C7 | `Output State` vid `Power-up`? | Alltid `OFF`. | K1 |
 | TBD-C8 | Vilken ESP-IDF-version byggs firmware mot? | ESP-IDF 6.1, med ESP-Matter `release/v1.6.1` för Matter 1.6.1. Se [`../reference/external/esp-idf/INDEX.md`](../reference/external/esp-idf/INDEX.md). | K1 |
+| TBD-C9 | Vilka Matter-enhetstyper används? | On/Off Plug-in Unit (`0x010A`) och Electrical Sensor (`0x0510`) på samma endpoint. Se [`../specification/architecture.md`](../specification/architecture.md) §5.1. Monteringssättet prövas i `TBD-23`. | K4 |
+| TBD-C10 | Hur rapporteras `phase_delay`? | Som `PowerFactor` i Electrical Power Measurement. Enhet och skalning är öppen fråga (`TBD-22`). | K4 |
 
 ## Så används dokumentet
 
