@@ -17,6 +17,7 @@ engelska.
 | Project | [`project/decisions.md`](project/decisions.md) | Beslut och öppna frågor. | Utkast |
 | Reference | [`reference/glossary.md`](reference/glossary.md) | Terminologi och godkända begrepp. | Utkast |
 | Reference | [`reference/external/matter-1.6.1/`](reference/external/matter-1.6.1/) | Matter 1.6.1-utdrag (read-only). | – |
+| Reference | [`reference/external/esp-idf/INDEX.md`](reference/external/esp-idf/INDEX.md) | Var ESP-IDF 6.1 och ESP-Matter-dokumentationen finns. | Utkast |
 
 ## Ämneskarta
 
@@ -35,6 +36,7 @@ behövs.
 | Lucka, nästa steg, `GAP-01`–`GAP-06` | [`gaps.md`](gaps.md) |
 | Komma igång, användning, felsökning, teknisk data | [`user/manual.md`](user/manual.md) |
 | Attribut-ID, kluster, device type, cluster revision | [`reference/external/matter-1.6.1/INDEX.md`](reference/external/matter-1.6.1/INDEX.md), därefter `grep` i `text/*.txt` |
+| ESP-IDF, ESP-Matter, GPIO, NVS, OTA, `idf.py`, sökväg i `$IDF_PATH` | [`reference/external/esp-idf/INDEX.md`](reference/external/esp-idf/INDEX.md) |
 | Branch, commit, pull request | [`workflow.md`](workflow.md) |
 
 ## Arbetssätt
