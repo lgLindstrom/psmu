@@ -82,6 +82,7 @@ ett beslut fattats, och berörda dokument uppdateras.
 |---|---|---|---|---|
 | TBD-19 | Vad står `PSMD`, `MDCB`, `MDB` och `DPS` för, och vilka ansvarsgränser har de? | K5 | `architecture.md`, datamodell | Att undersöka |
 | TBD-20 | Ska datamodellens fält, typer och skalning (t.ex. `int64` för mätvärden) bekräftas och dokumenteras per fält? | K5 | `architecture.md`, Matter-rapportering | Att undersöka |
+| TBD-21 | ESP-Matter `release/v1.6.1` rekommenderar ESP-IDF v6.0.2, men PSMU bygger på 6.1 (`TBD-C8`). Fungerar kombinationen, eller ska IDF-versionen sänkas? | K2 | Byggmiljö, `architecture.md` §7 | Att undersöka |
 
 ## Beslutade frågor (stängda)
 
@@ -94,6 +95,7 @@ ett beslut fattats, och berörda dokument uppdateras.
 | TBD-C5 | Ska `Long Press` gå till `PAIRING` även från `OPERATIONAL`? | Ja. | K1 |
 | TBD-C6 | Ska `Long Press` i `PAIRING` avbryta till `LOCAL`? | Ja. | K1 |
 | TBD-C7 | `Output State` vid `Power-up`? | Alltid `OFF`. | K1 |
+| TBD-C8 | Vilken ESP-IDF-version byggs firmware mot? | ESP-IDF 6.1, med ESP-Matter `release/v1.6.1` för Matter 1.6.1. Se [`../reference/external/esp-idf/INDEX.md`](../reference/external/esp-idf/INDEX.md). | K1 |
 
 ## Så används dokumentet
 
