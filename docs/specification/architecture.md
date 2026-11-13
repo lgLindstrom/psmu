@@ -111,9 +111,13 @@ när Home Assistant inte nås är inte fastställt (`TBD-05`, `TBD-06`, `TBD-07`
 
 ## 7. Byggmiljö och körtid
 
-- Mjukvaran byggs med **ESP-IDF**. Projektet i detta repository innehåller endast
-  dokumentation, inte firmware-källkod.
-- Hårdvarutarget, ESP-IDF-version och byggkonfiguration är inte fastställda.
+- Mjukvaran byggs med **ESP-IDF 6.1** (`TBD-C8`) och **ESP-Matter**
+  `release/v1.6.1` för Matter 1.6.1. Projektet i detta repository innehåller
+  endast dokumentation, inte firmware-källkod.
+- Var Espressif-dokumentationen finns och hur den slås upp:
+  [`../reference/external/esp-idf/INDEX.md`](../reference/external/esp-idf/INDEX.md).
+- Hårdvarutarget och byggkonfiguration är inte fastställda.
+- ESP-Matter rekommenderar ESP-IDF v6.0.2; avvikelsen utreds i `TBD-21`.
 - Firmware- och applikationsversioner lagras enligt datamodellen ovan.
 
 ## 8. Säkerhet och uppdatering
