@@ -24,7 +24,7 @@ on one line, which makes grep useful on attribute tables. Regenerate after
 replacing a PDF:
 
 ```sh
-cd specs/matter-1.6.1 && python3 extract_text.py
+cd docs/reference/external/matter-1.6.1 && python3 extract_text.py
 ```
 
 The script needs `pymupdf` and `pymupdf4llm`. The extracts are an index only:
@@ -63,13 +63,13 @@ its commands.
 
 ```sh
 # an attribute or command ID inside one document
-rg -n "0x0004" specs/matter-1.6.1/text/23-27350*.txt
+rg -n "0x0004" docs/reference/external/matter-1.6.1/text/23-27350*.txt
 
 # a named item; table rows keep the ID and name on one line
-rg -n "CurrentState" specs/matter-1.6.1/text/23-27350*.txt
+rg -n "CurrentState" docs/reference/external/matter-1.6.1/text/23-27350*.txt
 
 # a section heading, to jump to a cluster
-rg -n "^#+ 4\.6\." specs/matter-1.6.1/text/23-27350*.txt
+rg -n "^#+ 4\.6\." docs/reference/external/matter-1.6.1/text/23-27350*.txt
 ```
 
 Then open the PDF at the page from the nearest marker to confirm the entry.
@@ -97,6 +97,9 @@ tracked documents beyond short citations with a section reference.
 
 ## Related
 
-The `matter-spec` skill (`.agents/skills/matter-spec/SKILL.md`) tells an agent
-how to use this index. Espressif API questions belong to the `espressif-docs`
-MCP server and the installed ESP-Matter source, not here.
+- [`../esp-idf/INDEX.md`](../esp-idf/INDEX.md) – the Espressif side: ESP-IDF 6.1
+  and ESP-Matter documentation.
+- `docs/specification/architecture.md` §5 – how the clusters are used by PSMU.
+- The `esp-idf` MCP server (`.opencode/esp-idf-mcp.sh`, registered in
+  `opencode.jsonc`) builds, flashes and monitors firmware; it does not answer
+  API questions. Those belong here and in the ESP-IDF documentation.
