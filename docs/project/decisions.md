@@ -1,20 +1,19 @@
-# Decisions and open questions – PSMD
+# Decisions, open questions and gaps – PSMD
 
-Samlade beslut och frågor som ännu inte är avgjorda, med **varifrån de kommer**.
+Samlade beslut, öppna frågor och kända luckor, med **varifrån de kommer**.
 Dokumentet är arbetsmaterial: öppna frågor flyttas till **Beslutade frågor** när
 ett beslut fattats, och berörda dokument uppdateras.
 
 - **Status:** Utkast
 - **Version:** 0.1
-- **Senast uppdaterad:** 2026-11-04
+- **Senast uppdaterad:** 2026-11-14
 - **Relaterade dokument:** [`manual.md`](../user/manual.md),
   [`glossary.md`](../reference/glossary.md),
-  [`architecture.md`](../specification/architecture.md),
   [`specification.md`](../specification/specification.md)
 
-> **Äger:** beslut och öppna frågor med källa (`K1`–`K6`).
-> **Läs vid behov:** det dokument frågan gäller – sök på ID eller ämne i stället
-> för att läsa hela filen.
+> **Äger:** beslut, öppna frågor och kända luckor med källa (`K1`–`K6`).
+> **Läs vid behov:** det dokument frågan eller luckan gäller – sök på ID eller
+> ämne i stället för att läsa hela filen.
 
 ## Statusar
 
@@ -59,7 +58,7 @@ ett beslut fattats, och berörda dokument uppdateras.
 | TBD-10 | Vilka mätvärden exponeras: spänning, ström, aktiv effekt, energi, frekvens, effektfaktor? | K4 | Handbok 6.2, Matter-kluster | Väntar beslut |
 | TBD-11 | Vilket `Measurement Interval` ska användas? | K4 | Mätning, HA-rapportering | Väntar beslut |
 | TBD-12 | Ska energimätning ackumuleras över strömavbrott (`Persisted State`)? | K4 | Energimätning | Väntar beslut |
-| TBD-22 | Vilken enhet och skalning ska `PowerFactor`-rapporteringen av `phase_delay` använda (percent100ths enligt Matter eller grader)? | K4 | Matter-rapportering, `architecture.md` §5.3 | Väntar beslut |
+| TBD-22 | Vilken enhet och skalning ska `PowerFactor`-rapporteringen av `phase_delay` använda (percent100ths enligt Matter eller grader)? | K4 | Matter-rapportering, `specification.md` §13.3 | Väntar beslut |
 
 ### Hårdvara och elsäkerhet
 
@@ -68,7 +67,7 @@ ett beslut fattats, och berörda dokument uppdateras.
 | TBD-13 | Vilken typ av anslutningsdon har ingång och utgång? | K1 (uppskjutet), K4 | Handbok 4.2/5.1 | Väntar beslut |
 | TBD-14 | Max belastning (A/W) och elsäkerhetsklassning? | K4 | Handbok 3, tekniska data | Väntar beslut |
 | TBD-15 | Ska enheten vara avsedd för inomhusbruk endast? | K4 | Handbok 3 | Väntar beslut |
-| TBD-23 | Ska PSMD vara en plug-in-enhet eller fast monterad? Fast montering kräver Mounted On/Off Control (`0x010F`) enligt Matter 1.4+. | K4 | `architecture.md` §5.1, `DeviceTypeList` | Väntar beslut |
+| TBD-23 | Ska PSMD vara en plug-in-enhet eller fast monterad? Fast montering kräver Mounted On/Off Control (`0x010F`) enligt Matter 1.4+. | K4 | `specification.md` §13.1, `DeviceTypeList` | Väntar beslut |
 
 ### Terminologi
 
@@ -82,9 +81,9 @@ ett beslut fattats, och berörda dokument uppdateras.
 
 | ID | Fråga | Källa | Påverkar | Status / nästa steg |
 |---|---|---|---|---|
-| TBD-19 | Vad står `PSMD`, `MDCB`, `MDB` och `DPS` för, och vilka ansvarsgränser har de? | K5 | `architecture.md`, datamodell | Att undersöka |
-| TBD-20 | Ska datamodellens fält, typer och skalning (t.ex. `int64` för mätvärden) bekräftas och dokumenteras per fält? | K5 | `architecture.md`, Matter-rapportering | Att undersöka |
-| TBD-21 | ESP-Matter `release/v1.6.1` rekommenderar ESP-IDF v6.0.2, men PSMD bygger på 6.1 (`TBD-C8`). Fungerar kombinationen, eller ska IDF-versionen sänkas? | K2 | Byggmiljö, `architecture.md` §7 | Att undersöka |
+| TBD-19 | Vad står `PSMD`, `MDCB`, `MDB` och `DPS` för, och vilka ansvarsgränser har de? | K5 | `specification.md` §11, datamodell | Att undersöka |
+| TBD-20 | Ska datamodellens fält, typer och skalning (t.ex. `int64` för mätvärden) bekräftas och dokumenteras per fält? | K5 | `specification.md` §12–13, Matter-rapportering | Att undersöka |
+| TBD-21 | ESP-Matter `release/v1.6.1` rekommenderar ESP-IDF v6.0.2, men PSMD bygger på 6.1 (`TBD-C8`). Fungerar kombinationen, eller ska IDF-versionen sänkas? | K2 | Byggmiljö, `specification.md` §15 | Att undersöka |
 
 ## Beslutade frågor (stängda)
 
@@ -98,8 +97,73 @@ ett beslut fattats, och berörda dokument uppdateras.
 | TBD-C6 | Ska `Long Press` i `PAIRING` avbryta till `LOCAL`? | Ja. | K1 |
 | TBD-C7 | `Output State` vid `Power-up`? | Alltid `OFF`. | K1 |
 | TBD-C8 | Vilken ESP-IDF-version byggs firmware mot? | ESP-IDF 6.1, med ESP-Matter `release/v1.6.1` för Matter 1.6.1. Se [`../reference/external/esp-idf/INDEX.md`](../reference/external/esp-idf/INDEX.md). | K1 |
-| TBD-C9 | Vilka Matter-enhetstyper används? | On/Off Plug-in Unit (`0x010A`) och Electrical Sensor (`0x0510`) på samma endpoint. Se [`../specification/architecture.md`](../specification/architecture.md) §5.1. Monteringssättet prövas i `TBD-23`. | K4 |
+| TBD-C9 | Vilka Matter-enhetstyper används? | On/Off Plug-in Unit (`0x010A`) och Electrical Sensor (`0x0510`) på samma endpoint. Se [`../specification/specification.md`](../specification/specification.md) §13.1. Monteringssättet prövas i `TBD-23`. | K4 |
 | TBD-C10 | Hur rapporteras `phase_delay`? | Som `PowerFactor` i Electrical Power Measurement. Enhet och skalning är öppen fråga (`TBD-22`). | K4 |
+
+## Luckor och nästa steg
+
+Kända luckor i dokumentationen och vad som behöver tas fram. Det är en
+arbetslista – inte fastställda krav. Beslut och öppna frågor hanteras i
+avsnitten ovan.
+
+| ID | Prio | Område | Vad som saknas | Dokument |
+|---|---|---|---|---|
+| GAP-01 | Hög | Matter | Device type, endpoints, kluster, attribut, enheter och rapporteringsintervall. | [`specification.md`](../specification/specification.md) §13 |
+| GAP-02 | Hög | Hårdvara/mjukvara | Pin-map, aktiv nivå, debounce, ADC-kanal, mätområden och kalibrering. | [`specification.md`](../specification/specification.md) §15 |
+| GAP-03 | Hög | Datamodell | Enheter, skalning, intervall, `timestamp`, energi vid `Power-up`/overflow och vilka fält som är `Persisted State`. | [`specification.md`](../specification/specification.md) §12 |
+| GAP-04 | Medel | Verifiering | Icke-funktionella krav och konkreta acceptanstester kopplade till varje krav. | [`specification.md`](../specification/specification.md) §9 |
+| GAP-05 | Medel | Användarhandbok | Avsnitt 5.4 förutsätter ett lokalt UI med vyer och skärmbilder. Klargör om PSMD har något eget gränssnitt utöver knapp, LED och Home Assistant. | [`manual.md`](../user/manual.md) |
+
+### GAP-01 – Matter-gränssnitt
+
+`specification.md` §13 säger att endpoints och kluster är TBD. Det behövs:
+
+- device type och antal endpoints,
+- vilka kluster som används, t.ex. On/Off och mätkluster,
+- attribut, enheter och rapporteringsintervall,
+- vilka värden som rapporteras när `Output State = OFF`.
+
+Utan detta går firmware, Home Assistant-integration och acceptanstest inte att
+specificera.
+
+### GAP-02 – Hårdvara/mjukvara
+
+Det saknas en beskrivning av gränssnittet mellan hårdvara och mjukvara:
+
+- pin-map för knapp, `Operation Mode LED`, `Output State LED`, relä och ADC,
+- aktiv nivå, pull-up/pull-down och debounce,
+- mätkanal, kalibrering och mätområden.
+
+### GAP-03 – Datamodellens semantik
+
+Datamodellen i `specification.md` §12 har fältnamn och typer, men saknar:
+
+- enheter och skalning för `vac`, `iac`, `pact` och `energy`,
+- intervall och teckenkonvention för `preact` och `phase_delay`,
+- vad `timestamp` representerar,
+- hur `energy` hanteras vid `Power-up` och overflow,
+- vilka fält som faktiskt är `Persisted State`.
+
+### GAP-04 – Verifiering
+
+`specification.md` §9 har fem funktionella krav. Det saknas:
+
+- icke-funktionella krav inom prestanda, minne, robusthet och strömförbrukning,
+- elsäkerhet och EMC, om de ska hanteras i detta repo,
+- konkreta acceptanstester för varje krav.
+
+### GAP-05 – Användarhandbokens UI-avsnitt
+
+Avsnitt 5.4 i `manual.md` beskriver "huvudvyer, menyer och viktiga
+funktioner – gärna med skärmbilder". Det förutsätter ett lokalt gränssnitt som
+inte framgår någon annanstans. PSMD verkar ha knapp, två LED och Home Assistant –
+ingen egen skärm. Avsnittet bör tas bort eller förtydligas.
+
+### Rekommenderad ordning
+
+1. GAP-01 och GAP-03 – de låser upp krav, test och Home Assistant-integration.
+2. GAP-02 – behövs innan firmware och mätning kan implementeras.
+3. GAP-04 och GAP-05 – förbättrar spårbarhet och användardokumentation.
 
 ## Så används dokumentet
 
