@@ -5,7 +5,7 @@ Svensk förklaring anges för läsbarhet.
 
 Status: `Bekräftad` = fastställd, `Förslag` = föreslagen term, `TBD` = att
 undersöka/fastställa. Öppna frågor med källa finns i
-[`decisions.md`](../project/decisions.md).
+[`decisions.md`](../decisions.md).
 
 Beteckningarna `LED1` och `LED2` används endast om det fysiska kortets märkning.
 I text och mjukvara används de beskrivande namnen **`Operation Mode LED`** och
@@ -13,7 +13,7 @@ I text och mjukvara används de beskrivande namnen **`Operation Mode LED`** och
 **`Output LED`**.
 
 > **Äger:** terminologi och godkända begrepp.
-> **Läs vid behov:** [`../project/decisions.md`](../project/decisions.md) för
+> **Läs vid behov:** [`../decisions.md`](../decisions.md) för
 > terminologifrågor. Sök i tabellerna i stället för att läsa hela filen.
 
 ## Driftlägen (Operation Modes)

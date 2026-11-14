@@ -7,9 +7,9 @@ ett beslut fattats, och berörda dokument uppdateras.
 - **Status:** Utkast
 - **Version:** 0.1
 - **Senast uppdaterad:** 2026-11-14
-- **Relaterade dokument:** [`manual.md`](../user/manual.md),
-  [`glossary.md`](../reference/glossary.md),
-  [`specification.md`](../specification/specification.md)
+- **Relaterade dokument:** [`manual.md`](manual.md),
+  [`glossary.md`](reference/glossary.md),
+  [`specification.md`](specification.md)
 
 > **Äger:** beslut, öppna frågor och kända luckor med källa (`K1`–`K6`).
 > **Läs vid behov:** det dokument frågan eller luckan gäller – sök på ID eller
@@ -97,7 +97,7 @@ ett beslut fattats, och berörda dokument uppdateras.
 | TBD-C6 | Ska `Long Press` i `PAIRING` avbryta till `LOCAL`? | Ja. | K1 |
 | TBD-C7 | `Output State` vid `Power-up`? | Alltid `OFF`. | K1 |
 | TBD-C8 | Vilken ESP-IDF-version byggs firmware mot? | ESP-IDF 6.1, med ESP-Matter `release/v1.6.1` för Matter 1.6.1. Se [`../reference/external/esp-idf/INDEX.md`](../reference/external/esp-idf/INDEX.md). | K1 |
-| TBD-C9 | Vilka Matter-enhetstyper används? | On/Off Plug-in Unit (`0x010A`) och Electrical Sensor (`0x0510`) på samma endpoint. Se [`../specification/specification.md`](../specification/specification.md) §13.1. Monteringssättet prövas i `TBD-23`. | K4 |
+| TBD-C9 | Vilka Matter-enhetstyper används? | On/Off Plug-in Unit (`0x010A`) och Electrical Sensor (`0x0510`) på samma endpoint. Se [`specification.md`](specification.md) §13.1. Monteringssättet prövas i `TBD-23`. | K4 |
 | TBD-C10 | Hur rapporteras `phase_delay`? | Som `PowerFactor` i Electrical Power Measurement. Enhet och skalning är öppen fråga (`TBD-22`). | K4 |
 
 ## Luckor och nästa steg
@@ -108,11 +108,11 @@ avsnitten ovan.
 
 | ID | Prio | Område | Vad som saknas | Dokument |
 |---|---|---|---|---|
-| GAP-01 | Hög | Matter | Device type, endpoints, kluster, attribut, enheter och rapporteringsintervall. | [`specification.md`](../specification/specification.md) §13 |
-| GAP-02 | Hög | Hårdvara/mjukvara | Pin-map, aktiv nivå, debounce, ADC-kanal, mätområden och kalibrering. | [`specification.md`](../specification/specification.md) §15 |
-| GAP-03 | Hög | Datamodell | Enheter, skalning, intervall, `timestamp`, energi vid `Power-up`/overflow och vilka fält som är `Persisted State`. | [`specification.md`](../specification/specification.md) §12 |
-| GAP-04 | Medel | Verifiering | Icke-funktionella krav och konkreta acceptanstester kopplade till varje krav. | [`specification.md`](../specification/specification.md) §9 |
-| GAP-05 | Medel | Användarhandbok | Avsnitt 5.4 förutsätter ett lokalt UI med vyer och skärmbilder. Klargör om PSMD har något eget gränssnitt utöver knapp, LED och Home Assistant. | [`manual.md`](../user/manual.md) |
+| GAP-01 | Hög | Matter | Device type, endpoints, kluster, attribut, enheter och rapporteringsintervall. | [`specification.md`](specification.md) §13 |
+| GAP-02 | Hög | Hårdvara/mjukvara | Pin-map, aktiv nivå, debounce, ADC-kanal, mätområden och kalibrering. | [`specification.md`](specification.md) §15 |
+| GAP-03 | Hög | Datamodell | Enheter, skalning, intervall, `timestamp`, energi vid `Power-up`/overflow och vilka fält som är `Persisted State`. | [`specification.md`](specification.md) §12 |
+| GAP-04 | Medel | Verifiering | Icke-funktionella krav och konkreta acceptanstester kopplade till varje krav. | [`specification.md`](specification.md) §9 |
+| GAP-05 | Medel | Användarhandbok | Avsnitt 5.4 förutsätter ett lokalt UI med vyer och skärmbilder. Klargör om PSMD har något eget gränssnitt utöver knapp, LED och Home Assistant. | [`manual.md`](manual.md) |
 
 ### GAP-01 – Matter-gränssnitt
 

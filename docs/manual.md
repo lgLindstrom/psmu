@@ -4,13 +4,13 @@
 
 > Status: Utkast. Avsnitt markerade med `[...]` behöver fyllas i när produktens
 > funktioner och beteende är fastställda. Öppna frågor och varifrån de kommer
-> samlas i [`decisions.md`](../project/decisions.md).
+> samlas i [`decisions.md`](decisions.md).
 >
 > **Äger:** användarens väg genom produkten – komma igång, användning,
 > felsökning och tekniska data.
 > **Läs vid behov:**
-> [`specification/specification.md`](../specification/specification.md) för exakt
-> beteende och [`project/decisions.md`](../project/decisions.md) för värden som
+> [`specification.md`](specification.md) för exakt
+> beteende och [`decisions.md`](decisions.md) för värden som
 > ännu är `[...]`.
 
 ## 1. Om denna handbok
@@ -185,7 +185,7 @@ På enheten finns dessutom:
 
 > **Att undersöka:** om och hur `Factory Reset` ska finnas. Inget beslut taget.
 
-> Termerna förklaras i [ordlistan](../reference/glossary.md). Beteendet vid `Power-up` i
+> Termerna förklaras i [ordlistan](reference/glossary.md). Beteendet vid `Power-up` i
 > `OPERATIONAL` när Home Assistant inte nås är ännu inte fastställt – ska
 > undersökas mot Matter-standarden.
 
@@ -255,7 +255,7 @@ Home Assistants automationer och scener.
 ## 10. Ordlista
 
 Fullständig terminologi med engelska mjukvarutermer finns i
-[`glossary.md`](../reference/glossary.md).
+[`glossary.md`](reference/glossary.md).
 
 | Term (EN) | Svenska | Kort förklaring |
 |---|---|---|

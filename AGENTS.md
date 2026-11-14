@@ -11,10 +11,10 @@ ESP-IDF 6.1 and ESP-Matter, under `firmware/`.
   Commits).
 - `firmware/` – ESP-IDF project (C/C++) for the ESP32 hardware. Builds and
   flashing go through the `esp-idf` MCP, never by hand.
-- `docs/user/manual.md` – the user manual (primary deliverable).
-- `docs/specification/specification.md` – behavior (§2–8), requirements (§9),
+- `docs/manual.md` – the user manual (primary deliverable).
+- `docs/specification.md` – behavior (§2–8), requirements (§9),
   architecture, data model, Matter integration, build environment (§10–16).
-- `docs/project/decisions.md` – decisions, open questions and known gaps with
+- `docs/decisions.md` – decisions, open questions and known gaps with
   source (`K1`–`K6`).
 - `docs/reference/glossary.md` – terminology, English term → Swedish
   explanation, status.
@@ -36,14 +36,14 @@ orders of magnitude more than reading too few.
 
 | Task | Always read | Read on demand | Do not read |
 | --- | --- | --- | --- |
-| Manual text | `docs/user/manual.md` | `specification/specification.md` §2–8, `project/decisions.md` (unknown values), `grep` on the term in `reference/glossary.md` | Matter extracts |
-| Specification (all) | `docs/specification/specification.md` | `project/decisions.md` | `user/manual.md`, Matter extracts |
-| Architecture / Matter | `specification/specification.md` §10–16, `docs/reference/external/matter-1.6.1/INDEX.md` | targeted `grep` in `text/*.txt` | whole `text/*.txt`, PDFs, `*.tar`, `user/manual.md` |
+| Manual text | `docs/manual.md` | `specification.md` §2–8, `decisions.md` (unknown values), `grep` on the term in `reference/glossary.md` | Matter extracts |
+| Specification (all) | `docs/specification.md` | `decisions.md` | `manual.md`, Matter extracts |
+| Architecture / Matter | `specification.md` §10–16, `docs/reference/external/matter-1.6.1/INDEX.md` | targeted `grep` in `text/*.txt` | whole `text/*.txt`, PDFs, `*.tar`, `manual.md` |
 | ESP-IDF / ESP-Matter API | `docs/reference/external/esp-idf/INDEX.md` | targeted `grep` in `$IDF_PATH/docs/en/` or `$ESP_MATTER_PATH/docs/en/` | whole doc trees, `$IDF_PATH` in a codegraph index (734 MB) |
-| Firmware / C code | the `firmware/` files the task touches | `specification/specification.md` §2–8 and §15 (behavior, build), the `esp-idf` skill | `user/manual.md`, Matter extracts |
-| Requirements | `specification/specification.md` §9 | `project/decisions.md` | Matter extracts, `user/manual.md` |
-| Decision / open question | `project/decisions.md` (grep on the ID or topic) | the document the question concerns | everything else |
-| Gap / next step | `project/decisions.md` (luckor) | `specification/specification.md` §10–16 (where the gap gets filled in) | `user/manual.md`, Matter extracts |
+| Firmware / C code | the `firmware/` files the task touches | `specification.md` §2–8 and §15 (behavior, build), the `esp-idf` skill | `manual.md`, Matter extracts |
+| Requirements | `specification.md` §9 | `decisions.md` | Matter extracts, `manual.md` |
+| Decision / open question | `decisions.md` (grep on the ID or topic) | the document the question concerns | everything else |
+| Gap / next step | `decisions.md` (luckor) | `specification.md` §10–16 (where the gap gets filled in) | `manual.md`, Matter extracts |
 | Index / structure | `docs/README.md` | – | everything else |
 | Terminology | only the matching `grep` hits in `reference/glossary.md` | – | `reference/glossary.md` in full |
 | Branch / commit | `docs/README.md` §Workflow | – | everything else |
@@ -58,7 +58,7 @@ Rules:
   the binaries are not readable anyway.
 - Read sections, not files: `grep -n '^##' file.md` first, then `read` with
   `offset`/`limit`.
-- Grep `project/decisions.md` and `reference/glossary.md` for the specific ID or
+- Grep `decisions.md` and `reference/glossary.md` for the specific ID or
   term instead of loading the whole file.
 - Every document except `docs/README.md` and `matter-1.6.1/INDEX.md` has an
   **Äger** / **Läs vid behov** block (around lines 9–17). That block is enough to
@@ -76,13 +76,13 @@ Rules:
 - `docs/reference/glossary.md` is the source of truth for terminology. Use the
   approved names `Operation Mode LED` and `Output State LED`, not `LED1`/`LED2`.
 - Firmware code logs with the ESP-IDF macros and sets a per-module `TAG` that
-  always starts with `psmd_` – see `docs/specification/specification.md` §15.
+  always starts with `psmd_` – see `docs/specification.md` §15.
 - Keep the manual's numbered section structure (`## 1.`, `### 4.4`, …) intact
   when editing; do not renumber sections without updating cross-references.
 - Placeholders look like `[text]`. Do **not** invent values to fill them. If a
   fact is unknown or undecided, leave the placeholder and add or update an entry
-  in `docs/project/decisions.md` with a source ID.
-- When a question in `docs/project/decisions.md` is decided, move it to
+  in `docs/decisions.md` with a source ID.
+- When a question in `docs/decisions.md` is decided, move it to
   “Beslutade frågor” and apply the decision in the relevant document.
 
 ## Verification

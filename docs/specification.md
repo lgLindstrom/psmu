@@ -6,15 +6,15 @@
 > Version: 0.1
 > Ansvarig: [ ]
 > Senast uppdaterad: 2026-11-14
-> Relaterade: [`decisions.md`](../project/decisions.md),
-> [`manual.md`](../user/manual.md),
-> [`glossary.md`](../reference/glossary.md)
+> Relaterade: [`decisions.md`](decisions.md),
+> [`manual.md`](manual.md),
+> [`glossary.md`](reference/glossary.md)
 
 > **Äger:** driftlägen, knapp, lysdioder, `Power-up`, mätning, krav,
 > arkitektur, datamodell, Matter-integration och byggmiljö.
-> **Läs vid behov:** [`decisions.md`](../project/decisions.md) för öppna frågor
+> **Läs vid behov:** [`decisions.md`](decisions.md) för öppna frågor
 > och okända värden, samt
-> [`../reference/external/matter-1.6.1/INDEX.md`](../reference/external/matter-1.6.1/INDEX.md)
+> [`reference/external/matter-1.6.1/INDEX.md`](reference/external/matter-1.6.1/INDEX.md)
 > för Matter-utdragen (sök där, läs inte hela textfilerna).
 
 ## 1. Syfte
@@ -126,7 +126,7 @@ detta dokument.
 | REQ-F-005 | `Operation Mode LED` och `Output State LED` ska följa specificerade mönster. | K1 | Blink- och skenmönster överensstämmer med specifikationen. | §5 | [ ] | Bekräftad |
 
 Icke-funktionella krav och konkreta acceptanstester kopplade till varje krav
-saknas ännu; se luckan i [`decisions.md`](../project/decisions.md).
+saknas ännu; se luckan i [`decisions.md`](decisions.md).
 
 ### Teststrategi
 
@@ -280,7 +280,7 @@ när Home Assistant inte nås är inte fastställt (`TBD-05`, `TBD-06`, `TBD-07`
   `release/v1.6.1` för Matter 1.6.1. Firmwarekällkoden ligger i `firmware/` i
   detta repository och byggs/flashes via `esp-idf`-MCP:n.
 - Var Espressif-dokumentationen finns och hur den slås upp:
-  [`../reference/external/esp-idf/INDEX.md`](../reference/external/esp-idf/INDEX.md).
+  [`reference/external/esp-idf/INDEX.md`](reference/external/esp-idf/INDEX.md).
 - Loggning sker med ESP-IDF-makrona `ESP_LOGI`, `ESP_LOGW`, `ESP_LOGE`,
   `ESP_LOGD` och `ESP_LOGV` – inte `printf`.
 - Varje modul som loggar definierar en `TAG` (`static const char *TAG`). `TAG`

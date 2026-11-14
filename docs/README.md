@@ -7,9 +7,9 @@ engelska.
 
 | Område | Dokument | Beskrivning | Status |
 |---|---|---|---|
-| Användare | [`user/manual.md`](user/manual.md) | Användarhandbok för PSMD. | Utkast |
-| Specification | [`specification/specification.md`](specification/specification.md) | Beteende, krav, arkitektur, datamodell, Matter och byggmiljö. | Utkast |
-| Project | [`project/decisions.md`](project/decisions.md) | Beslut, öppna frågor och kända luckor. | Utkast |
+| Användare | [`manual.md`](manual.md) | Användarhandbok för PSMD. | Utkast |
+| Specification | [`specification.md`](specification.md) | Beteende, krav, arkitektur, datamodell, Matter och byggmiljö. | Utkast |
+| Project | [`decisions.md`](decisions.md) | Beslut, öppna frågor och kända luckor. | Utkast |
 | Källkod | [`../firmware/`](../firmware/) | ESP32-firmware (ESP-IDF + ESP-Matter). Byggs via `esp-idf`-MCP:n. | Ej påbörjad |
 | Reference | [`reference/glossary.md`](reference/glossary.md) | Terminologi och godkända begrepp. | Utkast |
 | Reference | [`reference/external/matter-1.6.1/`](reference/external/matter-1.6.1/) | Matter 1.6.1-utdrag (read-only). | – |
@@ -23,24 +23,24 @@ behövs.
 
 | Fråga eller sökord | Läs |
 |---|---|
-| Driftläge, övergång, knapp, lysdiod, `Power-up`, mätning, lokal styrning | [`specification/specification.md`](specification/specification.md) §2–8 |
-| Krav, acceptanskriterium, spårbarhet, teststrategi | [`specification/specification.md`](specification/specification.md) §9 |
-| Komponent, datamodell, Matter, Home Assistant, provisionering, byggmiljö, säkerhet | [`specification/specification.md`](specification/specification.md) §10–16 |
-| Beslut, öppen fråga, källa `K1`–`K6` | [`project/decisions.md`](project/decisions.md) |
-| Lucka, nästa steg, `GAP-01`–`GAP-05` | [`project/decisions.md`](project/decisions.md) |
+| Driftläge, övergång, knapp, lysdiod, `Power-up`, mätning, lokal styrning | [`specification.md`](specification.md) §2–8 |
+| Krav, acceptanskriterium, spårbarhet, teststrategi | [`specification.md`](specification.md) §9 |
+| Komponent, datamodell, Matter, Home Assistant, provisionering, byggmiljö, säkerhet | [`specification.md`](specification.md) §10–16 |
+| Beslut, öppen fråga, källa `K1`–`K6` | [`decisions.md`](decisions.md) |
+| Lucka, nästa steg, `GAP-01`–`GAP-05` | [`decisions.md`](decisions.md) |
 | Term, benämning, `Operation Mode LED`, `Output State LED` | [`reference/glossary.md`](reference/glossary.md) |
-| Komma igång, användning, felsökning, teknisk data | [`user/manual.md`](user/manual.md) |
+| Komma igång, användning, felsökning, teknisk data | [`manual.md`](manual.md) |
 | Attribut-ID, kluster, device type, cluster revision | [`reference/external/matter-1.6.1/INDEX.md`](reference/external/matter-1.6.1/INDEX.md), därefter `grep` i `text/*.txt` |
 | ESP-IDF, ESP-Matter, GPIO, NVS, OTA, `idf.py`, sökväg i `$IDF_PATH` | [`reference/external/esp-idf/INDEX.md`](reference/external/esp-idf/INDEX.md) |
-| Firmware, källkod, loggning, `psmd_`, `TAG` | [`../firmware/`](../firmware/), [`specification/specification.md`](specification/specification.md) §15 |
+| Firmware, källkod, loggning, `psmd_`, `TAG` | [`../firmware/`](../firmware/), [`specification.md`](specification.md) §15 |
 | Branch, commit, pull request | [Workflow](#workflow) |
 
 ## Arbetssätt
 
 - Branching och commit-format finns i [Workflow](#workflow) nedan.
 - Nya fakta ska in i rätt dokument – inte i `README.md`.
-- Öppna frågor hanteras i [`project/decisions.md`](project/decisions.md).
-- Kända luckor och nästa steg finns i [`project/decisions.md`](project/decisions.md).
+- Öppna frågor hanteras i [`decisions.md`](decisions.md).
+- Kända luckor och nästa steg finns i [`decisions.md`](decisions.md).
 - Termer ska följa [`reference/glossary.md`](reference/glossary.md).
 - Okända värden lämnas som `[ ]`; de får inte fyllas i med antaganden.
 
@@ -98,13 +98,13 @@ punkt på slutet.
 
 Används för att visa vilken del som ändras:
 
-`user`, `spec`, `project`, `reference`, `matter`, `build`.
+`manual`, `spec`, `decisions`, `reference`, `matter`, `build`.
 
 #### Exempel
 
 ```
 docs(spec): add requirements traceability
-docs(project): update open questions
+docs(decisions): update open questions
 fix(spec): correct pairing timeout
 feat(spec): describe energy persistence
 chore: ignore Python cache files
