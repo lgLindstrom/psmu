@@ -111,7 +111,7 @@ avsnitten ovan.
 | GAP-01 | Hög | Matter | Device type, endpoints, kluster, attribut, enheter och rapporteringsintervall. | [`specification.md`](specification.md) §13 |
 | GAP-02 | Hög | Hårdvara/mjukvara | Pin-map, aktiv nivå, debounce, ADC-kanal, mätområden och kalibrering. | [`specification.md`](specification.md) §15 |
 | GAP-03 | Hög | Datamodell | Enheter, skalning, intervall, `timestamp`, energi vid `Power-up`/overflow och vilka fält som är `Persisted State`. | [`specification.md`](specification.md) §12 |
-| GAP-04 | Medel | Verifiering | Icke-funktionella krav och konkreta acceptanstester kopplade till varje krav. | [`specification.md`](specification.md) §9 |
+| GAP-04 | Medel | Verifiering | Icke-funktionella krav och konkreta acceptanstester kopplade till varje krav. | [`specification.md`](specification.md) §10 |
 | GAP-05 | Medel | Användarhandbok | Avsnitt 5.4 förutsätter ett lokalt UI med vyer och skärmbilder. Klargör om PSMD har något eget gränssnitt utöver knapp, LED och Home Assistant. | [`manual.md`](manual.md) |
 
 ### GAP-01 – Matter-gränssnitt
@@ -146,7 +146,7 @@ Datamodellen i `specification.md` §12 har fältnamn och typer, men saknar:
 
 ### GAP-04 – Verifiering
 
-`specification.md` §9 har fem funktionella krav. Det saknas:
+`specification.md` §10 har fem funktionella krav. Det saknas:
 
 - icke-funktionella krav inom prestanda, minne, robusthet och strömförbrukning,
 - elsäkerhet och EMC, om de ska hanteras i detta repo,

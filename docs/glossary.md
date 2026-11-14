@@ -94,6 +94,18 @@ då vara 0).
 | **Power Factor** | Effektfaktor | Förhållandet mellan aktiv och skenbar effekt, om den mäts. | TBD |
 | **Measurement Interval** | Mätintervall | Hur ofta värden uppdateras. | TBD |
 
+## Funktionella enheter (Functional Units)
+
+| Term (EN) | Svenska | Definition | Status |
+|---|---|---|---|
+| **Matter Controller** | Matter-styrenhet | Funktionell enhet som hanterar gränssnittet mot Home Assistant via Matter-protokollet. | Bekräftad |
+| **MC** | MC | Förkortning för `Matter Controller`. | Bekräftad |
+| **Measurement Unit** | Mätenhet | Funktionell enhet som sköter mätningen. | Bekräftad |
+| **MU** | MU | Förkortning för `Measurement Unit`. | Bekräftad |
+| **Power Unit** | Effektenhet | Funktionell enhet som är gränssnitt mot in- och utsignaler. | Bekräftad |
+| **PU** | PU | Förkortning för `Power Unit`. | Bekräftad |
+| **I2C** | I2C | Kommunikationskanal mellan `MC` och `MU` (tillsammans med direkta signaler). | Bekräftad |
+
 ## Undvik tvetydiga ord
 
 | Undvik | Använd i stället | Skäl |

@@ -19,15 +19,50 @@
 
 ## 1. Syfte
 
-Det här dokumentet specificerar PSMD: mjukvarubeteende (§2–8), krav med
-acceptanskriterier (§9) och mjukvarans övergripande uppbyggnad (§10–16) –
+Det här dokumentet specificerar PSMD: mjukvarubeteende (§3–9), krav med
+acceptanskriterier (§10) och mjukvarans övergripande uppbyggnad (§2, §11–16) –
 komponenter, ansvarsgränser, dataflöden, datamodell och integrationen med
 Matter och Home Assistant.
+
+Dokumentet beskriver firmware för **Matter Controller (MC)** samt gränssnittet
+mot **Measurement Unit (MU)**.
 
 Dokumentet beskriver **avsedd arkitektur**. Exakt implementation,
 mjukvaruversion och hårdvarutarget är inte fastställda ännu.
 
-## 2. Operation Modes
+## 2. Systemöversikt
+
+PSMD är en Matter-enhet som styr en `Output` och mäter den anslutna `Load`.
+Enheten kan användas fristående i `LOCAL` eller via en `Fabric` i Home Assistant.
+
+PSMD består av tre funktionella enheter:
+
+| Enhet | Förkortning | Uppgift |
+|---|---|---|
+| **Matter Controller** | `MC` | Hanterar gränssnittet mot Home Assistant via Matter-protokollet. |
+| **Measurement Unit** | `MU` | Sköter mätningen. |
+| **Power Unit** | `PU` | Är gränssnitt mot in- och utsignaler. |
+
+`MC` och `MU` kommunicerar via en I2C-kanal samt direkta signaler.
+
+```mermaid
+flowchart LR
+    Load[Load] --- PSMD[PSMD]
+    PSMD -- Matter --> MS[Matter Server]
+    MS --- HA[Home Assistant]
+```
+
+PSMD ansvarar för:
+
+- att växla `Output State` (`ON`/`OFF`),
+- att mäta spänning, ström och effekt i `OPERATIONAL`,
+- att hantera `Operation Mode` och lokal manövrering,
+- att lagra den konfiguration och det tillstånd som krävs vid `Power-up`.
+
+Home Assistant och `Matter Server` ligger utanför PSMD och ansvarar för
+`Commissioning`, automationer och användargränssnitt.
+
+## 3. Operation Modes
 
 | `Operation Mode` | Beskrivning | `Operation Mode LED` |
 |---|---|---|
@@ -35,7 +70,7 @@ mjukvaruversion och hårdvarutarget är inte fastställda ännu.
 | **`PAIRING`** | Enheten är tillgänglig för Matter-`Commissioning`. `Short Press` har ingen effekt. | Långsamt blink. |
 | **`OPERATIONAL`** | Enheten ingår i en `Fabric` och kan styras via Home Assistant. `Short Press` växlar `Output State`. | Snabbt blink i 5 s vid `Power-up`, därefter fast sken. |
 
-## 3. Övergångar
+## 4. Övergångar
 
 | Från | Händelse | Till | Kommentar |
 |---|---|---|---|
@@ -50,7 +85,7 @@ mjukvaruversion och hårdvarutarget är inte fastställda ännu.
 `Short Press` ändrar aldrig `Operation Mode`; den växlar endast `Output State` i
 `LOCAL` och `OPERATIONAL`.
 
-## 4. Button
+## 5. Button
 
 | Händelse | Definition | Beteende |
 |---|---|---|
@@ -60,7 +95,7 @@ mjukvaruversion och hårdvarutarget är inte fastställda ännu.
 
 Debounce-tid och exakt avläsning av knappen är inte fastställda.
 
-## 5. LEDs
+## 6. LEDs
 
 | LED | Beteende |
 |---|---|
@@ -74,7 +109,7 @@ Debounce-tid och exakt avläsning av knappen är inte fastställda.
 | **`Solid`** | Tänd | – |
 | **`Off`** | Släckt | – |
 
-## 6. Power-up och lagring
+## 7. Power-up och lagring
 
 - `Output State` sätts **alltid till `OFF`** vid `Power-up` (`Power-loss Recovery`).
 - `Operation Mode` vid `Power-up` följer `Boot Mode`: `LOCAL` första gången,
@@ -83,7 +118,7 @@ Debounce-tid och exakt avläsning av knappen är inte fastställda.
   (`TBD-12`).
 - Om och hur `Factory Reset` ska finnas är inte beslutat (`TBD-04`).
 
-## 7. Mätning
+## 8. Mätning
 
 Mätning sker **endast i `OPERATIONAL`**. Inget mäts i `LOCAL` eller `PAIRING`.
 Mätningen är aktiv även när `Output State` är `OFF`.
@@ -104,7 +139,7 @@ rapporteras till Matter avgörs i `TBD-10`. Fältnamn och skalning finns i §12.
 inte fastställda (`TBD-22`). Mappningen mellan datamodellens fält och
 Matter-attributen finns i §13.3.
 
-## 8. Lokal och extern styrning
+## 9. Lokal och extern styrning
 
 - **`LOCAL`:** endast `Short Press` styr `Output State`.
 - **`OPERATIONAL`:** Home Assistant och `Short Press` kan båda ändra
@@ -112,18 +147,18 @@ Matter-attributen finns i §13.3.
 - **`PAIRING`:** `Output State` behåller sitt aktuella värde; `Short Press` har
   ingen effekt.
 
-## 9. Krav och acceptanskriterier
+## 10. Krav och acceptanskriterier
 
 Krav med ID, källa, acceptanskriterium och spårbarhet till specifikationen i
 detta dokument.
 
 | ID | Krav | Källa | Acceptanskriterium | Spec | Test | Status |
 |---|---|---|---|---|---|---|
-| REQ-F-001 | `Short Press` ska växla `Output State` i `LOCAL` och `OPERATIONAL`. | K1 | Utgången växlar vid tryck ≤ 3 s. | §4 | [ ] | Bekräftad |
-| REQ-F-002 | `Long Press` ska växla `Operation Mode` enligt specifikationen. | K1 | `LOCAL`/`OPERATIONAL` → `PAIRING`; `PAIRING` → `LOCAL`. | §3–4 | [ ] | Bekräftad |
-| REQ-F-003 | `Output State` ska alltid vara `OFF` vid `Power-up`. | K1 | Utgången är `OFF` efter varje spänningssättning. | §6 | [ ] | Bekräftad |
-| REQ-F-004 | Mätning ska endast ske i `OPERATIONAL`. | K1 | Inga mätvärden uppdateras i `LOCAL` eller `PAIRING`. | §7 | [ ] | Bekräftad |
-| REQ-F-005 | `Operation Mode LED` och `Output State LED` ska följa specificerade mönster. | K1 | Blink- och skenmönster överensstämmer med specifikationen. | §5 | [ ] | Bekräftad |
+| REQ-F-001 | `Short Press` ska växla `Output State` i `LOCAL` och `OPERATIONAL`. | K1 | Utgången växlar vid tryck ≤ 3 s. | §5 | [ ] | Bekräftad |
+| REQ-F-002 | `Long Press` ska växla `Operation Mode` enligt specifikationen. | K1 | `LOCAL`/`OPERATIONAL` → `PAIRING`; `PAIRING` → `LOCAL`. | §4–5 | [ ] | Bekräftad |
+| REQ-F-003 | `Output State` ska alltid vara `OFF` vid `Power-up`. | K1 | Utgången är `OFF` efter varje spänningssättning. | §7 | [ ] | Bekräftad |
+| REQ-F-004 | Mätning ska endast ske i `OPERATIONAL`. | K1 | Inga mätvärden uppdateras i `LOCAL` eller `PAIRING`. | §8 | [ ] | Bekräftad |
+| REQ-F-005 | `Operation Mode LED` och `Output State LED` ska följa specificerade mönster. | K1 | Blink- och skenmönster överensstämmer med specifikationen. | §6 | [ ] | Bekräftad |
 
 Icke-funktionella krav och konkreta acceptanstester kopplade till varje krav
 saknas ännu; se luckan i [`decisions.md`](decisions.md).
@@ -134,28 +169,6 @@ saknas ännu; se luckan i [`decisions.md`](decisions.md).
 - [ ] Integrations- och HIL-test av knapp, LED, relä och mätning.
 - [ ] Matter-`Commissioning` mot Home Assistant.
 - [ ] Acceptanstest mot kraven ovan.
-
-## 10. Systemöversikt
-
-PSMD är en Matter-enhet som styr en `Output` och mäter den anslutna `Load`.
-Enheten kan användas fristående i `LOCAL` eller via en `Fabric` i Home Assistant.
-
-```mermaid
-flowchart LR
-    Load[Load] --- PSMD[PSMD]
-    PSMD -- Matter --> MS[Matter Server]
-    MS --- HA[Home Assistant]
-```
-
-PSMD ansvarar för:
-
-- att växla `Output State` (`ON`/`OFF`),
-- att mäta spänning, ström och effekt i `OPERATIONAL`,
-- att hantera `Operation Mode` och lokal manövrering,
-- att lagra den konfiguration och det tillstånd som krävs vid `Power-up`.
-
-Home Assistant och `Matter Server` ligger utanför PSMD och ansvarar för
-`Commissioning`, automationer och användargränssnitt.
 
 ## 11. Komponenter
 
@@ -206,7 +219,7 @@ var värdet skapas och `Storage` var det lagras.
 
 - `Commissioning` lägger PSMD i en `Fabric` och gör enheten styrbar från Home
   Assistant.
-- `Operation Mode` och övergångar specificeras i §2–3.
+- `Operation Mode` och övergångar specificeras i §3–4.
 - Mätning sker endast i `OPERATIONAL`. Vilka mätvärden som exponeras är delvis
   fastställt (`TBD-10`, `TBD-11`).
 - `Pairing Timeout`, `Commissioning Timeout`, `Reconnect` och hantering av flera
