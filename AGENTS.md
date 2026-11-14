@@ -30,15 +30,15 @@ ESP-IDF 6.1 and ESP-Matter, under `firmware/`.
 ## Reading budget
 
 Load only what the task needs. The internal docs total ~55 kB; the Matter text
-extracts total ~5 MB (≈1.3 M tokens); the PDFs (33 MB) and `matter-1.6.1.tar`
-(38 MB) are binary and are never worth reading. Reading the wrong file costs
+extracts total ~5 MB (≈1.3 M tokens); the PDFs (33 MB) are binary and are
+never worth reading. Reading the wrong file costs
 orders of magnitude more than reading too few.
 
 | Task | Always read | Read on demand | Do not read |
 | --- | --- | --- | --- |
 | Manual text | `docs/manual.md` | `specification.md` §2–8, `decisions.md` (unknown values), `grep` on the term in `glossary.md` | Matter extracts |
 | Specification (all) | `docs/specification.md` | `decisions.md` | `manual.md`, Matter extracts |
-| Architecture / Matter | `specification.md` §10–16, `docs/lookup/matter-1.6.1/INDEX.md` | targeted `grep` in `text/*.txt` | whole `text/*.txt`, PDFs, `*.tar`, `manual.md` |
+| Architecture / Matter | `specification.md` §10–16, `docs/lookup/matter-1.6.1/INDEX.md` | targeted `grep` in `text/*.txt` | whole `text/*.txt`, PDFs, `manual.md` |
 | ESP-IDF / ESP-Matter API | `docs/lookup/esp-idf.md` | targeted `grep` in `$IDF_PATH/docs/en/` or `$ESP_MATTER_PATH/docs/en/` | whole doc trees, `$IDF_PATH` in a codegraph index (734 MB) |
 | Firmware / C code | the `firmware/` files the task touches | `specification.md` §2–8 and §15 (behavior, build), the `esp-idf` skill | `manual.md`, Matter extracts |
 | Requirements | `specification.md` §9 | `decisions.md` | Matter extracts, `manual.md` |
@@ -47,15 +47,15 @@ orders of magnitude more than reading too few.
 | Index / structure | `docs/README.md` | – | everything else |
 | Terminology | only the matching `grep` hits in `glossary.md` | – | `glossary.md` in full |
 | Branch / commit | `docs/README.md` §Workflow | – | everything else |
-| Unfamiliar task | `docs/README.md` §Ämneskarta, then the document it points to | – | Matter extracts, PDFs, `*.tar` |
+| Unfamiliar task | `docs/README.md` §Ämneskarta, then the document it points to | – | Matter extracts, PDFs |
 
 Rules:
 
 - Never read `docs/lookup/matter-1.6.1/text/*.txt` in full. Start at
   `INDEX.md`, then `grep -n` with `-A`/`-B` context and `read` only those line
   ranges (`offset`/`limit`).
-- Never read the Matter PDFs or `matter-1.6.1.tar`; the text extracts exist and
-  the binaries are not readable anyway.
+- Never read the Matter PDFs; the text extracts exist and the binaries are not
+  readable anyway.
 - Read sections, not files: `grep -n '^##' file.md` first, then `read` with
   `offset`/`limit`.
 - Grep `decisions.md` and `glossary.md` for the specific ID or

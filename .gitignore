@@ -8,7 +8,6 @@ __pycache__/
 # Matter 1.6.1 reference: CSA documents are not redistributable
 docs/lookup/matter-1.6.1/*.pdf
 docs/lookup/matter-1.6.1/text/
-docs/lookup/*.tar
 
 # ESP-IDF build artifacts (firmware/)
 firmware/build/
