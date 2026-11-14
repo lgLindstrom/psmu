@@ -57,7 +57,6 @@ ett beslut fattats, och berörda dokument uppdateras.
 | TBD-13 | Vilken typ av anslutningsdon har ingång och utgång? | K1 (uppskjutet), K4 | Handbok 4.2/5.1 | Väntar beslut |
 | TBD-14 | Max belastning (A/W) och elsäkerhetsklassning? | K4 | Handbok 3, tekniska data | Väntar beslut |
 | TBD-15 | Ska enheten vara avsedd för inomhusbruk endast? | K4 | Handbok 3 | Väntar beslut |
-| TBD-23 | Ska PSMD vara en plug-in-enhet eller fast monterad? Fast montering kräver Mounted On/Off Control (`0x010F`) enligt Matter 1.4+. | K4 | `specification.md` §12.1, `DeviceTypeList` | Väntar beslut |
 
 ### Terminologi
 
@@ -92,7 +91,7 @@ ett beslut fattats, och berörda dokument uppdateras.
 | TBD-C11 | Vilket `Measurement Interval` ska användas? | 5 s, driven av MU:s mätomgång; alla 8 mätvärden är synkrona och MC rapporterar ett värde i taget till HA. | K4 |
 | TBD-C12 | Ska mätvärden rapporteras som en struct med alla värden eller som standardattribut? | Standardattribut (ett värde per Matter-attribut). Behåller HA:s standardmappning; ingen anpassad struct. | K2, K3 |
 | TBD-C13 | Matter, Home Assistant och provisionering (`TBD-01`–`TBD-09`): Pairing/Commissioning Timeout, Decommissioning, Factory Reset, Wi-Fi-provisionering, beteende när Home Assistant inte nås, Reconnect, flera Fabric och HA/Matter Server-version. | Hanteras av ESP-Matter enligt Matter-standarden; PSMD använder ESP-Matters implementation/standardbeteende och antar kompatibilitet med Matter-standarden. | K2, K3 |
-
+| TBD-C14 | Ska PSMD vara plug-in eller fast monterad? | Plug-in (On/Off Plug-in Unit, `0x010A`). Mounted On/Off Control (`0x010F`) behövs inte. | K4 |
 ## Luckor och nästa steg
 
 Kända luckor i dokumentationen och vad som behöver tas fram. Det är en
