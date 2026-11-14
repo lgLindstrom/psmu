@@ -115,7 +115,7 @@ Brytande ändring markeras med `!` efter typ/scope och förklaras i en footer:
 ```
 feat(spec)!: change data model field names
 
-BREAKING CHANGE: `ac_switch` har bytt namn till `output_state`.
+BREAKING CHANGE: `ac_switch` har bytt namn till `onoff`.
 ```
 
 ### Pull requests
