@@ -40,7 +40,7 @@ orders of magnitude more than reading too few.
 | Specification (all) | `docs/specification.md` | `decisions.md` | `manual.md`, Matter extracts |
 | Architecture / Matter | `specification.md` §2, §11–16, `docs/lookup/matter-1.6.1/INDEX.md` | targeted `grep` in `text/*.txt` | whole `text/*.txt`, PDFs, `manual.md` |
 | ESP-IDF / ESP-Matter API | `docs/lookup/esp-idf.md` | targeted `grep` in `$IDF_PATH/docs/en/` or `$ESP_MATTER_PATH/docs/en/` | whole doc trees, `$IDF_PATH` in a codegraph index (734 MB) |
-| Firmware / C code | the `firmware/` files the task touches | `specification.md` §3–9 and §15 (behavior, build), the `esp-idf` skill | `manual.md`, Matter extracts |
+| Firmware / C code | the `firmware/` files the task touches | `specification.md` §3–9 and §14 (behavior, build), the `esp-idf` skill | `manual.md`, Matter extracts |
 | Requirements | `specification.md` §10 | `decisions.md` | Matter extracts, `manual.md` |
 | Decision / open question | `decisions.md` (grep on the ID or topic) | the document the question concerns | everything else |
 | Gap / next step | `decisions.md` (luckor) | `specification.md` §2, §11–16 (where the gap gets filled in) | `manual.md`, Matter extracts |
