@@ -7,7 +7,7 @@
 > Ansvarig: [ ]
 > Senast uppdaterad: 2026-11-13
 > Relaterade: [`matter-1.6.1/INDEX.md`](../matter-1.6.1/INDEX.md),
-> [`architecture.md`](../../../specification/architecture.md) §5 och §7
+> [`specification.md`](../../../specification/specification.md) §13 och §15
 
 > **Äger:** var Espressif-dokumentationen finns och hur den slås upp.
 > **Läs vid behov:** [`matter-1.6.1/INDEX.md`](../matter-1.6.1/INDEX.md) för
