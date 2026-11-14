@@ -13,7 +13,7 @@ ESP-IDF 6.1 and ESP-Matter, under `firmware/`.
   flashing go through the `esp-idf` MCP, never by hand.
 - `docs/manual.md` – the user manual (primary deliverable).
 - `docs/specification.md` – behavior (§3–9), requirements (§10),
-  architecture, data model, Matter integration, build environment (§2, §11–15).
+  architecture, data model, Matter integration (§2, §11–15).
 - `docs/decisions.md` – decisions, open questions and known gaps with
   source (`K1`–`K6`).
 - `docs/glossary.md` – terminology, English term → Swedish

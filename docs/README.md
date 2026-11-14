@@ -1,124 +1,118 @@
-# Dokumentation – PSMD
+# Documentation – PSMD
 
 **Power Switch and Measurement Device (PSMD)**
 
-Index över dokumentationen. Innehållet skrivs på svenska; fil- och mappnamn är
-engelska.
+Index of the documentation. Content is written in Swedish; file and folder names
+are in English.
 
-| Område | Dokument | Beskrivning | Status |
+| Area | Document | Description | Status |
 |---|---|---|---|
-| Användare | [`manual.md`](manual.md) | Användarhandbok för PSMD. | Utkast |
-| Specification | [`specification.md`](specification.md) | Beteende, krav, arkitektur, datamodell, Matter och byggmiljö. | Utkast |
-| Project | [`decisions.md`](decisions.md) | Beslut, öppna frågor och kända luckor. | Utkast |
-| Källkod | [`../firmware/`](../firmware/) | ESP32-firmware (ESP-IDF + ESP-Matter). Byggs via `esp-idf`-MCP:n. | Ej påbörjad |
-| Reference | [`glossary.md`](glossary.md) | Terminologi och godkända begrepp. | Utkast |
-| Lookup | [`lookup/matter-1.6.1/`](lookup/matter-1.6.1/) | Matter 1.6.1-utdrag (read-only). | – |
-| Lookup | [`lookup/esp-idf.md`](lookup/esp-idf.md) | Var ESP-IDF 6.1 och ESP-Matter-dokumentationen finns. | Utkast |
+| Users | [`manual.md`](manual.md) | User manual for PSMD. | Draft |
+| Specification | [`specification.md`](specification.md) | Behavior, requirements, architecture, data model, Matter and Home Assistant. | Draft |
+| Project | [`decisions.md`](decisions.md) | Decisions, open questions and known gaps. | Draft |
+| Source code | [`../firmware/`](../firmware/) | ESP32 firmware (ESP-IDF + ESP-Matter). Built via the `esp-idf` MCP. | Not started |
+| Firmware | [`../firmware/README.md`](../firmware/README.md) | Build, flash, debug and logging rules for the firmware. | Draft |
+| Reference | [`glossary.md`](glossary.md) | Terminology and approved terms. | Draft |
+| Lookup | [`lookup/matter-1.6.1/`](lookup/matter-1.6.1/) | Matter 1.6.1 extracts (read-only). | – |
+| Lookup | [`lookup/esp-idf.md`](lookup/esp-idf.md) | Where the ESP-IDF 6.1 and ESP-Matter documentation lives. | Draft |
 
-## Ämneskarta
+## Topic map
 
-Sök på nyckelordet i stället för att läsa alla dokument. Varje dokument inleds
-med en **Äger** / **Läs vid behov**-rad som räcker för att avgöra om filen
-behövs.
+Search by keyword instead of reading all documents. Each document starts with an
+**Owner** / **Read when needed** line that is enough to decide whether the file
+is needed.
 
-| Fråga eller sökord | Läs |
+| Question or keyword | Read |
 |---|---|
-| Driftläge, övergång, knapp, lysdiod, `Power-up`, mätning, lokal styrning | [`specification.md`](specification.md) §3–9 |
-| Krav, acceptanskriterium, spårbarhet, teststrategi | [`specification.md`](specification.md) §10 |
-| Komponent, datamodell, Matter, Home Assistant, provisionering, byggmiljö, säkerhet | [`specification.md`](specification.md) §2, §11–15 |
-| Beslut, öppen fråga, källa `K1`–`K6` | [`decisions.md`](decisions.md) |
-| Lucka, nästa steg, `GAP-01`–`GAP-05` | [`decisions.md`](decisions.md) |
-| Term, benämning, `Operation Mode LED`, `Output State LED` | [`glossary.md`](glossary.md) |
-| Komma igång, användning, felsökning, teknisk data | [`manual.md`](manual.md) |
-| Attribut-ID, kluster, device type, cluster revision | [`lookup/matter-1.6.1/INDEX.md`](lookup/matter-1.6.1/INDEX.md), därefter `grep` i `text/*.txt` |
-| ESP-IDF, ESP-Matter, GPIO, NVS, OTA, `idf.py`, sökväg i `$IDF_PATH` | [`lookup/esp-idf.md`](lookup/esp-idf.md) |
-| Firmware, källkod, loggning, `psmd_`, `TAG` | [`../firmware/`](../firmware/), [`specification.md`](specification.md) §14 |
+| Operating mode, transition, button, LED, `Power-up`, measurement, local control | [`specification.md`](specification.md) §3–9 |
+| Requirements, acceptance criterion, traceability, test strategy | [`specification.md`](specification.md) §10 |
+| Component, data model, Matter, Home Assistant, provisioning, security | [`specification.md`](specification.md) §2, §11–15 |
+| Decision, open question, source `K1`–`K6` | [`decisions.md`](decisions.md) |
+| Gap, next step, `GAP-01`–`GAP-05` | [`decisions.md`](decisions.md) |
+| Term, naming, `Operation Mode LED`, `Output State LED` | [`glossary.md`](glossary.md) |
+| Getting started, usage, troubleshooting, technical data | [`manual.md`](manual.md) |
+| Attribute ID, cluster, device type, cluster revision | [`lookup/matter-1.6.1/INDEX.md`](lookup/matter-1.6.1/INDEX.md), then `grep` in `text/*.txt` |
+| ESP-IDF, ESP-Matter, GPIO, NVS, OTA, path in `$IDF_PATH` | [`lookup/esp-idf.md`](lookup/esp-idf.md) |
+| Firmware, source code, logging, `psmd_`, `TAG` | [`../firmware/README.md`](../firmware/README.md), [`specification.md`](specification.md) §14 |
 | Branch, commit, pull request | [Workflow](#workflow) |
 
-## Arbetssätt
+## Working method
 
-- Branching och commit-format finns i [Workflow](#workflow) nedan.
-- Nya fakta ska in i rätt dokument – inte i `README.md`.
-- Öppna frågor hanteras i [`decisions.md`](decisions.md).
-- Kända luckor och nästa steg finns i [`decisions.md`](decisions.md).
-- Termer ska följa [`glossary.md`](glossary.md).
-- Okända värden lämnas som `[ ]`; de får inte fyllas i med antaganden.
+- Branching and commit format are described in [Workflow](#workflow) below.
+- New facts go into the right document – not into `README.md`.
+- Open questions are handled in [`decisions.md`](decisions.md).
+- Known gaps and next steps are in [`decisions.md`](decisions.md).
+- Terms must follow [`glossary.md`](glossary.md).
+- Unknown values are left as `[ ]`; they must not be filled in with guesses.
 
 ## Workflow
 
-Vi använder en enkel **GitHub Flow**-modell:
+We use a simple **GitHub Flow** model:
 
-1. `main` är alltid den fungerande versionen.
-2. Skapa en kortlivad branch från `main`.
-3. Gör ändringarna och commit:a enligt nedan.
-4. Öppna en pull request mot `main`.
-5. Granska, merga och ta bort branchen.
+1. `main` is always the working version.
+2. Create a short-lived branch from `main`.
+3. Make the changes and commit according to the rules below.
+4. Open a pull request against `main`.
+5. Review, merge and delete the branch.
 
-Vi har inga långlivade `develop`-, `release`- eller `hotfix`-branches. Allt går
-via `main`.
+We have no long-lived `develop`, `release` or `hotfix` branches. Everything
+goes through `main`.
 
 ### Branching
 
-#### Branchnamn
+#### Branch names
 
-| Prefix | Används för | Exempel |
+| Prefix | Used for | Example |
 |---|---|---|
-| `feat/` | Ny funktion eller nytt innehåll | `feat/matter-clusters` |
-| `fix/` | Rätta fel | `fix/pairing-timeout` |
-| `docs/` | Endast dokumentation | `docs/spec` |
-| `chore/` | Underhåll, verktyg, konfiguration | `chore/gitignore` |
+| `feat/` | New feature or new content | `feat/matter-clusters` |
+| `fix/` | Fix a bug | `fix/pairing-timeout` |
+| `docs/` | Documentation only | `docs/spec` |
+| `chore/` | Maintenance, tooling, configuration | `chore/gitignore` |
 
-Använd korta, beskrivande namn med gemener och bindestreck.
+Use short, descriptive names in lowercase with hyphens.
 
 ### Conventional Commits
 
-Commit-meddelanden följer [Conventional Commits](https://www.conventionalcommits.org/):
+Commit messages follow [Conventional Commits](https://www.conventionalcommits.org/):
 
 ```
-<type>(<scope>): <beskrivning>
+<type>(<scope>): <description>
 ```
 
-`scope` är valfri. Beskrivningen skrivs i imperativ form, med gemener och utan
-punkt på slutet.
-
-#### Typer
-
-| Typ | Används för |
+| Type | Meaning |
 |---|---|
-| `feat` | Ny funktion eller nytt innehåll |
-| `fix` | Rätta fel |
-| `docs` | Endast dokumentation |
-| `refactor` | Omskrivning utan beteendeändring |
-| `test` | Tester |
-| `chore` | Underhåll och verktyg |
-| `build` | Byggsystem och beroenden |
-| `ci` | CI-konfiguration |
+| `feat` | New feature or content |
+| `fix` | Bug fix |
+| `docs` | Documentation only |
+| `chore` | Maintenance, tooling |
+| `refactor` | Refactoring without behavior change |
 
-#### Scopes
+Example: `docs(spec): restructure overview and add functional units`.
 
-Används för att visa vilken del som ändras:
+### Before you finish
 
-`manual`, `spec`, `decisions`, `reference`, `matter`, `build`.
+- Check that relative links and section references still resolve.
+- Check that Markdown tables render.
+- Keep diffs focused.
 
-#### Exempel
+## Reading budget
 
-```
-docs(spec): add requirements traceability
-docs(decisions): update open questions
-fix(spec): correct pairing timeout
-feat(spec): describe energy persistence
-chore: ignore Python cache files
-```
+Load only what the task needs. The internal docs total ~55 kB; the Matter text
+extracts total ~5 MB (≈1.3 M tokens); the PDFs (33 MB) are binary and are
+never worth reading. Reading the wrong file costs orders of magnitude more than
+reading too few.
 
-Brytande ändring markeras med `!` efter typ/scope och förklaras i en footer:
-
-```
-feat(spec)!: change data model field names
-
-BREAKING CHANGE: `ac_switch` har bytt namn till `onoff`.
-```
-
-### Pull requests
-
-Pull requestens titel följer samma format som en commit. Vid squash-merge blir
-PR-titeln commit-meddelandet på `main`.
+| Task | Always read | Read on demand | Do not read |
+|---|---|---|---|
+| Manual text | `docs/manual.md` | `specification.md` §3–9, `decisions.md` (unknown values), `grep` on the term in `glossary.md` | Matter extracts |
+| Specification (all) | `docs/specification.md` | `decisions.md` | `manual.md`, Matter extracts |
+| Architecture / Matter | `specification.md` §2, §11–15, `docs/lookup/matter-1.6.1/INDEX.md` | targeted `grep` in `text/*.txt` | whole `text/*.txt`, PDFs, `manual.md` |
+| ESP-IDF / ESP-Matter API | `docs/lookup/esp-idf.md` | targeted `grep` in `$IDF_PATH/docs/en/` or `$ESP_MATTER_PATH/docs/en/` | whole doc trees, `$IDF_PATH` in a codegraph index (734 MB) |
+| Firmware / C code | the `firmware/` files the task touches | `specification.md` §3–9 and §14 (behavior, build), the `esp-idf` skill | `manual.md`, Matter extracts |
+| Requirements | `specification.md` §10 | `decisions.md` | Matter extracts, `manual.md` |
+| Decision / open question | `decisions.md` (grep on the ID or topic) | the document the question concerns | everything else |
+| Gap / next step | `decisions.md` (gaps) | `specification.md` §2, §11–15 (where the gap gets filled in) | `manual.md`, Matter extracts |
+| Index / structure | `docs/README.md` | – | everything else |
+| Terminology | only the matching `grep` hits in `glossary.md` | – | `glossary.md` in full |
+| Branch / commit | `docs/README.md` §Workflow | – | everything else |
+| Unfamiliar task | `docs/README.md` §Topic map, then the document it points to | – | Matter extracts, PDFs |
