@@ -275,13 +275,9 @@ hanteras av ESP-Matter enligt Matter-standarden (`TBD-C13`).
   detta repository och byggs/flashes via `esp-idf`-MCP:n.
 - Var Espressif-dokumentationen finns och hur den slås upp:
   [`lookup/esp-idf.md`](lookup/esp-idf.md).
-- Loggning sker med ESP-IDF-makrona `ESP_LOGI`, `ESP_LOGW`, `ESP_LOGE`,
-  `ESP_LOGD` och `ESP_LOGV` – inte `printf`.
-- Varje modul som loggar definierar en `TAG` (`static const char *TAG`). `TAG`
-  börjar alltid med `psmd_` följt av modulnamnet, till exempel `psmd_meas`, så
-  att PSMD:s egna loggar kan filtreras fram från ESP-IDF- och
-  ESP-Matter-bibliotekens.
 - Hårdvarutarget och byggkonfiguration är inte fastställda.
+- Praktiska bygg-, flash- och felsökningssteg samt loggkonventioner finns i
+  [`../firmware/README.md`](../firmware/README.md).
 - ESP-Matter rekommenderar ESP-IDF v6.0.2; avvikelsen utreds i `TBD-21`.
 - Firmware- och applikationsversioner lagras enligt datamodellen ovan.
 
