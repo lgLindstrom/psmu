@@ -25,14 +25,14 @@ behövs.
 |---|---|
 | Driftläge, övergång, knapp, lysdiod, `Power-up`, mätning, lokal styrning | [`specification.md`](specification.md) §3–9 |
 | Krav, acceptanskriterium, spårbarhet, teststrategi | [`specification.md`](specification.md) §10 |
-| Komponent, datamodell, Matter, Home Assistant, provisionering, byggmiljö, säkerhet | [`specification.md`](specification.md) §2, §11–16 |
+| Komponent, datamodell, Matter, Home Assistant, provisionering, byggmiljö, säkerhet | [`specification.md`](specification.md) §2, §11–15 |
 | Beslut, öppen fråga, källa `K1`–`K6` | [`decisions.md`](decisions.md) |
 | Lucka, nästa steg, `GAP-01`–`GAP-05` | [`decisions.md`](decisions.md) |
 | Term, benämning, `Operation Mode LED`, `Output State LED` | [`glossary.md`](glossary.md) |
 | Komma igång, användning, felsökning, teknisk data | [`manual.md`](manual.md) |
 | Attribut-ID, kluster, device type, cluster revision | [`lookup/matter-1.6.1/INDEX.md`](lookup/matter-1.6.1/INDEX.md), därefter `grep` i `text/*.txt` |
 | ESP-IDF, ESP-Matter, GPIO, NVS, OTA, `idf.py`, sökväg i `$IDF_PATH` | [`lookup/esp-idf.md`](lookup/esp-idf.md) |
-| Firmware, källkod, loggning, `psmd_`, `TAG` | [`../firmware/`](../firmware/), [`specification.md`](specification.md) §15 |
+| Firmware, källkod, loggning, `psmd_`, `TAG` | [`../firmware/`](../firmware/), [`specification.md`](specification.md) §14 |
 | Branch, commit, pull request | [Workflow](#workflow) |
 
 ## Arbetssätt
