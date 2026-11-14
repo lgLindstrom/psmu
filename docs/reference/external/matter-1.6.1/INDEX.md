@@ -99,7 +99,7 @@ tracked documents beyond short citations with a section reference.
 
 - [`../esp-idf/INDEX.md`](../esp-idf/INDEX.md) – the Espressif side: ESP-IDF 6.1
   and ESP-Matter documentation.
-- `docs/specification/architecture.md` §5 – how the clusters are used by PSMU.
+- `docs/specification/architecture.md` §5 – how the clusters are used by PSMD.
 - The `esp-idf` MCP server (`.opencode/esp-idf-mcp.sh`, registered in
   `opencode.jsonc`) builds, flashes and monitors firmware; it does not answer
   API questions. Those belong here and in the ESP-IDF documentation.

@@ -1,13 +1,15 @@
-# Project instructions – PSMU documentation
+# Project instructions – PSMD documentation
 
-This repository contains the Swedish user manual for **PSMU (Power Switch and
-Measurement Unit)**, a Matter-enabled smart plug that switches and measures
-connected equipment. It is documentation only: there is no firmware source,
-build, or test suite here.
+This repository contains the Swedish user manual for **PSMD (Power Switch and
+Measurement Device)**, a Matter-enabled smart plug that switches and measures
+connected equipment, and the firmware source for it: C/C++ for ESP32 built on
+ESP-IDF 6.1 and ESP-Matter, under `firmware/`.
 
 ## Layout
 
 - `docs/README.md` – documentation index.
+- `firmware/` – ESP-IDF project (C/C++) for the ESP32 hardware. Builds and
+  flashing go through the `esp-idf` MCP, never by hand.
 - `docs/gaps.md` – known gaps and next steps.
 - `docs/workflow.md` – branching model and Conventional Commits.
 - `docs/user/manual.md` – the user manual (primary deliverable).
@@ -43,6 +45,7 @@ orders of magnitude more than reading too few.
 | Behaviour / specification | `docs/specification/specification.md` | `architecture.md`, `project/decisions.md` | `user/manual.md`, Matter extracts |
 | Architecture / Matter | `docs/specification/architecture.md`, `docs/reference/external/matter-1.6.1/INDEX.md` | targeted `grep` in `text/*.txt` | whole `text/*.txt`, PDFs, `*.tar`, `user/manual.md` |
 | ESP-IDF / ESP-Matter API | `docs/reference/external/esp-idf/INDEX.md` | targeted `grep` in `$IDF_PATH/docs/en/` or `$ESP_MATTER_PATH/docs/en/` | whole doc trees, `$IDF_PATH` in a codegraph index (734 MB) |
+| Firmware / C code | the `firmware/` files the task touches | `specification/specification.md` (behaviour), `specification/architecture.md` (design), the `esp-idf` skill | `user/manual.md`, Matter extracts |
 | Requirements / plan | `project/requirements.md` or `project/plan.md` | `project/decisions.md` | Matter extracts, `user/manual.md` |
 | Decision / open question | `project/decisions.md` (grep on the ID or topic) | the document the question concerns | everything else |
 | Gap / next step | `gaps.md` | `project/decisions.md`, `specification/architecture.md` (where the gap gets filled in) | `user/manual.md`, Matter extracts |
@@ -79,6 +82,8 @@ Rules:
   delete branch.
 - `docs/reference/glossary.md` is the source of truth for terminology. Use the
   approved names `Operation Mode LED` and `Output State LED`, not `LED1`/`LED2`.
+- Firmware code logs with the ESP-IDF macros and sets a per-module `TAG` that
+  always starts with `psmd_` – see `docs/specification/architecture.md` §7.
 - Keep the manual's numbered section structure (`## 1.`, `### 4.4`, …) intact
   when editing; do not renumber sections without updating cross-references.
 - Placeholders look like `[text]`. Do **not** invent values to fill them. If a
@@ -89,6 +94,8 @@ Rules:
 
 ## Verification
 
-- No build or tests. Before finishing, check that relative links and section
+- Firmware: build via the `esp-idf` MCP (`build_project`) before claiming
+  completion; flash only when asked.
+- Documentation: before finishing, check that relative links and section
   references still resolve and that Markdown tables render.
 - Keep diffs focused; this is prose, so avoid unrelated rewording.

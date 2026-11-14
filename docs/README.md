@@ -1,6 +1,6 @@
-# Dokumentation – PSMU
+# Dokumentation – PSMD
 
-**Power Switch and Measurement Unit (PSMU)**
+**Power Switch and Measurement Device (PSMD)**
 
 Index över dokumentationen. Innehållet skrivs på svenska; fil- och mappnamn är
 engelska.
@@ -9,12 +9,13 @@ engelska.
 |---|---|---|---|
 | Översikt | [`gaps.md`](gaps.md) | Kända luckor och nästa steg, prioriterade. | Utkast |
 | Översikt | [`workflow.md`](workflow.md) | Branching och Conventional Commits. | Utkast |
-| Användare | [`user/manual.md`](user/manual.md) | Användarhandbok för PSMU. | Utkast |
+| Användare | [`user/manual.md`](user/manual.md) | Användarhandbok för PSMD. | Utkast |
 | Specification | [`specification/architecture.md`](specification/architecture.md) | Systemöversikt, komponenter, datamodell, Matter och byggmiljö. | Utkast |
 | Specification | [`specification/specification.md`](specification/specification.md) | Driftlägen, knapp, LED, `Power-up` och mätbeteende. | Utkast |
 | Project | [`project/plan.md`](project/plan.md) | Projektplan: mål, omfattning, roller, milstolpar och risker. | Utkast |
 | Project | [`project/requirements.md`](project/requirements.md) | Krav med ID, acceptanskriterier och spårbarhet. | Utkast |
 | Project | [`project/decisions.md`](project/decisions.md) | Beslut och öppna frågor. | Utkast |
+| Källkod | [`../firmware/`](../firmware/) | ESP32-firmware (ESP-IDF + ESP-Matter). Byggs via `esp-idf`-MCP:n. | Ej påbörjad |
 | Reference | [`reference/glossary.md`](reference/glossary.md) | Terminologi och godkända begrepp. | Utkast |
 | Reference | [`reference/external/matter-1.6.1/`](reference/external/matter-1.6.1/) | Matter 1.6.1-utdrag (read-only). | – |
 | Reference | [`reference/external/esp-idf/INDEX.md`](reference/external/esp-idf/INDEX.md) | Var ESP-IDF 6.1 och ESP-Matter-dokumentationen finns. | Utkast |
@@ -37,6 +38,7 @@ behövs.
 | Komma igång, användning, felsökning, teknisk data | [`user/manual.md`](user/manual.md) |
 | Attribut-ID, kluster, device type, cluster revision | [`reference/external/matter-1.6.1/INDEX.md`](reference/external/matter-1.6.1/INDEX.md), därefter `grep` i `text/*.txt` |
 | ESP-IDF, ESP-Matter, GPIO, NVS, OTA, `idf.py`, sökväg i `$IDF_PATH` | [`reference/external/esp-idf/INDEX.md`](reference/external/esp-idf/INDEX.md) |
+| Firmware, källkod, loggning, `psmd_`, `TAG` | [`../firmware/`](../firmware/), [`specification/architecture.md`](specification/architecture.md) §7 |
 | Branch, commit, pull request | [`workflow.md`](workflow.md) |
 
 ## Arbetssätt

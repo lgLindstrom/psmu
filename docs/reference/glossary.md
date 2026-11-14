@@ -1,4 +1,4 @@
-# Terminologi – PSMU
+# Terminologi – PSMD
 
 Engelska termer som används i mjukvara, dokumentation och fortsatt diskussion.
 Svensk förklaring anges för läsbarhet.
@@ -61,8 +61,8 @@ I text och mjukvara används de beskrivande namnen **`Operation Mode LED`** och
 | **Commissioning Timeout** | Idrifttagningstimeout | Tidsgräns för själva `Commissioning`-processen. Ska verifieras mot Matter-standarden. | TBD |
 | **Fabric** | Fabric | Matter-domän som en enhet tillhör; skapas av t.ex. Home Assistant. | Bekräftad |
 | **Matter Server** | Matter-server | Home Assistant-komponent som krävs för Matter-anslutning. | Bekräftad |
-| **Wi-Fi Provisioning** | Wi-Fi-konfiguration | Hur PSMU får Wi-Fi-uppgifter: följer det sätt som Matter och Home Assistant föreskriver. Exakt flöde TBD. | TBD |
-| **Home Assistant (HA)** | Home Assistant | Systemet som PSMU kan integreras med. | Bekräftad |
+| **Wi-Fi Provisioning** | Wi-Fi-konfiguration | Hur PSMD får Wi-Fi-uppgifter: följer det sätt som Matter och Home Assistant föreskriver. Exakt flöde TBD. | TBD |
+| **Home Assistant (HA)** | Home Assistant | Systemet som PSMD kan integreras med. | Bekräftad |
 | **Fallback** | Återgång | Automatiskt byte till `LOCAL` när `PAIRING` misslyckas eller `Pairing Timeout` löser ut. | Förslag |
 | **Reconnect** | Återanslutning | Enhetens försök att återuppta kontakten med sin `Fabric` efter omstart. Beteende TBD enligt Matter-standarden. | TBD |
 | **Decommissioning** | Avregistrering | Att lämna `PAIRING` med `Long Press` bör även ta bort enhetens information i Home Assistant. **Ska undersökas** – exakt metod och ansvar enligt Matter-standarden. | TBD |

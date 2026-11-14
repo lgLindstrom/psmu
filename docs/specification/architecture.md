@@ -1,6 +1,6 @@
-# Architecture – PSMU
+# Architecture – PSMD
 
-**Power Switch and Measurement Unit (PSMU)**
+**Power Switch and Measurement Device (PSMD)**
 
 > Status: Utkast
 > Version: 0.1
@@ -28,24 +28,24 @@ och hårdvarutarget är inte fastställda ännu.
 
 ## 2. Systemöversikt
 
-PSMU är en Matter-enhet som styr en `Output` och mäter den anslutna `Load`.
+PSMD är en Matter-enhet som styr en `Output` och mäter den anslutna `Load`.
 Enheten kan användas fristående i `LOCAL` eller via en `Fabric` i Home Assistant.
 
 ```mermaid
 flowchart LR
-    Load[Load] --- PSMU[PSMU]
-    PSMU -- Matter --> MS[Matter Server]
+    Load[Load] --- PSMD[PSMD]
+    PSMD -- Matter --> MS[Matter Server]
     MS --- HA[Home Assistant]
 ```
 
-PSMU ansvarar för:
+PSMD ansvarar för:
 
 - att växla `Output State` (`ON`/`OFF`),
 - att mäta spänning, ström och effekt i `OPERATIONAL`,
 - att hantera `Operation Mode` och lokal manövrering,
 - att lagra den konfiguration och det tillstånd som krävs vid `Power-up`.
 
-Home Assistant och `Matter Server` ligger utanför PSMU och ansvarar för
+Home Assistant och `Matter Server` ligger utanför PSMD och ansvarar för
 `Commissioning`, automationer och användargränssnitt.
 
 ## 3. Komponenter
@@ -95,7 +95,7 @@ var värdet skapas och `Storage` var det lagras.
 
 ## 5. Matter och Home Assistant
 
-- `Commissioning` lägger PSMU i en `Fabric` och gör enheten styrbar från Home
+- `Commissioning` lägger PSMD i en `Fabric` och gör enheten styrbar från Home
   Assistant.
 - `Operation Mode` och övergångar specificeras i
   [`specification.md`](specification.md).
@@ -106,7 +106,7 @@ var värdet skapas och `Storage` var det lagras.
 
 ### 5.1 Enhetstyper
 
-PSMU exponeras som två enhetstyper på samma endpoint (`TBD-C9`):
+PSMD exponeras som två enhetstyper på samma endpoint (`TBD-C9`):
 
 | Enhetstyp | ID | Klass | Roll |
 |---|---|---|---|
@@ -117,7 +117,7 @@ Core §9.2 tillåter flera enhetstyper i `DeviceTypeList` på samma endpoint. Et
 kluster som är gemensamt för flera enhetstyper på endpointen ska finnas som en
 delad instans.
 
-Om PSMU i stället utförs som en fast monterad enhet gäller Matter 1.4+ kravet
+Om PSMD i stället utförs som en fast monterad enhet gäller Matter 1.4+ kravet
 att använda **Mounted On/Off Control** (`0x010F`), med On/Off Plug-in Unit som
 valfri extra post i `DeviceTypeList`. Monteringssättet är inte fastställt
 (`TBD-23`).
@@ -131,13 +131,13 @@ valfri extra post i `DeviceTypeList`. Monteringssättet är inte fastställt
 | On/Off | `0x0006` | On/Off Plug-in Unit | M | `OnOff` speglar `Output State`. |
 | Level Control | `0x0008` | On/Off Plug-in Unit | O | Rekommenderad för gruppstyrning; får inte påverka `Output` utöver av/på. |
 | Scenes Management | `0x0062` | On/Off Plug-in Unit | M | Scener i Home Assistant. |
-| Occupancy Sensing | `0x0406` | On/Off Plug-in Unit | O (client) | Används inte av PSMU. |
+| Occupancy Sensing | `0x0406` | On/Off Plug-in Unit | O (client) | Används inte av PSMD. |
 | Electrical Power Measurement | `0x0090` | Electrical Sensor | O.a+ | Momentana mätvärden. |
 | Electrical Energy Measurement | `0x0091` | Electrical Sensor | O.a+ | Energimätning. |
 | Power Topology | `0x009C` | Electrical Sensor | M | Anger vilka endpoints mätningen avser (Core §11.8). |
 
 Electrical Sensor kräver minst ett av Electrical Power Measurement och
-Electrical Energy Measurement (`O.a+`); PSMU använder båda.
+Electrical Energy Measurement (`O.a+`); PSMD använder båda.
 
 ### 5.3 Mappning
 
@@ -163,16 +163,22 @@ ackumuleras över `Power-up` är öppet (`TBD-12`).
 
 ## 6. Nätverk och provisionering
 
-Hur PSMU får Wi-Fi-uppgifter, hur återanslutning sker och hur enheten beter sig
+Hur PSMD får Wi-Fi-uppgifter, hur återanslutning sker och hur enheten beter sig
 när Home Assistant inte nås är inte fastställt (`TBD-05`, `TBD-06`, `TBD-07`).
 
 ## 7. Byggmiljö och körtid
 
 - Mjukvaran byggs med **ESP-IDF 6.1** (`TBD-C8`) och **ESP-Matter**
-  `release/v1.6.1` för Matter 1.6.1. Projektet i detta repository innehåller
-  endast dokumentation, inte firmware-källkod.
+  `release/v1.6.1` för Matter 1.6.1. Firmwarekällkoden ligger i `firmware/` i
+  detta repository och byggs/flashes via `esp-idf`-MCP:n.
 - Var Espressif-dokumentationen finns och hur den slås upp:
   [`../reference/external/esp-idf/INDEX.md`](../reference/external/esp-idf/INDEX.md).
+- Loggning sker med ESP-IDF-makrona `ESP_LOGI`, `ESP_LOGW`, `ESP_LOGE`,
+  `ESP_LOGD` och `ESP_LOGV` – inte `printf`.
+- Varje modul som loggar definierar en `TAG` (`static const char *TAG`). `TAG`
+  börjar alltid med `psmd_` följt av modulnamnet, till exempel `psmd_meas`, så
+  att PSMD:s egna loggar kan filtreras fram från ESP-IDF- och
+  ESP-Matter-bibliotekens.
 - Hårdvarutarget och byggkonfiguration är inte fastställda.
 - ESP-Matter rekommenderar ESP-IDF v6.0.2; avvikelsen utreds i `TBD-21`.
 - Firmware- och applikationsversioner lagras enligt datamodellen ovan.

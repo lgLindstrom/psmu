@@ -1,6 +1,6 @@
-# Användarhandbok – PSMU
+# Användarhandbok – PSMD
 
-**Power Switch and Measurement Unit (PSMU)**
+**Power Switch and Measurement Device (PSMD)**
 
 > Status: Utkast. Avsnitt markerade med `[...]` behöver fyllas i när produktens
 > funktioner och beteende är fastställda. Öppna frågor och varifrån de kommer
@@ -16,7 +16,7 @@
 ## 1. Om denna handbok
 
 Den här handboken beskriver hur du som användare kommer igång med och använder
-**[Power Switch and Measurement Unit (PSMU)]** – en smart plugg som slår på och
+**[Power Switch and Measurement Device (PSMD)]** – en smart plugg som slår på och
 stänger av ansluten utrustning samt mäter spänning, ström och effekt. Produkten
 består av både hårdvara och mjukvara.
 
@@ -30,8 +30,8 @@ förkunskaper].
 
 ## 2. Produktöversikt
 
-PSMU är en smart plugg som placeras mellan vägguttaget och den utrustning du vill
-styra. Med PSMU kan du:
+PSMD är en smart plugg som placeras mellan vägguttaget och den utrustning du vill
+styra. Med PSMD kan du:
 
 - **Slå på och stänga av** ansluten utrustning – lokalt eller via Home Assistant.
 - **Mäta spänning och ström** i den anslutna lasten (endast i `OPERATIONAL`).
@@ -39,28 +39,28 @@ styra. Med PSMU kan du:
 - **Integrera med Home Assistant** via Matter för automationer och gemensam
   styrning (se avsnitt 4.4).
 
-PSMU består av en hårdvaruenhet (själva pluggen) och en mjukvarudel som används
+PSMD består av en hårdvaruenhet (själva pluggen) och en mjukvarudel som används
 för att styra och läsa av enheten.
 
 ### 2.1 Användningssätt
 
-PSMU kan användas på två sätt:
+PSMD kan användas på två sätt:
 
 - **Lokalt (fristående):** pluggen sköter styrning (`ON`/`OFF`) på egen hand, utan
   molntjänst eller internetuppkoppling. Ingen mätning sker och ingen data lämnar
   den lokala miljön.
-- **Integrerat med Home Assistant:** om PSMU ansluts till Wi-Fi och du har en
+- **Integrerat med Home Assistant:** om PSMD ansluts till Wi-Fi och du har en
   **Matter Server** i Home Assistant kan enheten läggas till där. Du kan då styra
-  och läsa av PSMU tillsammans med dina övriga enheter och automationer.
+  och läsa av PSMD tillsammans med dina övriga enheter och automationer.
 
 > Matter-integrationen kräver att Home Assistant har en Matter Server installerad
-> och att PSMU och Home Assistant finns i samma nätverk.
+> och att PSMD och Home Assistant finns i samma nätverk.
 
 ### 2.2 Ingår i förpackningen
 
 | Del | Antal | Kommentar |
 |---|---|---|
-| PSMU-enhet | 1 | Smart plugg med mätfunktion |
+| PSMD-enhet | 1 | Smart plugg med mätfunktion |
 | [Snabbstart] | 1 | |
 | [Övrigt tillbehör] | | |
 
@@ -71,13 +71,13 @@ PSMU kan användas på två sätt:
 | Användning lokalt | Ingen extra mjukvara | – |
 | Home Assistant | Version [ ] med Matter Server | Senaste version |
 | Wi-Fi | [ 2,4 GHz ] | [ ] |
-| Nätverk | PSMU och Home Assistant i samma nät | – |
+| Nätverk | PSMD och Home Assistant i samma nät | – |
 
 ## 3. Säkerhet och viktig information
 
-Läs igenom detta innan PSMU tas i bruk.
+Läs igenom detta innan PSMD tas i bruk.
 
-- PSMU är avsedd för **[inomhusbruk]** och ansluts till ett jordat vägguttag.
+- PSMD är avsedd för **[inomhusbruk]** och ansluts till ett jordat vägguttag.
 - Anslut inte en last som överstiger **[max belastning, t.ex. 16 A / 3680 W]**.
 - Täck inte över enheten och placera den inte där den kan utsättas för fukt,
   värme eller mekanisk påverkan.
@@ -93,21 +93,21 @@ Läs igenom detta innan PSMU tas i bruk.
 
 ### 4.2 Ansluta hårdvaran
 
-PSMU har två anslutningar: en som ansluts till vägguttaget och en som den
+PSMD har två anslutningar: en som ansluts till vägguttaget och en som den
 utrustning du vill styra och mäta ansluts till.
 
-1. Sätt PSMU:s ena anslutning i **vägguttaget**.
-2. Anslut den **utrustning** som ska styras och mätas i PSMU:s andra anslutning.
-3. Kontrollera att PSMU får spänning. `Output State` är alltid `OFF` vid `Power-up`.
+1. Sätt PSMD:s ena anslutning i **vägguttaget**.
+2. Anslut den **utrustning** som ska styras och mätas i PSMD:s andra anslutning.
+3. Kontrollera att PSMD får spänning. `Output State` är alltid `OFF` vid `Power-up`.
 
 > Anslutningsdonens typ och utförande dokumenteras separat tills de är fastställda.
 
 ### 4.3 Använda lokalt
 
-PSMU fungerar direkt efter anslutning och kräver ingen molntjänst. Vid första
+PSMD fungerar direkt efter anslutning och kräver ingen molntjänst. Vid första
 `Power-up` startar enheten i `LOCAL`.
 
-1. Kontrollera att PSMU får spänning.
+1. Kontrollera att PSMD får spänning.
 2. Tryck **kort** på knappen för att växla `Output State` mellan `ON` och `OFF`.
 3. `Output State LED` visar aktuellt `Output State`.
 
@@ -116,16 +116,16 @@ I `LOCAL` mäts inga elektriska värden.
 ### 4.4 Ansluta till Home Assistant via Matter
 
 Förutsättning: Home Assistant med **Matter Server** installerad och ett Wi-Fi-nät
-som PSMU kan ansluta till.
+som PSMD kan ansluta till.
 
 1. Håll knappen intryckt (`Long Press`, > 3 s) tills `Operation Mode LED` börjar
    blinka långsamt. Enheten är nu i `PAIRING`.
 2. Öppna Home Assistant och välj att lägga till en enhet via Matter.
-3. [Ange parkopplingskod/QR från PSMU]
+3. [Ange parkopplingskod/QR från PSMD]
 4. Välj rum och namn, och slutför guiden.
 5. När anslutningen lyckas övergår enheten till `OPERATIONAL` och `Operation Mode LED`
    lyser fast.
-6. Kontrollera att PSMU visas med sina mätvärden i Home Assistant.
+6. Kontrollera att PSMD visas med sina mätvärden i Home Assistant.
 
 Om anslutningen misslyckas, eller om `Pairing Timeout` (preliminärt 3 minuter)
 löser ut, återgår enheten till `LOCAL`.
@@ -143,7 +143,7 @@ testkörning eller första mätvärde.]
 
 ### 5.1 Hårdvarans delar
 
-PSMU har två anslutningar:
+PSMD har två anslutningar:
 
 - **Ingång:** ansluts till vägguttaget.
 - **Utgång:** den utrustning som ska styras och mätas ansluts här.
@@ -209,7 +209,7 @@ På enheten finns dessutom:
 Mätning sker **endast i `OPERATIONAL`**. Inget mäts i `LOCAL` eller `PAIRING`.
 Mätningen är aktiv även när `Output State` är `OFF`.
 
-PSMU mäter den anslutna lasten och kan presentera följande värden:
+PSMD mäter den anslutna lasten och kan presentera följande värden:
 
 - Spänning
 - Ström
@@ -222,11 +222,11 @@ uppdateringsintervall.]
 
 ### 6.3 Automationer i Home Assistant
 
-När PSMU är tillagd via Matter kan dess mätvärden och strömbrytare användas i
+När PSMD är tillagd via Matter kan dess mätvärden och strömbrytare användas i
 Home Assistants automationer och scener.
 
 1. [Skapa automation]
-2. [Välj PSMU som utlösare/villkor/åtgärd]
+2. [Välj PSMD som utlösare/villkor/åtgärd]
 3. [Spara och testa]
 
 ## 7. Underhåll och skötsel
@@ -240,8 +240,8 @@ Home Assistants automationer och scener.
 
 | Symtom | Möjlig orsak | Åtgärd |
 |---|---|---|
-| Ingen statusindikering | PSMU saknar spänning | Kontrollera att PSMU sitter i vägguttaget |
-| Går inte att lägga till i Home Assistant | Matter Server saknas eller PSMU är inte i parkopplingsläge | Kontrollera Matter Server och upprepa parkopplingen |
+| Ingen statusindikering | PSMD saknar spänning | Kontrollera att PSMD sitter i vägguttaget |
+| Går inte att lägga till i Home Assistant | Matter Server saknas eller PSMD är inte i parkopplingsläge | Kontrollera Matter Server och upprepa parkopplingen |
 | Inga mätvärden visas | Ingen last ansluten eller fel i anslutningen | Kontrollera ansluten utrustning |
 | [ ] | [ ] | [ ] |
 
