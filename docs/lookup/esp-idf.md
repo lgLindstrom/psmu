@@ -6,11 +6,11 @@
 > Version: 0.1
 > Ansvarig: [ ]
 > Senast uppdaterad: 2026-11-13
-> Relaterade: [`matter-1.6.1/INDEX.md`](../matter-1.6.1/INDEX.md),
-> [`specification.md`](../../specification.md) §13 och §15
+> Relaterade: [`matter-1.6.1/INDEX.md`](matter-1.6.1/INDEX.md),
+> [`specification.md`](../specification.md) §13 och §15
 
 > **Äger:** var Espressif-dokumentationen finns och hur den slås upp.
-> **Läs vid behov:** [`matter-1.6.1/INDEX.md`](../matter-1.6.1/INDEX.md) för
+> **Läs vid behov:** [`matter-1.6.1/INDEX.md`](matter-1.6.1/INDEX.md) för
 > Matter-specifika kluster och attribut.
 
 Firmware byggs med **ESP-IDF 6.1** (beslut `TBD-C8`) och Matter-delen med
@@ -120,19 +120,19 @@ Rubriken är inte normativ i sig: kontrollera signaturer i
 | Komponent | Version | Källa |
 |---|---|---|
 | ESP-IDF | **6.1** | Beslut `TBD-C8` |
-| ESP-Matter | `release/v1.6.1` (Matter 1.6.1) | [`matter-1.6.1/INDEX.md`](../matter-1.6.1/INDEX.md) |
-| Matter-specifikation | 1.6.1 | [`matter-1.6.1/INDEX.md`](../matter-1.6.1/INDEX.md) |
+| ESP-Matter | `release/v1.6.1` (Matter 1.6.1) | [`matter-1.6.1/INDEX.md`](matter-1.6.1/INDEX.md) |
+| Matter-specifikation | 1.6.1 | [`matter-1.6.1/INDEX.md`](matter-1.6.1/INDEX.md) |
 
 **Känd avvikelse:** ESP-Matters README för både `release/v1.6.1` och `main`
 rekommenderar ESP-IDF **v6.0.2**, inte 6.1. Vi ligger alltså ett steg före vad
 Espressif testar mot. Frågan är registrerad som `TBD-21` i
-[`decisions.md`](../../decisions.md).
+[`decisions.md`](../decisions.md).
 
 ## Filer här
 
 | Fil | Spårad | Innehåll |
 |---|---|---|
-| `INDEX.md` | ja | Den här kartan |
+| `esp-idf.md` | ja | Den här kartan |
 
 Inga PDF:er, inga textextrakt och ingen kopia av Espressifs dokumentation lagras
 i repot. ESP-IDF:s dokumentation är CC-BY-SA 4.0 och får återges med

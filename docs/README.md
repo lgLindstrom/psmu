@@ -12,8 +12,8 @@ engelska.
 | Project | [`decisions.md`](decisions.md) | Beslut, öppna frågor och kända luckor. | Utkast |
 | Källkod | [`../firmware/`](../firmware/) | ESP32-firmware (ESP-IDF + ESP-Matter). Byggs via `esp-idf`-MCP:n. | Ej påbörjad |
 | Reference | [`glossary.md`](glossary.md) | Terminologi och godkända begrepp. | Utkast |
-| Reference | [`reference/external/matter-1.6.1/`](reference/external/matter-1.6.1/) | Matter 1.6.1-utdrag (read-only). | – |
-| Reference | [`reference/external/esp-idf/INDEX.md`](reference/external/esp-idf/INDEX.md) | Var ESP-IDF 6.1 och ESP-Matter-dokumentationen finns. | Utkast |
+| Lookup | [`lookup/matter-1.6.1/`](lookup/matter-1.6.1/) | Matter 1.6.1-utdrag (read-only). | – |
+| Lookup | [`lookup/esp-idf.md`](lookup/esp-idf.md) | Var ESP-IDF 6.1 och ESP-Matter-dokumentationen finns. | Utkast |
 
 ## Ämneskarta
 
@@ -30,8 +30,8 @@ behövs.
 | Lucka, nästa steg, `GAP-01`–`GAP-05` | [`decisions.md`](decisions.md) |
 | Term, benämning, `Operation Mode LED`, `Output State LED` | [`glossary.md`](glossary.md) |
 | Komma igång, användning, felsökning, teknisk data | [`manual.md`](manual.md) |
-| Attribut-ID, kluster, device type, cluster revision | [`reference/external/matter-1.6.1/INDEX.md`](reference/external/matter-1.6.1/INDEX.md), därefter `grep` i `text/*.txt` |
-| ESP-IDF, ESP-Matter, GPIO, NVS, OTA, `idf.py`, sökväg i `$IDF_PATH` | [`reference/external/esp-idf/INDEX.md`](reference/external/esp-idf/INDEX.md) |
+| Attribut-ID, kluster, device type, cluster revision | [`lookup/matter-1.6.1/INDEX.md`](lookup/matter-1.6.1/INDEX.md), därefter `grep` i `text/*.txt` |
+| ESP-IDF, ESP-Matter, GPIO, NVS, OTA, `idf.py`, sökväg i `$IDF_PATH` | [`lookup/esp-idf.md`](lookup/esp-idf.md) |
 | Firmware, källkod, loggning, `psmd_`, `TAG` | [`../firmware/`](../firmware/), [`specification.md`](specification.md) §15 |
 | Branch, commit, pull request | [Workflow](#workflow) |
 

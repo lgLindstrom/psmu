@@ -96,7 +96,7 @@ ett beslut fattats, och berörda dokument uppdateras.
 | TBD-C5 | Ska `Long Press` gå till `PAIRING` även från `OPERATIONAL`? | Ja. | K1 |
 | TBD-C6 | Ska `Long Press` i `PAIRING` avbryta till `LOCAL`? | Ja. | K1 |
 | TBD-C7 | `Output State` vid `Power-up`? | Alltid `OFF`. | K1 |
-| TBD-C8 | Vilken ESP-IDF-version byggs firmware mot? | ESP-IDF 6.1, med ESP-Matter `release/v1.6.1` för Matter 1.6.1. Se [`../reference/external/esp-idf/INDEX.md`](../reference/external/esp-idf/INDEX.md). | K1 |
+| TBD-C8 | Vilken ESP-IDF-version byggs firmware mot? | ESP-IDF 6.1, med ESP-Matter `release/v1.6.1` för Matter 1.6.1. Se [`../lookup/esp-idf.md`](../lookup/esp-idf.md). | K1 |
 | TBD-C9 | Vilka Matter-enhetstyper används? | On/Off Plug-in Unit (`0x010A`) och Electrical Sensor (`0x0510`) på samma endpoint. Se [`specification.md`](specification.md) §13.1. Monteringssättet prövas i `TBD-23`. | K4 |
 | TBD-C10 | Hur rapporteras `phase_delay`? | Som `PowerFactor` i Electrical Power Measurement. Enhet och skalning är öppen fråga (`TBD-22`). | K4 |
 

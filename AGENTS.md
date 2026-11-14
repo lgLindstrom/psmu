@@ -18,10 +18,10 @@ ESP-IDF 6.1 and ESP-Matter, under `firmware/`.
   source (`K1`–`K6`).
 - `docs/glossary.md` – terminology, English term → Swedish
   explanation, status.
-- `docs/reference/external/matter-1.6.1/` – read-only Matter 1.6.1 extracts. Do
+- `docs/lookup/matter-1.6.1/` – read-only Matter 1.6.1 extracts. Do
   not edit the PDFs, `text/`, or `extract_text.py`; search `text/*.txt` with grep
   rather than reading whole files (they are large).
-- `docs/reference/external/esp-idf/INDEX.md` – where the installed ESP-IDF 6.1
+- `docs/lookup/esp-idf.md` – where the installed ESP-IDF 6.1
   and ESP-Matter documentation lives. It is never copied into this repository.
   Builds and flashing go through the `esp-idf` MCP, which activates the EIM
   installation that `eim select` points at; do not source `activate_idf_v*.sh`
@@ -38,8 +38,8 @@ orders of magnitude more than reading too few.
 | --- | --- | --- | --- |
 | Manual text | `docs/manual.md` | `specification.md` §2–8, `decisions.md` (unknown values), `grep` on the term in `glossary.md` | Matter extracts |
 | Specification (all) | `docs/specification.md` | `decisions.md` | `manual.md`, Matter extracts |
-| Architecture / Matter | `specification.md` §10–16, `docs/reference/external/matter-1.6.1/INDEX.md` | targeted `grep` in `text/*.txt` | whole `text/*.txt`, PDFs, `*.tar`, `manual.md` |
-| ESP-IDF / ESP-Matter API | `docs/reference/external/esp-idf/INDEX.md` | targeted `grep` in `$IDF_PATH/docs/en/` or `$ESP_MATTER_PATH/docs/en/` | whole doc trees, `$IDF_PATH` in a codegraph index (734 MB) |
+| Architecture / Matter | `specification.md` §10–16, `docs/lookup/matter-1.6.1/INDEX.md` | targeted `grep` in `text/*.txt` | whole `text/*.txt`, PDFs, `*.tar`, `manual.md` |
+| ESP-IDF / ESP-Matter API | `docs/lookup/esp-idf.md` | targeted `grep` in `$IDF_PATH/docs/en/` or `$ESP_MATTER_PATH/docs/en/` | whole doc trees, `$IDF_PATH` in a codegraph index (734 MB) |
 | Firmware / C code | the `firmware/` files the task touches | `specification.md` §2–8 and §15 (behavior, build), the `esp-idf` skill | `manual.md`, Matter extracts |
 | Requirements | `specification.md` §9 | `decisions.md` | Matter extracts, `manual.md` |
 | Decision / open question | `decisions.md` (grep on the ID or topic) | the document the question concerns | everything else |
@@ -51,7 +51,7 @@ orders of magnitude more than reading too few.
 
 Rules:
 
-- Never read `docs/reference/external/matter-1.6.1/text/*.txt` in full. Start at
+- Never read `docs/lookup/matter-1.6.1/text/*.txt` in full. Start at
   `INDEX.md`, then `grep -n` with `-A`/`-B` context and `read` only those line
   ranges (`offset`/`limit`).
 - Never read the Matter PDFs or `matter-1.6.1.tar`; the text extracts exist and

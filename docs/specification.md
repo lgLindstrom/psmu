@@ -14,7 +14,7 @@
 > arkitektur, datamodell, Matter-integration och byggmiljö.
 > **Läs vid behov:** [`decisions.md`](decisions.md) för öppna frågor
 > och okända värden, samt
-> [`reference/external/matter-1.6.1/INDEX.md`](reference/external/matter-1.6.1/INDEX.md)
+> [`lookup/matter-1.6.1/INDEX.md`](lookup/matter-1.6.1/INDEX.md)
 > för Matter-utdragen (sök där, läs inte hela textfilerna).
 
 ## 1. Syfte
@@ -280,7 +280,7 @@ när Home Assistant inte nås är inte fastställt (`TBD-05`, `TBD-06`, `TBD-07`
   `release/v1.6.1` för Matter 1.6.1. Firmwarekällkoden ligger i `firmware/` i
   detta repository och byggs/flashes via `esp-idf`-MCP:n.
 - Var Espressif-dokumentationen finns och hur den slås upp:
-  [`reference/external/esp-idf/INDEX.md`](reference/external/esp-idf/INDEX.md).
+  [`lookup/esp-idf.md`](lookup/esp-idf.md).
 - Loggning sker med ESP-IDF-makrona `ESP_LOGI`, `ESP_LOGW`, `ESP_LOGE`,
   `ESP_LOGD` och `ESP_LOGV` – inte `printf`.
 - Varje modul som loggar definierar en `TAG` (`static const char *TAG`). `TAG`
