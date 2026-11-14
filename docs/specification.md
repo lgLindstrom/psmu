@@ -1,32 +1,141 @@
-# Architecture – PSMD
+# Specification – PSMD
 
 **Power Switch and Measurement Device (PSMD)**
 
 > Status: Utkast
 > Version: 0.1
 > Ansvarig: [ ]
-> Senast uppdaterad: 2026-11-13
-> Relaterade: [`specification.md`](specification.md),
-> [`decisions.md`](../project/decisions.md),
-> [`glossary.md`](../reference/glossary.md)
+> Senast uppdaterad: 2026-11-14
+> Relaterade: [`decisions.md`](decisions.md),
+> [`manual.md`](manual.md),
+> [`glossary.md`](glossary.md)
 
-> **Äger:** systemöversikt, komponenter, datamodell, Matter-integration och
-> byggmiljö.
-> **Läs vid behov:** [`specification.md`](specification.md) för beteende och
-> [`../reference/external/matter-1.6.1/INDEX.md`](../reference/external/matter-1.6.1/INDEX.md)
+> **Äger:** driftlägen, knapp, lysdioder, `Power-up`, mätning, krav,
+> arkitektur, datamodell, Matter-integration och byggmiljö.
+> **Läs vid behov:** [`decisions.md`](decisions.md) för öppna frågor
+> och okända värden, samt
+> [`reference/external/matter-1.6.1/INDEX.md`](reference/external/matter-1.6.1/INDEX.md)
 > för Matter-utdragen (sök där, läs inte hela textfilerna).
 
 ## 1. Syfte
 
-Det här dokumentet beskriver mjukvarans övergripande uppbyggnad: komponenter,
-ansvarsgränser, dataflöden och integrationen med Matter och Home Assistant.
-Detaljerat beteende – driftlägen, knapp, lysdioder och mätning – finns i
-[`specification.md`](specification.md).
+Det här dokumentet specificerar PSMD: mjukvarubeteende (§2–8), krav med
+acceptanskriterier (§9) och mjukvarans övergripande uppbyggnad (§10–16) –
+komponenter, ansvarsgränser, dataflöden, datamodell och integrationen med
+Matter och Home Assistant.
 
-Dokumentet beskriver **avsedd arkitektur**. Exakt implementation, mjukvaruversion
-och hårdvarutarget är inte fastställda ännu.
+Dokumentet beskriver **avsedd arkitektur**. Exakt implementation,
+mjukvaruversion och hårdvarutarget är inte fastställda ännu.
 
-## 2. Systemöversikt
+## 2. Operation Modes
+
+| `Operation Mode` | Beskrivning | `Operation Mode LED` |
+|---|---|---|
+| **`LOCAL`** | Standardläge vid första `Power-up`. Ingen anslutning till Home Assistant. `Short Press` växlar `Output State`. | Snabbt blink i 5 s vid `Power-up`, därefter släckt. |
+| **`PAIRING`** | Enheten är tillgänglig för Matter-`Commissioning`. `Short Press` har ingen effekt. | Långsamt blink. |
+| **`OPERATIONAL`** | Enheten ingår i en `Fabric` och kan styras via Home Assistant. `Short Press` växlar `Output State`. | Snabbt blink i 5 s vid `Power-up`, därefter fast sken. |
+
+## 3. Övergångar
+
+| Från | Händelse | Till | Kommentar |
+|---|---|---|---|
+| – | `Power-up`, första gången | `LOCAL` | Standardläge. |
+| – | `Power-up`, tidigare ansluten | `OPERATIONAL` | Beteende när Home Assistant inte nås är inte fastställt (`TBD-06`). |
+| `LOCAL` | `Long Press` | `PAIRING` | |
+| `PAIRING` | Lyckad `Commissioning` | `OPERATIONAL` | Enheten läggs i en `Fabric`. |
+| `PAIRING` | `Pairing Timeout` eller misslyckad anslutning | `LOCAL` | Preliminärt 3 minuter (`TBD-01`). |
+| `PAIRING` | `Long Press` | `LOCAL` | `Decommissioning` enligt `TBD-03`. |
+| `OPERATIONAL` | `Long Press` | `PAIRING` | |
+
+`Short Press` ändrar aldrig `Operation Mode`; den växlar endast `Output State` i
+`LOCAL` och `OPERATIONAL`.
+
+## 4. Button
+
+| Händelse | Definition | Beteende |
+|---|---|---|
+| **`Short Press`** | Tryckning ≤ 3 s. | Växlar `Output State` i `LOCAL` och `OPERATIONAL`. Ingen effekt i `PAIRING`. |
+| **`Long Press`** | Tryckning > 3 s. | Växlar `Operation Mode` enligt tabellen ovan. |
+| **`Press Threshold`** | 3 s. | Gräns mellan `Short Press` och `Long Press`. |
+
+Debounce-tid och exakt avläsning av knappen är inte fastställda.
+
+## 5. LEDs
+
+| LED | Beteende |
+|---|---|
+| **`Operation Mode LED`** (`LED1`) | Visar `Operation Mode`: snabbt blink i 5 s vid `Power-up` (både `LOCAL` och `OPERATIONAL`), släckt i `LOCAL`, långsamt blink i `PAIRING`, fast sken i `OPERATIONAL`. |
+| **`Output State LED`** (`LED2`) | Speglar `Output State`: tänd vid `ON`, släckt vid `OFF`, oberoende av `Operation Mode`. |
+
+| Mönster | Tänd / släckt | Frekvens |
+|---|---|---|
+| **`Fast Blink`** | 0,25 s / 0,25 s | 2 Hz, i 5 s vid `Power-up`. |
+| **`Slow Blink`** | 0,5 s / 0,5 s | 1 Hz. |
+| **`Solid`** | Tänd | – |
+| **`Off`** | Släckt | – |
+
+## 6. Power-up och lagring
+
+- `Output State` sätts **alltid till `OFF`** vid `Power-up` (`Power-loss Recovery`).
+- `Operation Mode` vid `Power-up` följer `Boot Mode`: `LOCAL` första gången,
+  annars `OPERATIONAL`.
+- Vilket tillstånd som sparas och återställs i övrigt är inte fastställt
+  (`TBD-12`).
+- Om och hur `Factory Reset` ska finnas är inte beslutat (`TBD-04`).
+
+## 7. Mätning
+
+Mätning sker **endast i `OPERATIONAL`**. Inget mäts i `LOCAL` eller `PAIRING`.
+Mätningen är aktiv även när `Output State` är `OFF`.
+
+| Storhet | Status |
+|---|---|
+| Spänning | Fastställd som mätvärde. |
+| Ström | Fastställd som mätvärde. |
+| Aktiv effekt | Fastställd som mätvärde. |
+| Energi | Fastställd som mätvärde, men ackumulering över `Power-up` är inte beslutad (`TBD-12`). |
+| Frekvens | Inte fastställd (`TBD-10`). |
+| Effektfaktor | Inte fastställd (`TBD-10`). |
+
+`Measurement Interval` är inte fastställt (`TBD-11`), och vilka värden som
+rapporteras till Matter avgörs i `TBD-10`. Fältnamn och skalning finns i §12.
+
+`phase_delay` rapporteras som `PowerFactor` (`TBD-C10`); enhet och skalning är
+inte fastställda (`TBD-22`). Mappningen mellan datamodellens fält och
+Matter-attributen finns i §13.3.
+
+## 8. Lokal och extern styrning
+
+- **`LOCAL`:** endast `Short Press` styr `Output State`.
+- **`OPERATIONAL`:** Home Assistant och `Short Press` kan båda ändra
+  `Output State`. `Output State LED` följer alltid det aktuella tillståndet.
+- **`PAIRING`:** `Output State` behåller sitt aktuella värde; `Short Press` har
+  ingen effekt.
+
+## 9. Krav och acceptanskriterier
+
+Krav med ID, källa, acceptanskriterium och spårbarhet till specifikationen i
+detta dokument.
+
+| ID | Krav | Källa | Acceptanskriterium | Spec | Test | Status |
+|---|---|---|---|---|---|---|
+| REQ-F-001 | `Short Press` ska växla `Output State` i `LOCAL` och `OPERATIONAL`. | K1 | Utgången växlar vid tryck ≤ 3 s. | §4 | [ ] | Bekräftad |
+| REQ-F-002 | `Long Press` ska växla `Operation Mode` enligt specifikationen. | K1 | `LOCAL`/`OPERATIONAL` → `PAIRING`; `PAIRING` → `LOCAL`. | §3–4 | [ ] | Bekräftad |
+| REQ-F-003 | `Output State` ska alltid vara `OFF` vid `Power-up`. | K1 | Utgången är `OFF` efter varje spänningssättning. | §6 | [ ] | Bekräftad |
+| REQ-F-004 | Mätning ska endast ske i `OPERATIONAL`. | K1 | Inga mätvärden uppdateras i `LOCAL` eller `PAIRING`. | §7 | [ ] | Bekräftad |
+| REQ-F-005 | `Operation Mode LED` och `Output State LED` ska följa specificerade mönster. | K1 | Blink- och skenmönster överensstämmer med specifikationen. | §5 | [ ] | Bekräftad |
+
+Icke-funktionella krav och konkreta acceptanstester kopplade till varje krav
+saknas ännu; se luckan i [`decisions.md`](decisions.md).
+
+### Teststrategi
+
+- [ ] Enhetstest av mjukvarumoduler.
+- [ ] Integrations- och HIL-test av knapp, LED, relä och mätning.
+- [ ] Matter-`Commissioning` mot Home Assistant.
+- [ ] Acceptanstest mot kraven ovan.
+
+## 10. Systemöversikt
 
 PSMD är en Matter-enhet som styr en `Output` och mäter den anslutna `Load`.
 Enheten kan användas fristående i `LOCAL` eller via en `Fabric` i Home Assistant.
@@ -48,7 +157,7 @@ PSMD ansvarar för:
 Home Assistant och `Matter Server` ligger utanför PSMD och ansvarar för
 `Commissioning`, automationer och användargränssnitt.
 
-## 3. Komponenter
+## 11. Komponenter
 
 Datamodellen nedan använder fyra komponentbeteckningar. Deras fullständiga namn
 och ansvarsgränser är inte fastställda (`TBD-19`); tabellen är en preliminär
@@ -64,7 +173,7 @@ tolkning utifrån vilka data respektive komponent äger.
 > **Att undersöka:** komponenternas ansvar och gränssnitt behöver bekräftas innan
 > de kan användas som arkitekturbegrepp i krav och tester (`TBD-19`).
 
-## 4. Datamodell
+## 12. Datamodell
 
 Tabellen är den preliminära datamodellen. Fältnamn, typer och skalning behöver
 bekräftas (`TBD-20`).
@@ -93,18 +202,17 @@ bekräftas (`TBD-20`).
 `Editable = yes` innebär att värdet kan ändras via gränssnittet. `Origin` anger
 var värdet skapas och `Storage` var det lagras.
 
-## 5. Matter och Home Assistant
+## 13. Matter och Home Assistant
 
 - `Commissioning` lägger PSMD i en `Fabric` och gör enheten styrbar från Home
   Assistant.
-- `Operation Mode` och övergångar specificeras i
-  [`specification.md`](specification.md).
+- `Operation Mode` och övergångar specificeras i §2–3.
 - Mätning sker endast i `OPERATIONAL`. Vilka mätvärden som exponeras är delvis
   fastställt (`TBD-10`, `TBD-11`).
 - `Pairing Timeout`, `Commissioning Timeout`, `Reconnect` och hantering av flera
   `Fabric` är öppna frågor (`TBD-01`, `TBD-02`, `TBD-06`, `TBD-07`, `TBD-09`).
 
-### 5.1 Enhetstyper
+### 13.1 Enhetstyper
 
 PSMD exponeras som två enhetstyper på samma endpoint (`TBD-C9`):
 
@@ -122,7 +230,7 @@ att använda **Mounted On/Off Control** (`0x010F`), med On/Off Plug-in Unit som
 valfri extra post i `DeviceTypeList`. Monteringssättet är inte fastställt
 (`TBD-23`).
 
-### 5.2 Kluster
+### 13.2 Kluster
 
 | Kluster | ID | Krävs av | Conformance | Användning |
 |---|---|---|---|---|
@@ -139,7 +247,7 @@ valfri extra post i `DeviceTypeList`. Monteringssättet är inte fastställt
 Electrical Sensor kräver minst ett av Electrical Power Measurement och
 Electrical Energy Measurement (`O.a+`); PSMD använder båda.
 
-### 5.3 Mappning
+### 13.3 Mappning
 
 Tabellen är ett förslag. Vilka mätvärden som faktiskt exponeras avgörs i
 `TBD-10`. Att `phase_delay` rapporteras som `PowerFactor` är beslutat
@@ -161,18 +269,18 @@ Matter skalar mätvärden i mV, mA, mW och mHz, medan datamodellen anger `int64`
 utan enhet. Skalningen ska fastställas (`TBD-20`). Om energimätningen ska
 ackumuleras över `Power-up` är öppet (`TBD-12`).
 
-## 6. Nätverk och provisionering
+## 14. Nätverk och provisionering
 
 Hur PSMD får Wi-Fi-uppgifter, hur återanslutning sker och hur enheten beter sig
 när Home Assistant inte nås är inte fastställt (`TBD-05`, `TBD-06`, `TBD-07`).
 
-## 7. Byggmiljö och körtid
+## 15. Byggmiljö och körtid
 
 - Mjukvaran byggs med **ESP-IDF 6.1** (`TBD-C8`) och **ESP-Matter**
   `release/v1.6.1` för Matter 1.6.1. Firmwarekällkoden ligger i `firmware/` i
   detta repository och byggs/flashes via `esp-idf`-MCP:n.
 - Var Espressif-dokumentationen finns och hur den slås upp:
-  [`../reference/external/esp-idf/INDEX.md`](../reference/external/esp-idf/INDEX.md).
+  [`reference/external/esp-idf/INDEX.md`](reference/external/esp-idf/INDEX.md).
 - Loggning sker med ESP-IDF-makrona `ESP_LOGI`, `ESP_LOGW`, `ESP_LOGE`,
   `ESP_LOGD` och `ESP_LOGV` – inte `printf`.
 - Varje modul som loggar definierar en `TAG` (`static const char *TAG`). `TAG`
@@ -183,12 +291,7 @@ när Home Assistant inte nås är inte fastställt (`TBD-05`, `TBD-06`, `TBD-07`
 - ESP-Matter rekommenderar ESP-IDF v6.0.2; avvikelsen utreds i `TBD-21`.
 - Firmware- och applikationsversioner lagras enligt datamodellen ovan.
 
-## 8. Säkerhet och uppdatering
+## 16. Säkerhet och uppdatering
 
 Matter-attestering, nyckelhantering, säker lagring och eventuell OTA-uppdatering
 är ännu inte utrett. Inga krav eller lösningar är fastställda.
-
-## 9. Öppna frågor
-
-Samtliga öppna frågor och fattade beslut finns i
-[`decisions.md`](../project/decisions.md).

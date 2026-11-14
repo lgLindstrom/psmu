@@ -7,7 +7,7 @@
 > Ansvarig: [ ]
 > Senast uppdaterad: 2026-11-13
 > Relaterade: [`matter-1.6.1/INDEX.md`](../matter-1.6.1/INDEX.md),
-> [`architecture.md`](../../../specification/architecture.md) §5 och §7
+> [`specification.md`](../../specification.md) §13 och §15
 
 > **Äger:** var Espressif-dokumentationen finns och hur den slås upp.
 > **Läs vid behov:** [`matter-1.6.1/INDEX.md`](../matter-1.6.1/INDEX.md) för
@@ -126,7 +126,7 @@ Rubriken är inte normativ i sig: kontrollera signaturer i
 **Känd avvikelse:** ESP-Matters README för både `release/v1.6.1` och `main`
 rekommenderar ESP-IDF **v6.0.2**, inte 6.1. Vi ligger alltså ett steg före vad
 Espressif testar mot. Frågan är registrerad som `TBD-21` i
-[`decisions.md`](../../../project/decisions.md).
+[`decisions.md`](../../decisions.md).
 
 ## Filer här
 
