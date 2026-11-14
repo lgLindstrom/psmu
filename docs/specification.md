@@ -137,7 +137,7 @@ rapporteras till Matter avgörs i `TBD-10`. Fältnamn och skalning finns i §12.
 
 `phase_delay` rapporteras som `PowerFactor` (`TBD-C10`); enhet och skalning är
 inte fastställda (`TBD-22`). Mappningen mellan datamodellens fält och
-Matter-attributen finns i §13.3.
+Matter-attributen finns i §12.
 
 ## 9. Lokal och extern styrning
 
@@ -178,9 +178,9 @@ tolkning utifrån vilka data respektive komponent äger.
 
 | Komponent | Preliminärt ansvar | Äger data |
 |---|---|---|
-| **`PSMD`** | Tidsstämplar och sampeldata från mätningen. | `timestamp`, `nsamp` |
+| **`PSMD`** | Tidsstämplar och sampeldata från mätningen. | – |
 | **`MDCB`** | Enhetsidentitet, konfiguration och metadata. | `mac_address`, `friendly_name`, `location`, `geolocation`, `mdcb_firmware` |
-| **`MDB`** | Utgångstillstånd och beräknade mätvärden. | `ac_switch`, `vac`, `iac`, `papp`, `pact`, `preact`, `phase_delay`, `frequency`, `energy`, `mdb_firmware`, `mdb_app_id` |
+| **`MDB`** | Utgångstillstånd och beräknade mätvärden. | `onoff`, `vac`, `iac`, `papp`, `pact`, `preact`, `phase_delay`, `frequency`, `energy`, `mdb_firmware`, `mdb_app_id` |
 | **`DPS`** | Persistent lagring av data som ska överleva `Power-up`. | `mdb_firmware` |
 
 > **Att undersöka:** komponenternas ansvar och gränssnitt behöver bekräftas innan
@@ -191,29 +191,34 @@ tolkning utifrån vilka data respektive komponent äger.
 Tabellen är den preliminära datamodellen. Fältnamn, typer och skalning behöver
 bekräftas (`TBD-20`).
 
-| Name | Editable | Origin | Storage | Data type |
-|---|---|---|---|---|
-| timestamp | no | PSMD | PSMD | int |
-| mac_address | no | MDCB | MDCB | string |
-| ac_switch | yes | MDB | MDB | bool |
-| nsamp | no | PSMD | PSMD | int64 |
-| vac | no | MDB | MDB Calculated | int64 |
-| iac | no | MDB | MDB Calculated | int64 |
-| papp | no | MDB | MDB Calculated | int64 |
-| pact | no | MDB | MDB Calculated | int64 |
-| preact | no | MDB | MDB Calculated | int64 |
-| phase_delay | no | MDB | MDB Calculated | int64 |
-| frequency | no | MDB | MDB Calculated | int64 |
-| energy | no | MDB | MDB Calculated | int64 |
-| friendly_name | yes | MDCB | MDCB | String |
-| mdb_firmware | no | MDB | DPS | `byte[8]`, `a.b.c => uint16.uint16.uint32` |
-| mdcb_firmware | no | MDCB | MDCB | `byte[8]`, `a.b.c => uint16.uint16.uint32` |
-| location | yes | MDCB | MDCB | String |
-| geolocation | yes | MDCB | MDCB | String |
-| mdb_app_id | no | MDB | MDB | String |
+| Name | Editable | Matter-attribut | Enhet i Matter |
+|---|---|---|---|
+| mac_address | no | – | – |
+| onoff | yes | `OnOff` (On/Off) | bool |
+| vac | no | `Voltage` eller `RMSVoltage` (Electrical Power Measurement) | mV |
+| iac | no | `ActiveCurrent` eller `RMSCurrent` | mA |
+| papp | no | `ApparentPower` | mVA |
+| pact | no | `ActivePower` | mW |
+| preact | no | `ReactivePower` | mVAR |
+| phase_delay | no | `PowerFactor` | percent100ths (öppen, `TBD-22`) |
+| frequency | no | `Frequency` | mHz |
+| energy | no | `CumulativeEnergyImported` (Electrical Energy Measurement) | mWh |
+| friendly_name | yes | – | – |
+| mdb_firmware | no | – | – |
+| mdcb_firmware | no | – | – |
+| location | yes | – | – |
+| geolocation | yes | – | – |
+| mdb_app_id | no | – | – |
 
-`Editable = yes` innebär att värdet kan ändras via gränssnittet. `Origin` anger
-var värdet skapas och `Storage` var det lagras.
+`Editable = yes` innebär att värdet kan ändras via gränssnittet.
+
+Tabellen är ett förslag. Vilka mätvärden som faktiskt exponeras avgörs i
+`TBD-10`. Att `phase_delay` rapporteras som `PowerFactor` är beslutat
+(`TBD-C10`), men enhet och skalning är öppna (`TBD-22`).
+
+Matter skalar mätvärden i mV, mA, mW och mHz, medan datamodellen anger `int64`
+utan enhet. Skalningen ska fastställas (`TBD-20`). Om energimätningen ska
+ackumuleras över `Power-up` är öppet (`TBD-12`).
 
 ## 13. Matter och Home Assistant
 
@@ -259,28 +264,6 @@ valfri extra post i `DeviceTypeList`. Monteringssättet är inte fastställt
 
 Electrical Sensor kräver minst ett av Electrical Power Measurement och
 Electrical Energy Measurement (`O.a+`); PSMD använder båda.
-
-### 13.3 Mappning
-
-Tabellen är ett förslag. Vilka mätvärden som faktiskt exponeras avgörs i
-`TBD-10`. Att `phase_delay` rapporteras som `PowerFactor` är beslutat
-(`TBD-C10`), men enhet och skalning är öppna (`TBD-22`).
-
-| Datamodell | Matter-attribut | Enhet i Matter |
-|---|---|---|
-| `ac_switch` | `OnOff` (On/Off) | bool |
-| `vac` | `Voltage` eller `RMSVoltage` (Electrical Power Measurement) | mV |
-| `iac` | `ActiveCurrent` eller `RMSCurrent` | mA |
-| `pact` | `ActivePower` | mW |
-| `papp` | `ApparentPower` | mVA |
-| `preact` | `ReactivePower` | mVAR |
-| `frequency` | `Frequency` | mHz |
-| `energy` | `CumulativeEnergyImported` (Electrical Energy Measurement) | mWh |
-| `phase_delay` | `PowerFactor` | percent100ths (öppen, `TBD-22`) |
-
-Matter skalar mätvärden i mV, mA, mW och mHz, medan datamodellen anger `int64`
-utan enhet. Skalningen ska fastställas (`TBD-20`). Om energimätningen ska
-ackumuleras över `Power-up` är öppet (`TBD-12`).
 
 ## 14. Nätverk och provisionering
 
