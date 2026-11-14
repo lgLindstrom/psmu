@@ -243,10 +243,8 @@ Core §9.2 tillåter flera enhetstyper i `DeviceTypeList` på samma endpoint. Et
 kluster som är gemensamt för flera enhetstyper på endpointen ska finnas som en
 delad instans.
 
-Om PSMD i stället utförs som en fast monterad enhet gäller Matter 1.4+ kravet
-att använda **Mounted On/Off Control** (`0x010F`), med On/Off Plug-in Unit som
-valfri extra post i `DeviceTypeList`. Monteringssättet är inte fastställt
-(`TBD-23`).
+PSMD utförs som **plug-in-enhet** (On/Off Plug-in Unit, `0x010A`); Mounted
+On/Off Control (`0x010F`) används inte (`TBD-C14`).
 
 ### 12.2 Kluster
 
