@@ -1,6 +1,6 @@
-# Specification – PSMU
+# Specification – PSMD
 
-**Power Switch and Measurement Unit (PSMU)**
+**Power Switch and Measurement Device (PSMD)**
 
 > Status: Utkast
 > Version: 0.1
@@ -18,7 +18,7 @@
 
 ## 1. Syfte
 
-Det här dokumentet specificerar PSMU:s mjukvarubeteende: `Operation Mode`,
+Det här dokumentet specificerar PSMD:s mjukvarubeteende: `Operation Mode`,
 övergångar, knapp, lysdioder, `Power-up`, mätning och lokal styrning.
 Arkitektur och datamodell finns i [`architecture.md`](architecture.md).
 

@@ -1,6 +1,6 @@
-# Gaps and next steps – PSMU
+# Gaps and next steps – PSMD
 
-**Power Switch and Measurement Unit (PSMU)**
+**Power Switch and Measurement Device (PSMD)**
 
 > Status: Utkast
 > Version: 0.1
@@ -27,7 +27,7 @@ hanteras i [`project/decisions.md`](project/decisions.md).
 | GAP-02 | Hög | Hårdvara/mjukvara | Pin-map, aktiv nivå, debounce, ADC-kanal, mätområden och kalibrering. | [`specification/architecture.md`](specification/architecture.md) |
 | GAP-03 | Hög | Datamodell | Enheter, skalning, intervall, `timestamp`, energi vid `Power-up`/overflow och vilka fält som är `Persisted State`. | [`specification/architecture.md`](specification/architecture.md) |
 | GAP-04 | Medel | Verifiering | Icke-funktionella krav och konkreta acceptanstester kopplade till varje krav. | [`project/requirements.md`](project/requirements.md) |
-| GAP-05 | Medel | Användarhandbok | Avsnitt 5.4 förutsätter ett lokalt UI med vyer och skärmbilder. Klargör om PSMU har något eget gränssnitt utöver knapp, LED och Home Assistant. | [`user/manual.md`](user/manual.md) |
+| GAP-05 | Medel | Användarhandbok | Avsnitt 5.4 förutsätter ett lokalt UI med vyer och skärmbilder. Klargör om PSMD har något eget gränssnitt utöver knapp, LED och Home Assistant. | [`user/manual.md`](user/manual.md) |
 
 ## Detaljer
 
@@ -75,7 +75,7 @@ saknar:
 
 Avsnitt 5.4 i `user/manual.md` beskriver “huvudvyer, menyer och viktiga
 funktioner – gärna med skärmbilder”. Det förutsätter ett lokalt gränssnitt som
-inte framgår någon annanstans. PSMU verkar ha knapp, två LED och Home Assistant –
+inte framgår någon annanstans. PSMD verkar ha knapp, två LED och Home Assistant –
 ingen egen skärm. Avsnittet bör tas bort eller förtydligas.
 
 ### GAP-06 – Repo-hygien

@@ -1,6 +1,6 @@
 # ESP-IDF 6.1 och ESP-Matter – lokal referens
 
-**Power Switch and Measurement Unit (PSMU)**
+**Power Switch and Measurement Device (PSMD)**
 
 > Status: Utkast
 > Version: 0.1
@@ -39,7 +39,7 @@ aktivering             ~/.espressif/tools/activate_idf_v6.1.sh
 ```
 
 Samma maskin har även `~/esp/esp-idf-v4.3` och `~/esp/esp-idf-v5.5` från äldre
-installationer. De används inte av PSMU.
+installationer. De används inte av PSMD.
 
 ## Aktivera miljön
 
@@ -77,12 +77,12 @@ och ingen `esp-matter`-checkout finns. Grenen `release/v1.6.1` hämtas enligt
 avsnittet *Getting the Repositories* i ESP-Matters Programming Guide när
 firmware-arbetet börjar.
 
-## Var i dokumentationen PSMU behöver leta
+## Var i dokumentationen PSMD behöver leta
 
 Avsnittsnamnen nedan är verifierade mot API Reference för v6.1. Sök i katalogen i
 stället för att gissa filnamn; Sphinx flyttar filer mellan versioner.
 
-| PSMU-del | ESP-IDF-område | Katalog under `$IDF_PATH/docs/en/` |
+| PSMD-del | ESP-IDF-område | Katalog under `$IDF_PATH/docs/en/` |
 |---|---|---|
 | `Output State`, `Button`, `Operation Mode LED`, `Output State LED` | Peripherals API → GPIO & RTC GPIO | `api-reference/peripherals/` |
 | Blinkmönster (`Slow Blink`, `Fast Blink`) | Peripherals API → LED Control (LEDC) | `api-reference/peripherals/` |

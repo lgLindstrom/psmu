@@ -1,4 +1,4 @@
-# Decisions and open questions – PSMU
+# Decisions and open questions – PSMD
 
 Samlade beslut och frågor som ännu inte är avgjorda, med **varifrån de kommer**.
 Dokumentet är arbetsmaterial: öppna frågor flyttas till **Beslutade frågor** när
@@ -68,7 +68,7 @@ ett beslut fattats, och berörda dokument uppdateras.
 | TBD-13 | Vilken typ av anslutningsdon har ingång och utgång? | K1 (uppskjutet), K4 | Handbok 4.2/5.1 | Väntar beslut |
 | TBD-14 | Max belastning (A/W) och elsäkerhetsklassning? | K4 | Handbok 3, tekniska data | Väntar beslut |
 | TBD-15 | Ska enheten vara avsedd för inomhusbruk endast? | K4 | Handbok 3 | Väntar beslut |
-| TBD-23 | Ska PSMU vara en plug-in-enhet eller fast monterad? Fast montering kräver Mounted On/Off Control (`0x010F`) enligt Matter 1.4+. | K4 | `architecture.md` §5.1, `DeviceTypeList` | Väntar beslut |
+| TBD-23 | Ska PSMD vara en plug-in-enhet eller fast monterad? Fast montering kräver Mounted On/Off Control (`0x010F`) enligt Matter 1.4+. | K4 | `architecture.md` §5.1, `DeviceTypeList` | Väntar beslut |
 
 ### Terminologi
 
@@ -84,7 +84,7 @@ ett beslut fattats, och berörda dokument uppdateras.
 |---|---|---|---|---|
 | TBD-19 | Vad står `PSMD`, `MDCB`, `MDB` och `DPS` för, och vilka ansvarsgränser har de? | K5 | `architecture.md`, datamodell | Att undersöka |
 | TBD-20 | Ska datamodellens fält, typer och skalning (t.ex. `int64` för mätvärden) bekräftas och dokumenteras per fält? | K5 | `architecture.md`, Matter-rapportering | Att undersöka |
-| TBD-21 | ESP-Matter `release/v1.6.1` rekommenderar ESP-IDF v6.0.2, men PSMU bygger på 6.1 (`TBD-C8`). Fungerar kombinationen, eller ska IDF-versionen sänkas? | K2 | Byggmiljö, `architecture.md` §7 | Att undersöka |
+| TBD-21 | ESP-Matter `release/v1.6.1` rekommenderar ESP-IDF v6.0.2, men PSMD bygger på 6.1 (`TBD-C8`). Fungerar kombinationen, eller ska IDF-versionen sänkas? | K2 | Byggmiljö, `architecture.md` §7 | Att undersöka |
 
 ## Beslutade frågor (stängda)
 

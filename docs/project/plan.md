@@ -1,6 +1,6 @@
-# Project plan – PSMU
+# Project plan – PSMD
 
-**Power Switch and Measurement Unit (PSMU)**
+**Power Switch and Measurement Device (PSMD)**
 
 > Status: Utkast
 > Version: 0.1
@@ -15,7 +15,7 @@
 
 ## 1. Syfte
 
-Det här dokumentet beskriver projektet som tar fram PSMU: mål, omfattning,
+Det här dokumentet beskriver projektet som tar fram PSMD: mål, omfattning,
 roller, milstolpar, risker och release.
 
 ## 2. Mål
@@ -28,7 +28,7 @@ roller, milstolpar, risker och release.
 
 **Ingår:**
 
-- Hårdvara och mjukvara för PSMU.
+- Hårdvara och mjukvara för PSMD.
 - Matter-integration och användning med Home Assistant.
 - Användarhandbok och teknisk dokumentation.
 

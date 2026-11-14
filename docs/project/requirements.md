@@ -1,6 +1,6 @@
-# Requirements – PSMU
+# Requirements – PSMD
 
-**Power Switch and Measurement Unit (PSMU)**
+**Power Switch and Measurement Device (PSMD)**
 
 > Status: Utkast
 > Version: 0.1
