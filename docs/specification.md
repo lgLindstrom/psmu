@@ -8,7 +8,7 @@
 > Senast uppdaterad: 2026-11-14
 > Relaterade: [`decisions.md`](decisions.md),
 > [`manual.md`](manual.md),
-> [`glossary.md`](reference/glossary.md)
+> [`glossary.md`](glossary.md)
 
 > **Äger:** driftlägen, knapp, lysdioder, `Power-up`, mätning, krav,
 > arkitektur, datamodell, Matter-integration och byggmiljö.

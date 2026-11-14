@@ -8,7 +8,7 @@ ett beslut fattats, och berörda dokument uppdateras.
 - **Version:** 0.1
 - **Senast uppdaterad:** 2026-11-14
 - **Relaterade dokument:** [`manual.md`](manual.md),
-  [`glossary.md`](reference/glossary.md),
+  [`glossary.md`](glossary.md),
   [`specification.md`](specification.md)
 
 > **Äger:** beslut, öppna frågor och kända luckor med källa (`K1`–`K6`).

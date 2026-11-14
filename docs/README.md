@@ -11,7 +11,7 @@ engelska.
 | Specification | [`specification.md`](specification.md) | Beteende, krav, arkitektur, datamodell, Matter och byggmiljö. | Utkast |
 | Project | [`decisions.md`](decisions.md) | Beslut, öppna frågor och kända luckor. | Utkast |
 | Källkod | [`../firmware/`](../firmware/) | ESP32-firmware (ESP-IDF + ESP-Matter). Byggs via `esp-idf`-MCP:n. | Ej påbörjad |
-| Reference | [`reference/glossary.md`](reference/glossary.md) | Terminologi och godkända begrepp. | Utkast |
+| Reference | [`glossary.md`](glossary.md) | Terminologi och godkända begrepp. | Utkast |
 | Reference | [`reference/external/matter-1.6.1/`](reference/external/matter-1.6.1/) | Matter 1.6.1-utdrag (read-only). | – |
 | Reference | [`reference/external/esp-idf/INDEX.md`](reference/external/esp-idf/INDEX.md) | Var ESP-IDF 6.1 och ESP-Matter-dokumentationen finns. | Utkast |
 
@@ -28,7 +28,7 @@ behövs.
 | Komponent, datamodell, Matter, Home Assistant, provisionering, byggmiljö, säkerhet | [`specification.md`](specification.md) §10–16 |
 | Beslut, öppen fråga, källa `K1`–`K6` | [`decisions.md`](decisions.md) |
 | Lucka, nästa steg, `GAP-01`–`GAP-05` | [`decisions.md`](decisions.md) |
-| Term, benämning, `Operation Mode LED`, `Output State LED` | [`reference/glossary.md`](reference/glossary.md) |
+| Term, benämning, `Operation Mode LED`, `Output State LED` | [`glossary.md`](glossary.md) |
 | Komma igång, användning, felsökning, teknisk data | [`manual.md`](manual.md) |
 | Attribut-ID, kluster, device type, cluster revision | [`reference/external/matter-1.6.1/INDEX.md`](reference/external/matter-1.6.1/INDEX.md), därefter `grep` i `text/*.txt` |
 | ESP-IDF, ESP-Matter, GPIO, NVS, OTA, `idf.py`, sökväg i `$IDF_PATH` | [`reference/external/esp-idf/INDEX.md`](reference/external/esp-idf/INDEX.md) |
@@ -41,7 +41,7 @@ behövs.
 - Nya fakta ska in i rätt dokument – inte i `README.md`.
 - Öppna frågor hanteras i [`decisions.md`](decisions.md).
 - Kända luckor och nästa steg finns i [`decisions.md`](decisions.md).
-- Termer ska följa [`reference/glossary.md`](reference/glossary.md).
+- Termer ska följa [`glossary.md`](glossary.md).
 - Okända värden lämnas som `[ ]`; de får inte fyllas i med antaganden.
 
 ## Workflow

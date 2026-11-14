@@ -16,7 +16,7 @@ ESP-IDF 6.1 and ESP-Matter, under `firmware/`.
   architecture, data model, Matter integration, build environment (§10–16).
 - `docs/decisions.md` – decisions, open questions and known gaps with
   source (`K1`–`K6`).
-- `docs/reference/glossary.md` – terminology, English term → Swedish
+- `docs/glossary.md` – terminology, English term → Swedish
   explanation, status.
 - `docs/reference/external/matter-1.6.1/` – read-only Matter 1.6.1 extracts. Do
   not edit the PDFs, `text/`, or `extract_text.py`; search `text/*.txt` with grep
@@ -36,7 +36,7 @@ orders of magnitude more than reading too few.
 
 | Task | Always read | Read on demand | Do not read |
 | --- | --- | --- | --- |
-| Manual text | `docs/manual.md` | `specification.md` §2–8, `decisions.md` (unknown values), `grep` on the term in `reference/glossary.md` | Matter extracts |
+| Manual text | `docs/manual.md` | `specification.md` §2–8, `decisions.md` (unknown values), `grep` on the term in `glossary.md` | Matter extracts |
 | Specification (all) | `docs/specification.md` | `decisions.md` | `manual.md`, Matter extracts |
 | Architecture / Matter | `specification.md` §10–16, `docs/reference/external/matter-1.6.1/INDEX.md` | targeted `grep` in `text/*.txt` | whole `text/*.txt`, PDFs, `*.tar`, `manual.md` |
 | ESP-IDF / ESP-Matter API | `docs/reference/external/esp-idf/INDEX.md` | targeted `grep` in `$IDF_PATH/docs/en/` or `$ESP_MATTER_PATH/docs/en/` | whole doc trees, `$IDF_PATH` in a codegraph index (734 MB) |
@@ -45,7 +45,7 @@ orders of magnitude more than reading too few.
 | Decision / open question | `decisions.md` (grep on the ID or topic) | the document the question concerns | everything else |
 | Gap / next step | `decisions.md` (luckor) | `specification.md` §10–16 (where the gap gets filled in) | `manual.md`, Matter extracts |
 | Index / structure | `docs/README.md` | – | everything else |
-| Terminology | only the matching `grep` hits in `reference/glossary.md` | – | `reference/glossary.md` in full |
+| Terminology | only the matching `grep` hits in `glossary.md` | – | `glossary.md` in full |
 | Branch / commit | `docs/README.md` §Workflow | – | everything else |
 | Unfamiliar task | `docs/README.md` §Ämneskarta, then the document it points to | – | Matter extracts, PDFs, `*.tar` |
 
@@ -58,7 +58,7 @@ Rules:
   the binaries are not readable anyway.
 - Read sections, not files: `grep -n '^##' file.md` first, then `read` with
   `offset`/`limit`.
-- Grep `decisions.md` and `reference/glossary.md` for the specific ID or
+- Grep `decisions.md` and `glossary.md` for the specific ID or
   term instead of loading the whole file.
 - Every document except `docs/README.md` and `matter-1.6.1/INDEX.md` has an
   **Äger** / **Läs vid behov** block (around lines 9–17). That block is enough to
@@ -69,11 +69,11 @@ Rules:
 ## Writing conventions
 
 - Write documentation in **Swedish**. Keep filenames, folder names, protocol and
-  software terms in English as defined in `docs/reference/glossary.md`.
+  software terms in English as defined in `docs/glossary.md`.
 - Use **Conventional Commits** and the simple GitHub Flow described in
   `docs/README.md` §Workflow: short-lived branches from `main`, pull request,
   merge, delete branch.
-- `docs/reference/glossary.md` is the source of truth for terminology. Use the
+- `docs/glossary.md` is the source of truth for terminology. Use the
   approved names `Operation Mode LED` and `Output State LED`, not `LED1`/`LED2`.
 - Firmware code logs with the ESP-IDF macros and sets a per-module `TAG` that
   always starts with `psmd_` – see `docs/specification.md` §15.

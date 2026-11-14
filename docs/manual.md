@@ -185,7 +185,7 @@ På enheten finns dessutom:
 
 > **Att undersöka:** om och hur `Factory Reset` ska finnas. Inget beslut taget.
 
-> Termerna förklaras i [ordlistan](reference/glossary.md). Beteendet vid `Power-up` i
+> Termerna förklaras i [ordlistan](glossary.md). Beteendet vid `Power-up` i
 > `OPERATIONAL` när Home Assistant inte nås är ännu inte fastställt – ska
 > undersökas mot Matter-standarden.
 
@@ -255,7 +255,7 @@ Home Assistants automationer och scener.
 ## 10. Ordlista
 
 Fullständig terminologi med engelska mjukvarutermer finns i
-[`glossary.md`](reference/glossary.md).
+[`glossary.md`](glossary.md).
 
 | Term (EN) | Svenska | Kort förklaring |
 |---|---|---|
