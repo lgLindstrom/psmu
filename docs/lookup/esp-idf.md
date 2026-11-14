@@ -7,7 +7,7 @@
 > Ansvarig: [ ]
 > Senast uppdaterad: 2026-11-13
 > Relaterade: [`matter-1.6.1/INDEX.md`](matter-1.6.1/INDEX.md),
-> [`specification.md`](../specification.md) §13 och §15
+> [`specification.md`](../specification.md) §12 och §14
 
 > **Äger:** var Espressif-dokumentationen finns och hur den slås upp.
 > **Läs vid behov:** [`matter-1.6.1/INDEX.md`](matter-1.6.1/INDEX.md) för
@@ -87,9 +87,9 @@ stället för att gissa filnamn; Sphinx flyttar filer mellan versioner.
 | `Output State`, `Button`, `Operation Mode LED`, `Output State LED` | Peripherals API → GPIO & RTC GPIO | `api-reference/peripherals/` |
 | Blinkmönster (`Slow Blink`, `Fast Blink`) | Peripherals API → LED Control (LEDC) | `api-reference/peripherals/` |
 | Tidsstyrning, `Pairing Timeout`, `Reconnect` | System API → ESP Timer, System Time | `api-reference/system/` |
-| Mätning (`TBD-10`, `TBD-11`) | Peripherals API → ADC, eller extern mätkrets via I2C/SPI/UART | `api-reference/peripherals/` |
+| Mätning (`TBD-10`, `TBD-C11`) | Peripherals API → ADC, eller extern mätkrets via I2C/SPI/UART | `api-reference/peripherals/` |
 | Sparat `Output State`, `Power-up` | Storage API → Non-Volatile Storage Library | `api-reference/storage/` |
-| Wi-Fi och provisionering (`TBD-05`) | Networking APIs → Wi-Fi; Provisioning API | `api-reference/network/`, `api-reference/provisioning/` |
+| Wi-Fi och provisionering (`TBD-C13`) | Networking APIs → Wi-Fi; Provisioning API | `api-reference/network/`, `api-reference/provisioning/` |
 | Matter-endpoints och kluster | ESP-Matter, inte ESP-IDF | `$ESP_MATTER_PATH/docs/en/` |
 | OTA (`TBD-12`) | System API → ESP HTTPS OTA, Over The Air Updates | `api-reference/system/` |
 | Loggning och felsökning | System API → Logging library, Console, Watchdogs | `api-reference/system/` |

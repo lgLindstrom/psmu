@@ -20,7 +20,7 @@
 ## 1. Syfte
 
 Det här dokumentet specificerar PSMD: mjukvarubeteende (§3–9), krav med
-acceptanskriterier (§10) och mjukvarans övergripande uppbyggnad (§2, §11–16) –
+acceptanskriterier (§10) och mjukvarans övergripande uppbyggnad (§2, §11–15) –
 komponenter, ansvarsgränser, dataflöden, datamodell och integrationen med
 Matter och Home Assistant.
 
@@ -75,11 +75,11 @@ Home Assistant och `Matter Server` ligger utanför PSMD och ansvarar för
 | Från | Händelse | Till | Kommentar |
 |---|---|---|---|
 | – | `Power-up`, första gången | `LOCAL` | Standardläge. |
-| – | `Power-up`, tidigare ansluten | `OPERATIONAL` | Beteende när Home Assistant inte nås är inte fastställt (`TBD-06`). |
+| – | `Power-up`, tidigare ansluten | `OPERATIONAL` | Beteende när Home Assistant inte nås hanteras av ESP-Matter (`TBD-C13`). |
 | `LOCAL` | `Long Press` | `PAIRING` | |
 | `PAIRING` | Lyckad `Commissioning` | `OPERATIONAL` | Enheten läggs i en `Fabric`. |
-| `PAIRING` | `Pairing Timeout` eller misslyckad anslutning | `LOCAL` | Preliminärt 3 minuter (`TBD-01`). |
-| `PAIRING` | `Long Press` | `LOCAL` | `Decommissioning` enligt `TBD-03`. |
+| `PAIRING` | `Pairing Timeout` eller misslyckad anslutning | `LOCAL` | `Pairing Timeout` enligt ESP-Matter/Matter (`TBD-C13`). |
+| `PAIRING` | `Long Press` | `LOCAL` | `Decommissioning` enligt ESP-Matter (`TBD-C13`). |
 | `OPERATIONAL` | `Long Press` | `PAIRING` | |
 
 `Short Press` ändrar aldrig `Operation Mode`; den växlar endast `Output State` i
@@ -116,7 +116,7 @@ Debounce-tid och exakt avläsning av knappen är inte fastställda.
   annars `OPERATIONAL`.
 - Vilket tillstånd som sparas och återställs i övrigt är inte fastställt
   (`TBD-12`).
-- Om och hur `Factory Reset` ska finnas är inte beslutat (`TBD-04`).
+- `Factory Reset` hanteras av ESP-Matter (`TBD-C13`).
 
 ## 8. Mätning
 
@@ -127,17 +127,28 @@ Mätningen är aktiv även när `Output State` är `OFF`.
 |---|---|
 | Spänning | Fastställd som mätvärde. |
 | Ström | Fastställd som mätvärde. |
+| Skenbar effekt | Fastställd som mätvärde. |
 | Aktiv effekt | Fastställd som mätvärde. |
-| Energi | Fastställd som mätvärde, men ackumulering över `Power-up` är inte beslutad (`TBD-12`). |
+| Reaktiv effekt | Fastställd som mätvärde. |
+| Fasfördröjning (`phase_delay`) | Fastställd som mätvärde; rapporteras som `PowerFactor` (`TBD-C10`), enhet och skalning öppna (`TBD-22`). |
 | Frekvens | Inte fastställd (`TBD-10`). |
-| Effektfaktor | Inte fastställd (`TBD-10`). |
+| Energi | Fastställd som mätvärde, men ackumulering över `Power-up` är inte beslutad (`TBD-12`). |
 
-`Measurement Interval` är inte fastställt (`TBD-11`), och vilka värden som
-rapporteras till Matter avgörs i `TBD-10`. Fältnamn och skalning finns i §12.
+Mätningen utförs av **MU** med ett fast intervall på **5 s**. Alla 8 mätvärden
+är synkrona (samma mätomgång). `MC` skickar ett värde i taget till Home
+Assistant.
+
+`Measurement Interval` är därmed fastställt till 5 s (`TBD-C11`), men vilka
+värden som rapporteras till Matter avgörs i `TBD-10`. Fältnamn och skalning
+finns i §11.
+
+Mätvärden rapporteras som **standardattribut** (ett värde per Matter-attribut)
+för att Home Assistant ska kunna använda sin standardmappning. Ingen anpassad
+struct med alla värden används (`TBD-C12`).
 
 `phase_delay` rapporteras som `PowerFactor` (`TBD-C10`); enhet och skalning är
 inte fastställda (`TBD-22`). Mappningen mellan datamodellens fält och
-Matter-attributen finns i §12.
+Matter-attributen finns i §11.
 
 ## 9. Lokal och extern styrning
 
@@ -170,23 +181,7 @@ saknas ännu; se luckan i [`decisions.md`](decisions.md).
 - [ ] Matter-`Commissioning` mot Home Assistant.
 - [ ] Acceptanstest mot kraven ovan.
 
-## 11. Komponenter
-
-Datamodellen nedan använder fyra komponentbeteckningar. Deras fullständiga namn
-och ansvarsgränser är inte fastställda (`TBD-19`); tabellen är en preliminär
-tolkning utifrån vilka data respektive komponent äger.
-
-| Komponent | Preliminärt ansvar | Äger data |
-|---|---|---|
-| **`PSMD`** | Tidsstämplar och sampeldata från mätningen. | – |
-| **`MDCB`** | Enhetsidentitet, konfiguration och metadata. | `mac_address`, `friendly_name`, `location`, `geolocation`, `mdcb_firmware` |
-| **`MDB`** | Utgångstillstånd och beräknade mätvärden. | `onoff`, `vac`, `iac`, `papp`, `pact`, `preact`, `phase_delay`, `frequency`, `energy`, `mdb_firmware`, `mdb_app_id` |
-| **`DPS`** | Persistent lagring av data som ska överleva `Power-up`. | `mdb_firmware` |
-
-> **Att undersöka:** komponenternas ansvar och gränssnitt behöver bekräftas innan
-> de kan användas som arkitekturbegrepp i krav och tester (`TBD-19`).
-
-## 12. Datamodell
+## 11. Datamodell
 
 Tabellen är den preliminära datamodellen. Fältnamn, typer och skalning behöver
 bekräftas (`TBD-20`).
@@ -220,17 +215,22 @@ Matter skalar mätvärden i mV, mA, mW och mHz, medan datamodellen anger `int64`
 utan enhet. Skalningen ska fastställas (`TBD-20`). Om energimätningen ska
 ackumuleras över `Power-up` är öppet (`TBD-12`).
 
-## 13. Matter och Home Assistant
+## 12. Matter och Home Assistant
 
 - `Commissioning` lägger PSMD i en `Fabric` och gör enheten styrbar från Home
   Assistant.
 - `Operation Mode` och övergångar specificeras i §3–4.
 - Mätning sker endast i `OPERATIONAL`. Vilka mätvärden som exponeras är delvis
   fastställt (`TBD-10`, `TBD-11`).
-- `Pairing Timeout`, `Commissioning Timeout`, `Reconnect` och hantering av flera
-  `Fabric` är öppna frågor (`TBD-01`, `TBD-02`, `TBD-06`, `TBD-07`, `TBD-09`).
+- `MC` använder standardattributen i Electrical Power/Energy Measurement; HA:s
+  standardmappning används. Korrelation mellan värden i samma prov sker på
+  applikationsnivå, inte via struct (`TBD-C12`).
+- `Pairing`/`Commissioning` Timeout, `Decommissioning`, `Factory Reset`,
+  Wi-Fi-provisionering, beteende när Home Assistant inte nås, `Reconnect`,
+  hantering av flera `Fabric` och HA/Matter Server-version hanteras av
+  ESP-Matter enligt Matter-standarden (`TBD-C13`).
 
-### 13.1 Enhetstyper
+### 12.1 Enhetstyper
 
 PSMD exponeras som två enhetstyper på samma endpoint (`TBD-C9`):
 
@@ -248,7 +248,7 @@ att använda **Mounted On/Off Control** (`0x010F`), med On/Off Plug-in Unit som
 valfri extra post i `DeviceTypeList`. Monteringssättet är inte fastställt
 (`TBD-23`).
 
-### 13.2 Kluster
+### 12.2 Kluster
 
 | Kluster | ID | Krävs av | Conformance | Användning |
 |---|---|---|---|---|
@@ -265,12 +265,12 @@ valfri extra post i `DeviceTypeList`. Monteringssättet är inte fastställt
 Electrical Sensor kräver minst ett av Electrical Power Measurement och
 Electrical Energy Measurement (`O.a+`); PSMD använder båda.
 
-## 14. Nätverk och provisionering
+## 13. Nätverk och provisionering
 
-Hur PSMD får Wi-Fi-uppgifter, hur återanslutning sker och hur enheten beter sig
-när Home Assistant inte nås är inte fastställt (`TBD-05`, `TBD-06`, `TBD-07`).
+Wi-Fi-provisionering, återanslutning och beteende när Home Assistant inte nås
+hanteras av ESP-Matter enligt Matter-standarden (`TBD-C13`).
 
-## 15. Byggmiljö och körtid
+## 14. Byggmiljö och körtid
 
 - Mjukvaran byggs med **ESP-IDF 6.1** (`TBD-C8`) och **ESP-Matter**
   `release/v1.6.1` för Matter 1.6.1. Firmwarekällkoden ligger i `firmware/` i
@@ -287,7 +287,7 @@ när Home Assistant inte nås är inte fastställt (`TBD-05`, `TBD-06`, `TBD-07`
 - ESP-Matter rekommenderar ESP-IDF v6.0.2; avvikelsen utreds i `TBD-21`.
 - Firmware- och applikationsversioner lagras enligt datamodellen ovan.
 
-## 16. Säkerhet och uppdatering
+## 15. Säkerhet och uppdatering
 
 Matter-attestering, nyckelhantering, säker lagring och eventuell OTA-uppdatering
 är ännu inte utrett. Inga krav eller lösningar är fastställda.

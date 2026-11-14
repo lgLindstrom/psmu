@@ -217,8 +217,8 @@ PSMD mäter den anslutna lasten och kan presentera följande värden:
 - [Energiförbrukning]
 - [Övriga mätvärden]
 
-[Beskriv var och hur värdena presenteras i Home Assistant, samt enheter och
-uppdateringsintervall.]
+Mätningen utförs var 5:e sekund av `MU` (endast i `OPERATIONAL`, även vid
+`OFF`). `MC` skickar ett värde i taget till Home Assistant.
 
 ### 6.3 Automationer i Home Assistant
 
