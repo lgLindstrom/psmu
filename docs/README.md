@@ -33,7 +33,7 @@ is needed.
 | Component, data model, Matter, Home Assistant, provisioning, security | [`specification.md`](specification.md) §2, §11–15 |
 | Decision, open question, source `K1`–`K6` | [`decisions.md`](decisions.md) |
 | Gap, next step, `GAP-01`–`GAP-06` | [`decisions.md`](decisions.md) |
-| Plan, phase, order, milestone, what comes next | [`project.md`](project.md) |
+| Plan, phase, order, milestone, simulation, dev board, ESP32-C6, what comes next | [`project.md`](project.md) |
 | Connector, electrical safety, environment, temperature, supply, dimension, weight | [`hardware.md`](hardware.md) |
 | Term, naming, `Operation Mode LED`, `Output State LED` | [`glossary.md`](glossary.md) |
 | Getting started, usage, troubleshooting, technical data | [`manual.md`](manual.md) |

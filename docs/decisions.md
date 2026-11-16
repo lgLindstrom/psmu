@@ -38,6 +38,7 @@ questions** when a decision is made, and the affected documents are updated.
 | ID | Question | Source | Affects | Status / next step |
 |---|---|---|---|---|
 | TBD-24 | Where does the commissioning code/QR come from, and when can it be printed in the manual? | K1 | `manual.md` §4.4, `specification.md` §12 | Awaiting decision |
+| TBD-29 | Which Home Assistant and Matter Server versions run on the test network? | K1, K3 | `specification.md` §12–13 | To investigate at M2 |
 
 ### Measurement
 
@@ -46,6 +47,7 @@ questions** when a decision is made, and the affected documents are updated.
 | TBD-10 | Which measured values are exposed: voltage, current, active power, energy, frequency, power factor? | K4 | Manual 6.2, Matter clusters | Awaiting decision |
 | TBD-12 | Should energy measurement accumulate across a power loss (`Persisted State`)? | K4 | Energy measurement | Awaiting decision |
 | TBD-22 | Which unit and scaling should the `PowerFactor` reporting of `phase_delay` use (percent100ths per Matter, or degrees)? | K4 | Matter reporting, `specification.md` §12.2 | Awaiting decision |
+| TBD-28 | Where is the MU interface specification, and does it cover bus, address, register or command protocol, sample format, units, cycle and error handling? | K1 | `specification.md` §2, §8, §11, `GAP-02` | Awaiting the specification from the product owner |
 
 ### Hardware and electrical safety
 
@@ -95,6 +97,9 @@ questions** when a decision is made, and the affected documents are updated.
 | TBD-C14 | Should PSMD be a plug-in or permanently mounted unit? | Plug-in (On/Off Plug-in Unit, `0x010A`). Mounted On/Off Control (`0x010F`) is not needed. | K4 |
 | TBD-C15 | Does `LOCAL` require a cloud service or an internet connection? | No. `LOCAL` switches the `Output` without a cloud service or an internet connection, and no data leaves the local network. | K1 |
 | TBD-C16 | Are measured values computed when no `Load` is connected? | Yes, always. They are then 0 and are reported if the device is in `OPERATIONAL`. | K1 |
+| TBD-C17 | Which hardware is the firmware developed and verified on? | An ESP32-C6 dev board. The product's own board follows the hardware (`GAP-07`). | K1 |
+| TBD-C18 | How is PSMD developed before the hardware exists? | A simulated `PU` and `MU` behind the same interfaces as the real ones. Everything works simulated before the real MU replaces the simulated backend, and the simulator stays as a backend for tests. | K1 |
+
 ## Gaps and next steps
 
 Known gaps in the documentation and what has to be produced. It is a work list
@@ -104,7 +109,7 @@ sections above.
 | ID | Prio | Area | What is missing | Document |
 |---|---|---|---|---|
 | GAP-01 | High | Matter | Device type, endpoints, clusters, attributes, units and reporting intervals. | [`specification.md`](specification.md) §12 |
-| GAP-02 | High | Hardware/software | Pin map, active level, debounce, ADC channel, measurement ranges and calibration. | [`specification.md`](specification.md) §14 |
+| GAP-02 | High | Hardware/software | Pin map for the button, the LEDs and the `Output`, active level, debounce, the MU I2C interface (`TBD-28`), measurement ranges and calibration. | [`specification.md`](specification.md) §14 |
 | GAP-03 | High | Data model | Units, scaling, intervals, `timestamp`, energy at `Power-up`/overflow and which fields are `Persisted State`. | [`specification.md`](specification.md) §11 |
 | GAP-04 | Medium | Verification | Non-functional requirements and concrete acceptance tests tied to each requirement. | [`specification.md`](specification.md) §10 |
 | GAP-05 | Medium | User manual | Section 5.4 assumes a local UI with views and screenshots. Clarify whether PSMD has any interface of its own beyond the button, the LEDs and Home Assistant. | [`manual.md`](manual.md) |
@@ -127,9 +132,10 @@ tests cannot be specified.
 
 A description of the interface between hardware and software is missing:
 
-- pin map for the button, `Operation Mode LED`, `Output State LED`, relay and ADC,
+- pin map for the button, `Operation Mode LED`, `Output State LED` and the `Output`,
 - active level, pull-up/pull-down and debounce,
-- measurement channel, calibration and measurement ranges.
+- the I2C bus and interface to the `MU` (`TBD-28`), calibration and measurement
+  ranges.
 
 ### GAP-03 – Semantics of the data model
 
