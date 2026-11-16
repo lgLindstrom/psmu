@@ -1,116 +1,117 @@
-# Terminologi – PSMD
+# Terminology – PSMD
 
-Engelska termer som används i mjukvara, dokumentation och fortsatt diskussion.
-Svensk förklaring anges för läsbarhet.
+English terms used in software, documentation and continued discussion. The
+term is the name used in the firmware and in all documents; the Swedish column
+holds the wording used in [`manual.md`](manual.md), which is written in Swedish.
 
-Status: `Bekräftad` = fastställd, `Förslag` = föreslagen term, `TBD` = att
-undersöka/fastställa. Öppna frågor med källa finns i
+Status: `Confirmed` = established, `Proposed` = proposed term, `TBD` = to
+investigate/decide. Open questions with source are in
 [`decisions.md`](decisions.md).
 
-Beteckningarna `LED1` och `LED2` används endast om det fysiska kortets märkning.
-I text och mjukvara används de beskrivande namnen **`Operation Mode LED`** och
-**`Output State LED`**. Godkända förkortningar när det passar: **`Mode LED`** och
-**`Output LED`**.
+`LED1` and `LED2` are used only for the marking on the physical board. In text
+and software the descriptive names **`Operation Mode LED`** and
+**`Output State LED`** are used. Approved abbreviations where they fit:
+**`Mode LED`** and **`Output LED`**.
 
-> **Äger:** terminologi och godkända begrepp.
-> **Läs vid behov:** [`decisions.md`](decisions.md) för
-> terminologifrågor. Sök i tabellerna i stället för att läsa hela filen.
+> **Owner:** terminology and approved terms.
+> **Read when needed:** [`decisions.md`](decisions.md) for terminology
+> questions. Search the tables instead of reading the whole file.
 
-## Driftlägen (Operation Modes)
+## Operation Modes
 
-| Term (EN) | Svenska | Definition | Status |
+| Term (EN) | Swedish (manual.md) | Definition | Status |
 |---|---|---|---|
-| **Operation Mode** | Driftläge | Enhetens övergripande tillstånd: `LOCAL`, `PAIRING` eller `OPERATIONAL`. | Bekräftad |
-| **`LOCAL`** (Local Mode) | Lokalt läge | Standardläge vid första `Power-up`. Ingen anslutning till Home Assistant. `Operation Mode LED` blinkar snabbt i 5 s vid `Power-up` och är därefter släckt. `Short Press` växlar `Output State`. | Bekräftad |
-| **`PAIRING`** (Pairing Mode) | Parkopplingsläge | Läge där enheten är tillgänglig för Matter-`Commissioning`. `Operation Mode LED` blinkar långsamt. `Short Press` har ingen effekt. Lämnas vid lyckad anslutning, vid `Pairing Timeout` eller genom `Long Press` → `LOCAL`. | Bekräftad |
-| **`OPERATIONAL`** (Operational Mode) | Anslutet driftläge | Läge efter lyckad Matter-`Commissioning`. Enheten ingår i en `Fabric` och kan styras via Home Assistant. `Operation Mode LED` lyser fast. `Short Press` växlar `Output State`. Enheten startar i detta läge vid `Power-up` om den tidigare varit ansluten; `Operation Mode LED` blinkar då snabbt i 5 s innan den övergår till fast sken. `Long Press` går tillbaka till `PAIRING`. | Bekräftad |
-| **Transition** | Övergång | Byte av `Operation Mode`, t.ex. `LOCAL → PAIRING`. | Förslag |
+| **Operation Mode** | Driftläge | The overall state of the device: `LOCAL`, `PAIRING` or `OPERATIONAL`. | Confirmed |
+| **`LOCAL`** (Local Mode) | Lokalt läge | Default mode at the first `Power-up`. No connection to Home Assistant. `Operation Mode LED` blinks fast for 5 s at `Power-up` and is then off. `Short Press` toggles `Output State`. | Confirmed |
+| **`PAIRING`** (Pairing Mode) | Parkopplingsläge | Mode where the device is available for Matter `Commissioning`. `Operation Mode LED` blinks slowly. `Short Press` has no effect. Left on a successful connection, on `Pairing Timeout` or through `Long Press` → `LOCAL`. | Confirmed |
+| **`OPERATIONAL`** (Operational Mode) | Anslutet driftläge | Mode after a successful Matter `Commissioning`. The device belongs to a `Fabric` and can be controlled from Home Assistant. `Operation Mode LED` is solid. `Short Press` toggles `Output State`. The device starts in this mode at `Power-up` if it was previously connected; `Operation Mode LED` then blinks fast for 5 s before it becomes solid. `Long Press` returns to `PAIRING`. | Confirmed |
+| **Transition** | Övergång | Change of `Operation Mode`, e.g. `LOCAL → PAIRING`. | Proposed |
 
-## Styrning och indikering (Controls and Indicators)
+## Controls and Indicators
 
-| Term (EN) | Svenska | Definition | Status |
+| Term (EN) | Swedish (manual.md) | Definition | Status |
 |---|---|---|---|
-| **Button** | Knapp | Enhetens enda fysiska manöverdon. | Bekräftad |
-| **Short Press** | Kort tryck | Tryckning ≤ 3 s. Växlar `Output State` i `LOCAL` och `OPERATIONAL`. Har ingen effekt i `PAIRING`. | Bekräftad |
-| **Long Press** | Långt tryck | Tryckning > 3 s. Växlar `Operation Mode` till `PAIRING` från `LOCAL` och `OPERATIONAL`. I `PAIRING` växlar `Long Press` tillbaka till `LOCAL`. | Bekräftad |
-| **Press Threshold** | Trycktröskel | 3 s – gränsen mellan `Short Press` och `Long Press`. | Bekräftad |
-| **`Operation Mode LED`** (LED1) | Lägeslysdiod | Visar `Operation Mode`: blinkar snabbt i 5 s vid `Power-up` (både `LOCAL` och `OPERATIONAL`), är därefter släckt i `LOCAL`, blinkar långsamt i `PAIRING` och lyser fast i `OPERATIONAL`. | Bekräftad |
-| **`Output State LED`** (LED2) | Utgångslysdiod | Speglar `Output State`: tänd vid `ON`, släckt vid `OFF`, oberoende av `Operation Mode`. | Bekräftad |
-| **Slow Blink** | Långsamt blink | Blinkmönster som indikerar `PAIRING`: 0,5 s tänd / 0,5 s släckt (1 Hz). | Bekräftad |
-| **Fast Blink** | Snabbt blink | Blinkmönster som indikerar `Power-up` under 5 s: 0,25 s tänd / 0,25 s släckt (2 Hz). | Bekräftad |
-| **Solid** | Fast sken | Lysdiod som lyser utan att blinka. | Bekräftad |
-| **Off** | Släckt | Lysdiod som inte lyser. | Bekräftad |
+| **Button** | Knapp | The device's only physical control. | Confirmed |
+| **Short Press** | Kort tryck | Press ≤ 3 s. Toggles `Output State` in `LOCAL` and `OPERATIONAL`. Has no effect in `PAIRING`. | Confirmed |
+| **Long Press** | Långt tryck | Press > 3 s. Changes `Operation Mode` to `PAIRING` from `LOCAL` and `OPERATIONAL`. In `PAIRING`, `Long Press` returns to `LOCAL`. | Confirmed |
+| **Press Threshold** | Trycktröskel | 3 s – the boundary between `Short Press` and `Long Press`. | Confirmed |
+| **`Operation Mode LED`** (LED1) | Lägeslysdiod | Shows `Operation Mode`: fast blink for 5 s at `Power-up` (both `LOCAL` and `OPERATIONAL`), then off in `LOCAL`, slow blink in `PAIRING` and solid in `OPERATIONAL`. | Confirmed |
+| **`Output State LED`** (LED2) | Utgångslysdiod | Mirrors `Output State`: on when `ON`, off when `OFF`, independent of `Operation Mode`. | Confirmed |
+| **Slow Blink** | Långsamt blink | Blink pattern that indicates `PAIRING`: 0.5 s on / 0.5 s off (1 Hz). | Confirmed |
+| **Fast Blink** | Snabbt blink | Blink pattern that indicates `Power-up` for 5 s: 0.25 s on / 0.25 s off (2 Hz). | Confirmed |
+| **Solid** | Fast sken | An LED that is on without blinking. | Confirmed |
+| **Off** | Släckt | An LED that is not lit. | Confirmed |
 
-## Utgång och last (Output and Load)
+## Output and Load
 
-| Term (EN) | Svenska | Definition | Status |
+| Term (EN) | Swedish (manual.md) | Definition | Status |
 |---|---|---|---|
-| **Output** | Utgång | Den nätutgång som ansluten utrustning matas från. | Bekräftad |
-| **Output State** | Utgångstillstånd | `ON` eller `OFF` för `Output`. | Bekräftad |
-| **Relay** | Relä | Den fysiska komponent som sluter/öppnar `Output`. | Förslag |
-| **Load** | Last | Den utrustning som är ansluten till `Output`. | Bekräftad |
-| **Toggle** | Växla | Ändra `Output State` mellan `ON` och `OFF`. | Bekräftad |
+| **Output** | Utgång | The mains outlet that the connected equipment is supplied from. | Confirmed |
+| **Output State** | Utgångstillstånd | `ON` or `OFF` for the `Output`. | Confirmed |
+| **Relay** | Relä | The physical component that closes/opens the `Output`. | Proposed |
+| **Load** | Last | The equipment connected to the `Output`. | Confirmed |
+| **Toggle** | Växla | Change `Output State` between `ON` and `OFF`. | Confirmed |
 
-## Anslutning (Connectivity)
+## Connectivity
 
-| Term (EN) | Svenska | Definition | Status |
+| Term (EN) | Swedish (manual.md) | Definition | Status |
 |---|---|---|---|
-| **Commissioning** | Idrifttagning / parkoppling | Matter-processen då enheten läggs till i en `Fabric`. | Bekräftad |
-| **Pairing Window** | Parkopplingsfönster | Tidsperiod under `PAIRING` då `Commissioning` är tillåten. Stängs av `Pairing Timeout`. | Förslag |
-| **Pairing Timeout** | Parkopplingstimeout | Tidsgräns som avslutar `PAIRING` och återgår till `LOCAL` om ingen anslutning lyckats. **Preliminärt 3 minuter – ska verifieras mot Matter-standarden.** | TBD |
-| **Commissioning Timeout** | Idrifttagningstimeout | Tidsgräns för själva `Commissioning`-processen. Ska verifieras mot Matter-standarden. | TBD |
-| **Fabric** | Fabric | Matter-domän som en enhet tillhör; skapas av t.ex. Home Assistant. | Bekräftad |
-| **Matter Server** | Matter-server | Home Assistant-komponent som krävs för Matter-anslutning. | Bekräftad |
-| **Wi-Fi Provisioning** | Wi-Fi-konfiguration | Hur PSMD får Wi-Fi-uppgifter: följer det sätt som Matter och Home Assistant föreskriver. Exakt flöde TBD. | TBD |
-| **Home Assistant (HA)** | Home Assistant | Systemet som PSMD kan integreras med. | Bekräftad |
-| **Fallback** | Återgång | Automatiskt byte till `LOCAL` när `PAIRING` misslyckas eller `Pairing Timeout` löser ut. | Förslag |
-| **Reconnect** | Återanslutning | Enhetens försök att återuppta kontakten med sin `Fabric` efter omstart. Beteende TBD enligt Matter-standarden. | TBD |
-| **Decommissioning** | Avregistrering | Att lämna `PAIRING` med `Long Press` bör även ta bort enhetens information i Home Assistant. **Ska undersökas** – exakt metod och ansvar enligt Matter-standarden. | TBD |
+| **Commissioning** | Idrifttagning / parkoppling | The Matter process by which the device is added to a `Fabric`. | Confirmed |
+| **Pairing Window** | Parkopplingsfönster | Period during `PAIRING` when `Commissioning` is allowed. Closed by `Pairing Timeout`. | Proposed |
+| **Pairing Timeout** | Parkopplingstimeout | Time limit that ends `PAIRING` and returns to `LOCAL` if no connection succeeded. **Preliminary 3 minutes – to be verified against the Matter specification.** | TBD |
+| **Commissioning Timeout** | Idrifttagningstimeout | Time limit for the `Commissioning` process itself. To be verified against the Matter specification. | TBD |
+| **Fabric** | Fabric | Matter domain that a device belongs to; created by e.g. Home Assistant. | Confirmed |
+| **Matter Server** | Matter-server | Home Assistant component required for the Matter connection. | Confirmed |
+| **Wi-Fi Provisioning** | Wi-Fi-konfiguration | How PSMD gets its Wi-Fi credentials: follows the method prescribed by Matter and Home Assistant. Exact flow TBD. | TBD |
+| **Home Assistant (HA)** | Home Assistant | The system PSMD can be integrated with. | Confirmed |
+| **Fallback** | Återgång | Automatic change to `LOCAL` when `PAIRING` fails or `Pairing Timeout` expires. | Proposed |
+| **Reconnect** | Återanslutning | The device's attempt to resume contact with its `Fabric` after a restart. Behavior TBD per the Matter specification. | TBD |
+| **Decommissioning** | Avregistrering | Leaving `PAIRING` with `Long Press` should also remove the device information in Home Assistant. **To be investigated** – exact method and responsibility per the Matter specification. | TBD |
 
-## Livscykel och lagring (Lifecycle and Persistence)
+## Lifecycle and Persistence
 
-| Term (EN) | Svenska | Definition | Status |
+| Term (EN) | Swedish (manual.md) | Definition | Status |
 |---|---|---|---|
-| **Power-up** | Spänningssättning | När enheten får spänning från vägguttaget. | Bekräftad |
-| **Boot Mode** | Startläge | `Operation Mode` som enheten startar i vid `Power-up`: `LOCAL` första gången, annars `OPERATIONAL` om enheten tidigare varit ansluten. | Bekräftad |
-| **Persisted State** | Lagrat tillstånd | Tillstånd som sparas i icke-flyktigt minne och återställs vid `Power-up`. | Förslag |
-| **Power-loss Recovery** | Återstart efter strömavbrott | `Output State` sätts **alltid till `OFF`** vid `Power-up`, oavsett tidigare tillstånd. | Bekräftad |
-| **Factory Reset** | Fabriksåterställning | Nollställning av konfiguration och `Fabric`-tillhörighet. **Inget beslut taget** om det ska finnas eller hur det triggas. | TBD |
+| **Power-up** | Spänningssättning | When the device is supplied with power from the wall outlet. | Confirmed |
+| **Boot Mode** | Startläge | The `Operation Mode` the device starts in at `Power-up`: `LOCAL` the first time, otherwise `OPERATIONAL` if the device was previously connected. | Confirmed |
+| **Persisted State** | Lagrat tillstånd | State that is stored in non-volatile memory and restored at `Power-up`. | Proposed |
+| **Power-loss Recovery** | Återstart efter strömavbrott | `Output State` is **always set to `OFF`** at `Power-up`, regardless of the previous state. | Confirmed |
+| **Factory Reset** | Fabriksåterställning | Reset of configuration and `Fabric` membership. **No decision taken** on whether it exists or how it is triggered. | TBD |
 
-## Mätning (Measurement)
+## Measurement
 
-Mätning sker **endast i `OPERATIONAL`**. Inget mäts i `LOCAL` eller `PAIRING`.
-Mätningen är aktiv även när `Output State` är `OFF` (ström och effekt förväntas
-då vara 0).
+Measurement runs **only in `OPERATIONAL`**. Nothing is measured in `LOCAL` or
+`PAIRING`. Measurement is active also when `Output State` is `OFF` (current and
+power are then expected to be 0).
 
-| Term (EN) | Svenska | Definition | Status |
+| Term (EN) | Swedish (manual.md) | Definition | Status |
 |---|---|---|---|
-| **Measurement** | Mätning | Insamling av elektriska storheter från `Load`. Endast i `OPERATIONAL`, även vid `Output State = OFF`. | Bekräftad |
-| **Voltage** | Spänning | Uppmätt spänning över `Load` (V). | Förslag |
-| **Current** | Ström | Uppmätt ström genom `Load` (A). | Förslag |
-| **Active Power** | Aktiv effekt | Uppmätt aktiv effekt (W). | Förslag |
-| **Energy** | Energi | Ackumulerad förbrukning över tid (kWh). | Förslag |
-| **Frequency** | Frekvens | Nätfrekvens (Hz), om den mäts. | TBD |
-| **Power Factor** | Effektfaktor | Förhållandet mellan aktiv och skenbar effekt, om den mäts. | TBD |
-| **Measurement Interval** | Mätintervall | Hur ofta värden uppdateras. | TBD |
+| **Measurement** | Mätning | Collection of electrical quantities from the `Load`. Only in `OPERATIONAL`, also at `Output State = OFF`. | Confirmed |
+| **Voltage** | Spänning | Measured voltage across the `Load` (V). | Proposed |
+| **Current** | Ström | Measured current through the `Load` (A). | Proposed |
+| **Active Power** | Aktiv effekt | Measured active power (W). | Proposed |
+| **Energy** | Energi | Accumulated consumption over time (kWh). | Proposed |
+| **Frequency** | Frekvens | Mains frequency (Hz), if it is measured. | TBD |
+| **Power Factor** | Effektfaktor | The ratio between active and apparent power, if it is measured. | TBD |
+| **Measurement Interval** | Mätintervall | How often values are updated. | TBD |
 
-## Funktionella enheter (Functional Units)
+## Functional Units
 
-| Term (EN) | Svenska | Definition | Status |
+| Term (EN) | Swedish (manual.md) | Definition | Status |
 |---|---|---|---|
-| **Matter Controller** | Matter-styrenhet | Funktionell enhet som hanterar gränssnittet mot Home Assistant via Matter-protokollet. | Bekräftad |
-| **MC** | MC | Förkortning för `Matter Controller`. | Bekräftad |
-| **Measurement Unit** | Mätenhet | Funktionell enhet som sköter mätningen. | Bekräftad |
-| **MU** | MU | Förkortning för `Measurement Unit`. | Bekräftad |
-| **Power Unit** | Effektenhet | Funktionell enhet som är gränssnitt mot in- och utsignaler. | Bekräftad |
-| **PU** | PU | Förkortning för `Power Unit`. | Bekräftad |
-| **I2C** | I2C | Kommunikationskanal mellan `MC` och `MU` (tillsammans med direkta signaler). | Bekräftad |
+| **Matter Controller** | Matter-styrenhet | Functional unit that handles the interface to Home Assistant through the Matter protocol. | Confirmed |
+| **MC** | MC | Abbreviation for `Matter Controller`. | Confirmed |
+| **Measurement Unit** | Mätenhet | Functional unit that performs the measurement. | Confirmed |
+| **MU** | MU | Abbreviation for `Measurement Unit`. | Confirmed |
+| **Power Unit** | Effektenhet | Functional unit that is the interface to the input and output signals. | Confirmed |
+| **PU** | PU | Abbreviation for `Power Unit`. | Confirmed |
+| **I2C** | I2C | Communication channel between `MC` and `MU` (together with direct signals). | Confirmed |
 
-## Undvik tvetydiga ord
+## Avoid ambiguous words
 
-| Undvik | Använd i stället | Skäl |
+| Avoid | Use instead | Why |
 |---|---|---|
-| "status" (ensamt) | `Output State`, `Operation Mode` eller `Connection Status` | "Status" kan avse flera olika saker. |
-| "mode" (ensamt) | `Operation Mode` + värdet (`LOCAL`/`PAIRING`/`OPERATIONAL`) | Tydliggör vilken typ av läge som avses. |
-| "på/av" i teknisk text | `ON` / `OFF` | Konsekvent med mjukvarans nomenklatur. |
-| "lampa", "LED1", "LED2" i löptext | `Operation Mode LED` / `Output State LED` | Beskrivande beteckningar; LED1/LED2 är endast fysisk märkning. |
+| "status" on its own | `Output State`, `Operation Mode` or `Connection Status` | "Status" can mean several different things. |
+| "mode" on its own | `Operation Mode` plus the value (`LOCAL`/`PAIRING`/`OPERATIONAL`) | Makes clear which kind of mode is meant. |
+| "on/off" in technical text | `ON` / `OFF` | Consistent with the software nomenclature. |
+| "lamp", "LED1", "LED2" in running text | `Operation Mode LED` / `Output State LED` | Descriptive names; LED1/LED2 are physical marking only. |
