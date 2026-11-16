@@ -37,6 +37,7 @@ questions** when a decision is made, and the affected documents are updated.
 
 | ID | Question | Source | Affects | Status / next step |
 |---|---|---|---|---|
+| TBD-24 | Where does the commissioning code/QR come from, and when can it be printed in the manual? | K1 | `manual.md` §4.4, `specification.md` §12 | Awaiting decision |
 
 ### Measurement
 
@@ -50,9 +51,13 @@ questions** when a decision is made, and the affected documents are updated.
 
 | ID | Question | Source | Affects | Status / next step |
 |---|---|---|---|---|
-| TBD-13 | What type of connector do input and output have? | K1 (deferred), K4 | Manual 4.2/5.1 | Awaiting decision |
-| TBD-14 | Maximum load (A/W) and electrical safety rating? | K4 | Manual 3, technical data | Awaiting decision |
-| TBD-15 | Should the device be intended for indoor use only? | K4 | Manual 3 | Awaiting decision |
+| TBD-13 | What type of connector do input and output have? | K1 (deferred), K4 | `manual.md` §4.2, §5.1, `hardware.md` | Awaiting decision |
+| TBD-14 | Maximum load (A/W) and electrical safety rating? | K4 | `manual.md` §3, §11, `hardware.md` | Awaiting decision |
+| TBD-15 | Should the device be intended for indoor use only? | K4 | `manual.md` §3, `hardware.md` | Awaiting decision |
+| TBD-23 | How is the plug-in unit mounted? `TBD-C9` refers here. | K4 | `hardware.md` | Awaiting decision |
+| TBD-25 | Should the device require a protective earth (grounded outlet)? | K4 | `manual.md` §3, `hardware.md` | Awaiting decision |
+| TBD-26 | Which environment must the device tolerate: humidity, heat, storage and operating temperature? | K4 | `manual.md` §3, §7, §11, `hardware.md` | Awaiting decision |
+| TBD-27 | Technical data: mains supply, dimensions and weight? | K4 | `manual.md` §11, `hardware.md` | Awaiting decision |
 
 ### Terminology
 
@@ -88,6 +93,8 @@ questions** when a decision is made, and the affected documents are updated.
 | TBD-C12 | Should measured values be reported as one struct with all values, or as standard attributes? | Standard attributes (one value per Matter attribute). Keeps Home Assistant's standard mapping; no custom struct. | K2, K3 |
 | TBD-C13 | Matter, Home Assistant and provisioning (`TBD-01`–`TBD-09`): Pairing/Commissioning Timeout, Decommissioning, Factory Reset, Wi-Fi provisioning, behavior when Home Assistant is unreachable, Reconnect, multiple Fabrics and HA/Matter Server version. | Handled by ESP-Matter according to the Matter specification; PSMD uses ESP-Matter's implementation/standard behavior and assumes compatibility with the Matter specification. | K2, K3 |
 | TBD-C14 | Should PSMD be a plug-in or permanently mounted unit? | Plug-in (On/Off Plug-in Unit, `0x010A`). Mounted On/Off Control (`0x010F`) is not needed. | K4 |
+| TBD-C15 | Does `LOCAL` require a cloud service or an internet connection? | No. `LOCAL` switches the `Output` without a cloud service or an internet connection, and no data leaves the local network. | K1 |
+| TBD-C16 | Are measured values computed when no `Load` is connected? | Yes, always. They are then 0 and are reported if the device is in `OPERATIONAL`. | K1 |
 ## Gaps and next steps
 
 Known gaps in the documentation and what has to be produced. It is a work list
@@ -101,6 +108,8 @@ sections above.
 | GAP-03 | High | Data model | Units, scaling, intervals, `timestamp`, energy at `Power-up`/overflow and which fields are `Persisted State`. | [`specification.md`](specification.md) §11 |
 | GAP-04 | Medium | Verification | Non-functional requirements and concrete acceptance tests tied to each requirement. | [`specification.md`](specification.md) §10 |
 | GAP-05 | Medium | User manual | Section 5.4 assumes a local UI with views and screenshots. Clarify whether PSMD has any interface of its own beyond the button, the LEDs and Home Assistant. | [`manual.md`](manual.md) |
+| GAP-06 | Medium | Manual → specification | The network requirements in the manual (`manual.md` §2.3: Wi-Fi band, PSMD and Home Assistant in the same network, Home Assistant version with a Matter Server) have no equivalent in the specification. The band follows the hardware implementation. | [`specification.md`](specification.md) §13 |
+| GAP-07 | Medium | Hardware document | [`hardware.md`](hardware.md) is a stub: connectors, electrical safety, environment and technical data are open (`TBD-13`–`TBD-15`, `TBD-23`, `TBD-25`–`TBD-27`). | [`hardware.md`](hardware.md) |
 
 ### GAP-01 – Matter interface
 
@@ -147,11 +156,24 @@ preferably with screenshots". That assumes a local interface that does not
 appear anywhere else. PSMD appears to have a button, two LEDs and Home
 Assistant – no screen of its own. The section should be removed or clarified.
 
-### Recommended order
+### GAP-06 – Network requirements in the manual
 
-1. GAP-01 and GAP-03 – they unblock requirements, tests and the Home Assistant integration.
-2. GAP-02 – needed before firmware and measurement can be implemented.
-3. GAP-04 and GAP-05 – improve traceability and user documentation.
+`manual.md` §2.3 states network requirements – Wi-Fi band, PSMD and Home
+Assistant in the same network, a minimum Home Assistant version with a Matter
+Server – that the network section of `specification.md` does not have. The band
+(2.4 or 5 GHz) follows the hardware implementation and is open until it is
+decided ([`hardware.md`](hardware.md)).
+
+### GAP-07 – The hardware document
+
+[`hardware.md`](hardware.md) owns what the specification does not: connectors,
+electrical safety, environment and technical data. The values are open; the
+questions with IDs are in the tables above.
+
+### Order of work
+
+The order, the phases and the exit criteria are in [`project.md`](project.md).
+This document only defines the IDs.
 
 ## How the document is used
 

@@ -23,11 +23,18 @@ integration with Matter and Home Assistant.
 The document describes the firmware for the **Matter Controller (MC)** and the
 interface to the **Measurement Unit (MU)**.
 
-This document is normative. [`manual.md`](manual.md) is written for users and
-must not describe behavior that is not specified here.
+[`manual.md`](manual.md) owns the behavior: it describes what PSMD does from the
+user's point of view, and this document is derived from it. The specification
+adds what the manual does not describe – implementation, data model and the
+Matter integration. Behavior that the manual states and this document lacks is a
+gap: it is recorded in [`decisions.md`](decisions.md) and added here. The
+`Manual` column in the behavior tables shows which part of the manual each
+behavior comes from.
 
 The document describes the **intended architecture**. Exact implementation,
-software version and hardware target are not decided yet.
+software version and hardware target are not decided yet. Electrical safety,
+mains connectors, environment and technical data are not specified here; they
+are in [`hardware.md`](hardware.md).
 
 ## 2. System overview
 
@@ -57,50 +64,52 @@ PSMD is responsible for:
 - switching `Output State` (`ON`/`OFF`),
 - measuring voltage, current and power in `OPERATIONAL`,
 - handling `Operation Mode` and local operation,
-- storing the configuration and state that `Power-up` requires.
+- storing the configuration and state that `Power-up` requires,
+- working without a cloud service or an internet connection in `LOCAL`, sending
+  no data outside the local network (`TBD-C15`).
 
 Home Assistant and the `Matter Server` are outside PSMD and are responsible for
 `Commissioning`, automations and the user interface.
 
 ## 3. Operation Modes
 
-| `Operation Mode` | Description | `Operation Mode LED` |
-|---|---|---|
-| **`LOCAL`** | Default mode at the first `Power-up`. No connection to Home Assistant. `Short Press` toggles `Output State`. | Fast blink for 5 s at `Power-up`, then off. |
-| **`PAIRING`** | The device is available for Matter `Commissioning`. `Short Press` has no effect. | Slow blink. |
-| **`OPERATIONAL`** | The device belongs to a `Fabric` and can be controlled from Home Assistant. `Short Press` toggles `Output State`. | Fast blink for 5 s at `Power-up`, then solid. |
+| `Operation Mode` | Description | `Operation Mode LED` | Manual |
+|---|---|---|---|
+| **`LOCAL`** | Default mode at the first `Power-up`. No connection to Home Assistant. `Short Press` toggles `Output State`. | Fast blink for 5 s at `Power-up`, then off. | [manual.md §5.3](manual.md) |
+| **`PAIRING`** | The device is available for Matter `Commissioning`. `Short Press` has no effect. | Slow blink. | [manual.md §5.3](manual.md) |
+| **`OPERATIONAL`** | The device belongs to a `Fabric` and can be controlled from Home Assistant. `Short Press` toggles `Output State`. | Fast blink for 5 s at `Power-up`, then solid. | [manual.md §5.3](manual.md) |
 
 ## 4. Transitions
 
-| From | Event | To | Comment |
-|---|---|---|---|
-| – | `Power-up`, first time | `LOCAL` | Default mode. |
-| – | `Power-up`, previously connected | `OPERATIONAL` | Behavior when Home Assistant is unreachable is handled by ESP-Matter (`TBD-C13`). |
-| `LOCAL` | `Long Press` | `PAIRING` | |
-| `PAIRING` | Successful `Commissioning` | `OPERATIONAL` | The device is added to a `Fabric`. |
-| `PAIRING` | `Pairing Timeout` or failed connection | `LOCAL` | `Pairing Timeout` per ESP-Matter/Matter (`TBD-C13`). |
-| `PAIRING` | `Long Press` | `LOCAL` | `Decommissioning` per ESP-Matter (`TBD-C13`). |
-| `OPERATIONAL` | `Long Press` | `PAIRING` | |
+| From | Event | To | Comment | Manual |
+|---|---|---|---|---|
+| – | `Power-up`, first time | `LOCAL` | Default mode. | [manual.md §5.3](manual.md) |
+| – | `Power-up`, previously connected | `OPERATIONAL` | Behavior when Home Assistant is unreachable is handled by ESP-Matter (`TBD-C13`). | [manual.md §5.3](manual.md) |
+| `LOCAL` | `Long Press` | `PAIRING` | | [manual.md §5.3](manual.md) |
+| `PAIRING` | Successful `Commissioning` | `OPERATIONAL` | The device is added to a `Fabric`. | [manual.md §5.3](manual.md) |
+| `PAIRING` | `Pairing Timeout` or failed connection | `LOCAL` | `Pairing Timeout` is 3 min; verification against ESP-Matter/Matter is open (`TBD-C13`). | [manual.md §4.4](manual.md) |
+| `PAIRING` | `Long Press` | `LOCAL` | `Decommissioning` per ESP-Matter (`TBD-C13`). | [manual.md §5.3](manual.md) |
+| `OPERATIONAL` | `Long Press` | `PAIRING` | | [manual.md §5.3](manual.md) |
 
 `Short Press` never changes `Operation Mode`; it only toggles `Output State` in
 `LOCAL` and `OPERATIONAL`.
 
 ## 5. Button
 
-| Event | Definition | Behavior |
-|---|---|---|
-| **`Short Press`** | Press ≤ 3 s. | Toggles `Output State` in `LOCAL` and `OPERATIONAL`. No effect in `PAIRING`. |
-| **`Long Press`** | Press > 3 s. | Changes `Operation Mode` according to the table above. |
-| **`Press Threshold`** | 3 s. | Boundary between `Short Press` and `Long Press`. |
+| Event | Definition | Behavior | Manual |
+|---|---|---|---|
+| **`Short Press`** | Press ≤ 3 s. | Toggles `Output State` in `LOCAL` and `OPERATIONAL`. No effect in `PAIRING`. | [manual.md §5.2](manual.md) |
+| **`Long Press`** | Press > 3 s. | Changes `Operation Mode` according to the table above. | [manual.md §5.2](manual.md) |
+| **`Press Threshold`** | 3 s. | Boundary between `Short Press` and `Long Press`. | [manual.md §5.3](manual.md) |
 
 Debounce time and the exact reading of the button are not decided.
 
 ## 6. LEDs
 
-| LED | Behavior |
-|---|---|
-| **`Operation Mode LED`** (`LED1`) | Shows `Operation Mode`: fast blink for 5 s at `Power-up` (both `LOCAL` and `OPERATIONAL`), off in `LOCAL`, slow blink in `PAIRING`, solid in `OPERATIONAL`. |
-| **`Output State LED`** (`LED2`) | Mirrors `Output State`: on when `ON`, off when `OFF`, independent of `Operation Mode`. |
+| LED | Behavior | Manual |
+|---|---|---|
+| **`Operation Mode LED`** (`LED1`) | Shows `Operation Mode`: fast blink for 5 s at `Power-up` (both `LOCAL` and `OPERATIONAL`), off in `LOCAL`, slow blink in `PAIRING`, solid in `OPERATIONAL`. | [manual.md §5.2](manual.md) |
+| **`Output State LED`** (`LED2`) | Mirrors `Output State`: on when `ON`, off when `OFF`, independent of `Operation Mode`. | [manual.md §5.2](manual.md) |
 
 | Pattern | On / off | Frequency |
 |---|---|---|
@@ -108,6 +117,11 @@ Debounce time and the exact reading of the button are not decided.
 | **`Slow Blink`** | 0.5 s / 0.5 s | 1 Hz. |
 | **`Solid`** | On | – |
 | **`Off`** | Off | – |
+
+Both LEDs are off when PSMD has no power; the fast blink at `Power-up` is the
+only indication that the device is powered.
+
+Source: [manual.md §5.2](manual.md), [manual.md §8](manual.md).
 
 ## 7. Power-up and persistence
 
@@ -117,10 +131,14 @@ Debounce time and the exact reading of the button are not decided.
 - Which state is otherwise stored and restored is not decided (`TBD-12`).
 - `Factory Reset` is handled by ESP-Matter (`TBD-C13`).
 
+Source: [manual.md §4.2](manual.md), [manual.md §5.3](manual.md), [manual.md §6.1](manual.md).
+
 ## 8. Measurement
 
 Measurement runs **only in `OPERATIONAL`**. Nothing is measured in `LOCAL` or
-`PAIRING`. Measurement is active also when `Output State` is `OFF`.
+`PAIRING`. Measurement is active also when `Output State` is `OFF`. The values
+are computed and reported also when no `Load` is connected; they are then 0
+(`TBD-C16`).
 
 | Quantity | Status |
 |---|---|
@@ -149,6 +167,8 @@ struct with all values is used (`TBD-C12`).
 decided (`TBD-22`). The mapping between the data model's fields and the Matter
 attributes is in §11.
 
+Source: [manual.md §6.2](manual.md).
+
 ## 9. Local and external control
 
 - **`LOCAL`:** only `Short Press` controls `Output State`.
@@ -157,18 +177,22 @@ attributes is in §11.
 - **`PAIRING`:** `Output State` keeps its current value; `Short Press` has no
   effect.
 
+Source: [manual.md §6.1](manual.md).
+
 ## 10. Requirements and acceptance criteria
 
 Requirements with ID, source, acceptance criterion and traceability to the
 specification in this document.
 
-| ID | Requirement | Source | Acceptance criterion | Spec | Test | Status |
-|---|---|---|---|---|---|---|
-| REQ-F-001 | `Short Press` shall toggle `Output State` in `LOCAL` and `OPERATIONAL`. | K1 | The output toggles on a press ≤ 3 s. | §5 | [ ] | Confirmed |
-| REQ-F-002 | `Long Press` shall change `Operation Mode` according to the specification. | K1 | `LOCAL`/`OPERATIONAL` → `PAIRING`; `PAIRING` → `LOCAL`. | §4–5 | [ ] | Confirmed |
-| REQ-F-003 | `Output State` shall always be `OFF` at `Power-up`. | K1 | The output is `OFF` after every power-up. | §7 | [ ] | Confirmed |
-| REQ-F-004 | Measurement shall run only in `OPERATIONAL`. | K1 | No measured values are updated in `LOCAL` or `PAIRING`. | §8 | [ ] | Confirmed |
-| REQ-F-005 | `Operation Mode LED` and `Output State LED` shall follow the specified patterns. | K1 | Blink and light patterns match the specification. | §6 | [ ] | Confirmed |
+| ID | Requirement | Source | Acceptance criterion | Spec | Manual | Test | Status |
+|---|---|---|---|---|---|---|---|
+| REQ-F-001 | `Short Press` shall toggle `Output State` in `LOCAL` and `OPERATIONAL`. | K1 | The output toggles on a press ≤ 3 s. | §5 | [manual.md §5.2](manual.md) [manual.md §6.1](manual.md) | [ ] | Confirmed |
+| REQ-F-002 | `Long Press` shall change `Operation Mode` according to the specification. | K1 | `LOCAL`/`OPERATIONAL` → `PAIRING`; `PAIRING` → `LOCAL`. | §4–5 | [manual.md §5.2](manual.md) [manual.md §5.3](manual.md) | [ ] | Confirmed |
+| REQ-F-003 | `Output State` shall always be `OFF` at `Power-up`. | K1 | The output is `OFF` after every power-up. | §7 | [manual.md §4.2](manual.md) [manual.md §5.3](manual.md) | [ ] | Confirmed |
+| REQ-F-004 | Measurement shall run only in `OPERATIONAL`. | K1 | No measured values are updated in `LOCAL` or `PAIRING`. | §8 | [manual.md §6.2](manual.md) | [ ] | Confirmed |
+| REQ-F-005 | `Operation Mode LED` and `Output State LED` shall follow the specified patterns. | K1 | Blink and light patterns match the specification. | §6 | [manual.md §5.2](manual.md) | [ ] | Confirmed |
+| REQ-F-006 | `LOCAL` shall work without a cloud service or an internet connection, and without sending data outside the local network. | K1 | With the network disabled, `Short Press` still toggles `Output State`. | §2, §9 | [manual.md §2.1](manual.md) [manual.md §4.3](manual.md) | [ ] | Confirmed |
+| REQ-F-007 | Measured values shall be computed and reported also when no `Load` is connected. | K1 | Values are reported as 0 with no load in `OPERATIONAL`. | §8 | [manual.md §6.2](manual.md) [manual.md §8](manual.md) | [ ] | Confirmed |
 
 Non-functional requirements and concrete acceptance tests tied to each
 requirement are still missing; see the gap in [`decisions.md`](decisions.md).
@@ -218,6 +242,8 @@ Whether energy measurement accumulates across `Power-up` is open (`TBD-12`).
 
 - `Commissioning` puts PSMD in a `Fabric` and makes the device controllable from
   Home Assistant.
+- The commissioning code and its QR come from ESP-Matter and are printed in the
+  manual ([manual.md §4.4](manual.md)) once they exist (`TBD-24`).
 - `Operation Mode` and transitions are specified in §3–4.
 - Measurement runs only in `OPERATIONAL`. Which measured values are exposed is
   partly decided (`TBD-10`).

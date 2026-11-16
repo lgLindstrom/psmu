@@ -11,6 +11,8 @@ in English.
 | Users | [`manual.md`](manual.md) | User manual for PSMD (Swedish). |
 | Specification | [`specification.md`](specification.md) | Behavior, requirements, architecture, data model, Matter and Home Assistant. |
 | Project | [`decisions.md`](decisions.md) | Decisions, open questions and known gaps. |
+| Plan | [`project.md`](project.md) | What is done when: phases, order, dependencies, exit criteria. |
+| Hardware | [`hardware.md`](hardware.md) | Connectors, electrical safety, environment, technical data. |
 | Source code | [`../firmware/`](../firmware/) | ESP32 firmware (ESP-IDF + ESP-Matter). Built via the `esp-idf` MCP. |
 | Firmware | [`../firmware/README.md`](../firmware/README.md) | Build, flash, debug and logging rules for the firmware. |
 | Reference | [`glossary.md`](glossary.md) | Terminology, approved terms and their Swedish wording in the manual. |
@@ -30,7 +32,9 @@ is needed.
 | Requirements, acceptance criterion, traceability, test strategy | [`specification.md`](specification.md) §10 |
 | Component, data model, Matter, Home Assistant, provisioning, security | [`specification.md`](specification.md) §2, §11–15 |
 | Decision, open question, source `K1`–`K6` | [`decisions.md`](decisions.md) |
-| Gap, next step, `GAP-01`–`GAP-05` | [`decisions.md`](decisions.md) |
+| Gap, next step, `GAP-01`–`GAP-06` | [`decisions.md`](decisions.md) |
+| Plan, phase, order, milestone, what comes next | [`project.md`](project.md) |
+| Connector, electrical safety, environment, temperature, supply, dimension, weight | [`hardware.md`](hardware.md) |
 | Term, naming, `Operation Mode LED`, `Output State LED` | [`glossary.md`](glossary.md) |
 | Getting started, usage, troubleshooting, technical data | [`manual.md`](manual.md) |
 | Attribute ID, cluster, device type, cluster revision | [`lookup/matter-1.6.1/INDEX.md`](lookup/matter-1.6.1/INDEX.md), then `grep` in `text/*.txt` |
@@ -43,11 +47,17 @@ is needed.
 - Branching and commit format are described in [Workflow](#workflow) below.
 - New facts go into the right document – not into `README.md`.
 - Open questions are handled in [`decisions.md`](decisions.md).
-- Known gaps and next steps are in [`decisions.md`](decisions.md).
+- Known gaps are in [`decisions.md`](decisions.md); the order they are worked
+  in is in [`project.md`](project.md).
 - Terms must follow [`glossary.md`](glossary.md).
 - Unknown values are left as `[text]`; they must not be filled in with guesses.
-- The specification is normative. The manual describes the same behavior for
-  users and must not introduce behavior that the specification does not have.
+- [`manual.md`](manual.md) owns the behavior. [`specification.md`](specification.md)
+  and [`glossary.md`](glossary.md) are derived from it: the specification adds
+  implementation, data model and Matter, the glossary adds the terms. Behavior
+  the manual has and the specification lacks is a gap, recorded in
+  [`decisions.md`](decisions.md).
+- What is done when, in which order and with which exit criteria is in
+  [`project.md`](project.md).
 - Which document to read for which task is in `AGENTS.md` § Reading budget.
   That table is the single copy; do not duplicate it here.
 
