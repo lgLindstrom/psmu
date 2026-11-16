@@ -161,10 +161,8 @@ På enheten finns dessutom:
 | Komponent | Beteende |
 |---|---|
 | **Button** | `Short Press` (≤ 3 s) växlar `Output State` i `LOCAL` och `OPERATIONAL`. `Long Press` (> 3 s) växlar `Operation Mode` till `PAIRING` från `LOCAL` och `OPERATIONAL`, och från `PAIRING` tillbaka till `LOCAL`. |
-| **`Operation Mode LED`** (LED1) | Blinkar snabbt i 5 s vid `Power-up` (2 Hz: 0,25 s tänd / 0,25 s släckt), både i `LOCAL` och `OPERATIONAL`. Därefter släckt i `LOCAL`, långsamt blinkande i `PAIRING` (0,5 s tänd / 0,5 s släckt) och fast sken i `OPERATIONAL`. |
-| **`Output State LED`** (LED2) | Följer `Output State` oberoende av `Operation Mode`: tänd vid `ON`, släckt vid `OFF`. |
-
-[Alla LED-beteenden är nu fastställda.]
+| **`Operation Mode LED`** | Blinkar snabbt i 5 s vid `Power-up` (2 Hz: 0,25 s tänd / 0,25 s släckt), både i `LOCAL` och `OPERATIONAL`. Därefter släckt i `LOCAL`, långsamt blinkande i `PAIRING` (0,5 s tänd / 0,5 s släckt) och fast sken i `OPERATIONAL`. |
+| **`Output State LED`** | Följer `Output State` oberoende av `Operation Mode`: tänd vid `ON`, släckt vid `OFF`. |
 
 ### 5.3 Driftlägen (Operation Modes)
 
@@ -217,8 +215,8 @@ PSMD mäter den anslutna lasten och kan presentera följande värden:
 - [Energiförbrukning]
 - [Övriga mätvärden]
 
-Mätningen utförs var 5:e sekund av `MU` (endast i `OPERATIONAL`, även vid
-`OFF`). `MC` skickar ett värde i taget till Home Assistant.
+Mätvärdena beräknas även när ingen last är ansluten, och visas då som 0.
+Mätvärdena uppdateras var 5:e sekund.
 
 ### 6.3 Automationer i Home Assistant
 
@@ -242,7 +240,7 @@ Home Assistants automationer och scener.
 |---|---|---|
 | Ingen statusindikering | PSMD saknar spänning | Kontrollera att PSMD sitter i vägguttaget |
 | Går inte att lägga till i Home Assistant | Matter Server saknas eller PSMD är inte i parkopplingsläge | Kontrollera Matter Server och upprepa parkopplingen |
-| Inga mätvärden visas | Ingen last ansluten eller fel i anslutningen | Kontrollera ansluten utrustning |
+| Inga mätvärden visas | Enheten är inte i `OPERATIONAL`, eller Home Assistant når den inte | Kontrollera driftläget och anslutningen till Home Assistant |
 | [ ] | [ ] | [ ] |
 
 ## 9. Support och kontakt
@@ -265,7 +263,7 @@ Fullständig terminologi med engelska mjukvarutermer finns i
 | `OPERATIONAL` | Anslutet läge | Ansluten till Home Assistant via Matter |
 | `Output State` | Utgångstillstånd | `ON` eller `OFF` |
 | `Short Press` / `Long Press` | Kort/långt tryck | ≤ 3 s respektive > 3 s |
-| `Operation Mode LED` / `Output State LED` | Läges-/utgångslysdiod | LED1 respektive LED2 |
+| `Operation Mode LED` / `Output State LED` | Lägeslysdiod / utgångslysdiod | Visar driftläge respektive utgångstillstånd |
 | `Commissioning` | Idrifttagning | Matter-processen för att lägga till enheten |
 | `Pairing Timeout` | Parkopplingstimeout | Preliminärt 3 min, sedan återgång till `LOCAL` |
 | `Slow Blink` | Långsamt blink | 0,5 s tänd / 0,5 s släckt |
