@@ -153,7 +153,8 @@ are computed and reported also when no `Load` is connected; they are then 0
 
 The measurement is performed by **MU** at a fixed interval of **5 s**. All 8
 measured values are synchronous (the same measurement cycle). `MC` sends one
-value at a time to Home Assistant.
+value at a time to Home Assistant. `MC` reaches `MU` over I2C; the interface is
+`TBD-28`.
 
 `Measurement Interval` is therefore decided at 5 s (`TBD-C11`), but which values
 are reported to Matter is decided in `TBD-10`. Field names and scaling are in
@@ -302,7 +303,12 @@ unreachable are handled by ESP-Matter according to the Matter specification
   this repository and is built and flashed through the `esp-idf` MCP.
 - Where the Espressif documentation lives and how to look it up:
   [`lookup/esp-idf.md`](lookup/esp-idf.md).
-- Hardware target and build configuration are not decided.
+- The development and verification target is an ESP32-C6 dev board
+  (`TBD-C17`). The product's own board follows the hardware (`GAP-07`).
+- `PU` and `MU` sit behind interfaces with a simulated backend, so the firmware
+  runs without the real hardware (`TBD-C18`). The `MU` is simulated until the
+  interface in `TBD-28` is implemented behind the same interface; the product
+  build uses the I2C backend.
 - Practical build, flash and debug steps and logging conventions are in
   [`../firmware/README.md`](../firmware/README.md).
 - ESP-Matter recommends ESP-IDF v6.0.2; the deviation is examined in `TBD-21`.
