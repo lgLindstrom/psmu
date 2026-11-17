@@ -147,8 +147,8 @@ are computed and reported also when no `Load` is connected; they are then 0
 | Apparent power | Decided as a measured value. |
 | Active power | Decided as a measured value. |
 | Reactive power | Decided as a measured value. |
-| Phase delay (`phase_delay`) | Decided as a measured value; reported as `PowerFactor` (`TBD-C10`), unit and scaling open (`TBD-22`). |
-| Frequency | Not decided (`TBD-10`). |
+| Phase delay (`phase_delay`) | Decided as a measured value; reported as `PowerFactor` in percent100ths (`TBD-C10`, `TBD-C19`). |
+| Frequency | Decided as a measured value; whether it is exposed is decided in `TBD-10`. |
 | Energy | Decided as a measured value, but accumulation across `Power-up` is not decided (`TBD-12`). |
 
 The measurement is performed by **MU** at a fixed interval of **5 s**. All 8
@@ -164,8 +164,8 @@ Measured values are reported as **standard attributes** (one value per Matter
 attribute) so that Home Assistant can use its standard mapping. No custom
 struct with all values is used (`TBD-C12`).
 
-`phase_delay` is reported as `PowerFactor` (`TBD-C10`); unit and scaling are not
-decided (`TBD-22`). The mapping between the data model's fields and the Matter
+`phase_delay` is reported as `PowerFactor` in percent100ths (`TBD-C10`,
+`TBD-C19`). The mapping between the data model's fields and the Matter
 attributes is in §11.
 
 Source: [manual.md §6.2](manual.md).
@@ -219,7 +219,7 @@ be confirmed (`TBD-20`).
 | papp | no | `ApparentPower` | mVA |
 | pact | no | `ActivePower` | mW |
 | preact | no | `ReactivePower` | mVAR |
-| phase_delay | no | `PowerFactor` | percent100ths (open, `TBD-22`) |
+| phase_delay | no | `PowerFactor` | percent100ths |
 | frequency | no | `Frequency` | mHz |
 | energy | no | `CumulativeEnergyImported` (Electrical Energy Measurement) | mWh |
 | friendly_name | yes | – | – |
@@ -232,8 +232,8 @@ be confirmed (`TBD-20`).
 `Editable = yes` means that the value can be changed through the interface.
 
 The table is a proposal. Which measured values are actually exposed is decided
-in `TBD-10`. That `phase_delay` is reported as `PowerFactor` is decided
-(`TBD-C10`), but unit and scaling are open (`TBD-22`).
+in `TBD-10`. That `phase_delay` is reported as `PowerFactor` in percent100ths is
+decided (`TBD-C10`, `TBD-C19`).
 
 Matter scales measured values in mV, mA, mW and mHz, while the data model
 specifies `int64` without a unit. The scaling has to be decided (`TBD-20`).

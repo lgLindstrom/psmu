@@ -44,9 +44,8 @@ questions** when a decision is made, and the affected documents are updated.
 
 | ID | Question | Source | Affects | Status / next step |
 |---|---|---|---|---|
-| TBD-10 | Which measured values are exposed: voltage, current, active power, energy, frequency, power factor? | K4 | Manual 6.2, Matter clusters | Awaiting decision |
+| TBD-10 | Which of the eight measured values are exposed: voltage, current, apparent power, active power, reactive power, phase delay, frequency, energy? | K4 | Manual 6.2, Matter clusters | Awaiting decision |
 | TBD-12 | Should energy measurement accumulate across a power loss (`Persisted State`)? | K4 | Energy measurement | Awaiting decision |
-| TBD-22 | Which unit and scaling should the `PowerFactor` reporting of `phase_delay` use (percent100ths per Matter, or degrees)? | K4 | Matter reporting, `specification.md` §12.2 | Awaiting decision |
 | TBD-28 | Where is the MU interface specification, and does it cover bus, address, register or command protocol, sample format, units, cycle and error handling? | K1 | `specification.md` §2, §8, §11, `GAP-02` | Awaiting the specification from the product owner |
 
 ### Hardware and electrical safety
@@ -90,7 +89,7 @@ questions** when a decision is made, and the affected documents are updated.
 | TBD-C7 | `Output State` at `Power-up`? | Always `OFF`. | K1 |
 | TBD-C8 | Which ESP-IDF version is the firmware built against? | ESP-IDF 6.1, with ESP-Matter `release/v1.6.1` for Matter 1.6.1. See [`lookup/esp-idf.md`](lookup/esp-idf.md). | K1 |
 | TBD-C9 | Which Matter device types are used? | On/Off Plug-in Unit (`0x010A`) and Electrical Sensor (`0x0510`) on the same endpoint. See [`specification.md`](specification.md) §12.1. The mounting is examined in `TBD-23`. | K4 |
-| TBD-C10 | How is `phase_delay` reported? | As `PowerFactor` in Electrical Power Measurement. Unit and scaling are an open question (`TBD-22`). | K4 |
+| TBD-C10 | How is `phase_delay` reported? | As `PowerFactor` in Electrical Power Measurement. Unit and scaling are decided in `TBD-C19`. | K4 |
 | TBD-C11 | Which `Measurement Interval` should be used? | 5 s, driven by the MU measurement cycle; all 8 measured values are synchronous and MC reports one value at a time to HA. | K4 |
 | TBD-C12 | Should measured values be reported as one struct with all values, or as standard attributes? | Standard attributes (one value per Matter attribute). Keeps Home Assistant's standard mapping; no custom struct. | K2, K3 |
 | TBD-C13 | Matter, Home Assistant and provisioning (`TBD-01`–`TBD-09`): Pairing/Commissioning Timeout, Decommissioning, Factory Reset, Wi-Fi provisioning, behavior when Home Assistant is unreachable, Reconnect, multiple Fabrics and HA/Matter Server version. | Handled by ESP-Matter according to the Matter specification; PSMD uses ESP-Matter's implementation/standard behavior and assumes compatibility with the Matter specification. | K2, K3 |
@@ -99,6 +98,7 @@ questions** when a decision is made, and the affected documents are updated.
 | TBD-C16 | Are measured values computed when no `Load` is connected? | Yes, always. They are then 0 and are reported if the device is in `OPERATIONAL`. | K1 |
 | TBD-C17 | Which hardware is the firmware developed and verified on? | An ESP32-C6 dev board. The product's own board follows the hardware (`GAP-07`). | K1 |
 | TBD-C18 | How is PSMD developed before the hardware exists? | A simulated `PU` and `MU` behind the same interfaces as the real ones. Everything works simulated before the real MU replaces the simulated backend, and the simulator stays as a backend for tests. | K1 |
+| TBD-C19 | Which unit and scaling should the `PowerFactor` reporting of `phase_delay` use? | Percent100ths, the unit `PowerFactor` has in Electrical Power Measurement (`0x0011`, −10000…10000). `phase_delay` is not reported in degrees. | K2 |
 
 ## Gaps and next steps
 
