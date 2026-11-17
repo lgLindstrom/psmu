@@ -211,9 +211,12 @@ PSMD mäter den anslutna lasten och kan presentera följande värden:
 
 - Spänning
 - Ström
-- Effekt
-- [Energiförbrukning]
-- [Övriga mätvärden]
+- Skenbar effekt
+- Aktiv effekt
+- Reaktiv effekt
+- Fasförskjutning
+- Frekvens
+- Energiförbrukning
 
 Mätvärdena beräknas även när ingen last är ansluten, och visas då som 0.
 Mätvärdena uppdateras var 5:e sekund.
@@ -280,3 +283,7 @@ Fullständig terminologi med engelska mjukvarutermer finns i
 | [Strömförsörjning] | [ ] |
 | [Anslutningar] | [ ] |
 | [Miljö/Drifttemperatur] | [ ] |
+| Mätvärden: områden och enheter | [ ] |
+
+> Mätområden, upplösning och enheter för mätvärdena är inte fastställda
+> (`GAP-02`, `GAP-03` i [`decisions.md`](decisions.md)).

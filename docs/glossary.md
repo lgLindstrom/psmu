@@ -88,8 +88,12 @@ power are then expected to be 0).
 | **Measurement** | Mätning | Collection of electrical quantities from the `Load`. Only in `OPERATIONAL`, also at `Output State = OFF`. | Confirmed |
 | **Voltage** | Spänning | Measured voltage across the `Load` (V). | Proposed |
 | **Current** | Ström | Measured current through the `Load` (A). | Proposed |
+| **Apparent Power** | Skenbar effekt | Voltage times current (VA). | Proposed |
 | **Active Power** | Aktiv effekt | Measured active power (W). | Proposed |
-| **Energy** | Energi | Accumulated consumption over time (kWh). | Proposed |
+| **Reactive Power** | Reaktiv effekt | Power that oscillates between source and `Load` (var). | Proposed |
+| **Phase Delay** | Fasförskjutning | Phase shift between voltage and current. Reported as `PowerFactor` in percent100ths (`TBD-C10`, `TBD-C19`). | Proposed |
+| **Frequency** | Frekvens | Mains frequency (Hz). | Proposed |
+| **Energy** | Energiförbrukning | Accumulated consumption over time (kWh). Accumulation across `Power-up` is open (`TBD-12`). | Proposed |
 
 ## Internal terms
 
@@ -121,8 +125,7 @@ wording.
 | **Fallback** | Automatic change to `LOCAL` when `PAIRING` fails or `Pairing Timeout` expires. | Proposed |
 | **Reconnect** | The device's attempt to resume contact with its `Fabric` after a restart. Behavior TBD per the Matter specification. | TBD |
 | **Wi-Fi Provisioning** | How PSMD gets its Wi-Fi credentials: follows the method prescribed by Matter and Home Assistant. Exact flow TBD. | TBD |
-| **Frequency** | Mains frequency (Hz), if it is measured. | TBD |
-| **Power Factor** | The ratio between active and apparent power, if it is measured. | TBD |
+| **Power Factor** | The ratio between active and apparent power. Not measured; `phase_delay` is reported as `PowerFactor` (`TBD-C10`, `TBD-C19`). | Confirmed |
 | **Measurement Interval** | How often values are updated: 5 s, one value at a time to Home Assistant. | Confirmed |
 
 ## Avoid ambiguous words
