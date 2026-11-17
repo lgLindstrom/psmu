@@ -14,10 +14,9 @@ Status: `Confirmed` = established, `Proposed` = proposed term, `TBD` = to
 investigate/decide. Open questions with source are in
 [`decisions.md`](decisions.md).
 
-`LED1` and `LED2` are used only for the marking on the physical board. In text
-and software the descriptive names **`Operation Mode LED`** and
-**`Output State LED`** are used. Approved abbreviations where they fit:
-**`Mode LED`** and **`Output LED`**.
+`LED1` and `LED2` are the two LEDs on PSMD. In text and software the
+descriptive names **`Operation Mode LED`** and **`Output State LED`** are used.
+Approved abbreviations where they fit: **`Mode LED`** and **`Output LED`**.
 
 > **Owner:** terminology and approved terms.
 > **Read when needed:** [`decisions.md`](decisions.md) for terminology
@@ -42,8 +41,8 @@ and software the descriptive names **`Operation Mode LED`** and
 | **Short Press** | Kort tryck | Press ≤ 3 s. Toggles `Output State` in `LOCAL` and `OPERATIONAL`. Has no effect in `PAIRING`. | Confirmed |
 | **Long Press** | Långt tryck | Press > 3 s. Changes `Operation Mode` to `PAIRING` from `LOCAL` and `OPERATIONAL`. In `PAIRING`, `Long Press` returns to `LOCAL`. | Confirmed |
 | **Press Threshold** | Trycktröskel | 3 s – the boundary between `Short Press` and `Long Press`. | Confirmed |
-| **`Operation Mode LED`** | Lägeslysdiod | Shows `Operation Mode`: fast blink for 5 s at `Power-up` (both `LOCAL` and `OPERATIONAL`), then off in `LOCAL`, slow blink in `PAIRING` and solid in `OPERATIONAL`. Marked `LED1` on the board. | Confirmed |
-| **`Output State LED`** | Utgångslysdiod | Mirrors `Output State`: on when `ON`, off when `OFF`, independent of `Operation Mode`. Marked `LED2` on the board. | Confirmed |
+| **`Operation Mode LED`** | Lägeslysdiod | Shows `Operation Mode`: fast blink for 5 s at `Power-up` (both `LOCAL` and `OPERATIONAL`), then off in `LOCAL`, slow blink in `PAIRING` and solid in `OPERATIONAL`. Also called `LED1`. | Confirmed |
+| **`Output State LED`** | Utgångslysdiod | Mirrors `Output State`: on when `ON`, off when `OFF`, independent of `Operation Mode`. Also called `LED2`. | Confirmed |
 | **Slow Blink** | Långsamt blink | Blink pattern that indicates `PAIRING`: 0.5 s on / 0.5 s off (1 Hz). | Confirmed |
 | **Fast Blink** | Snabbt blink | Blink pattern that indicates `Power-up` for 5 s: 0.25 s on / 0.25 s off (2 Hz). | Confirmed |
 | **Solid** | Fast sken | An LED that is on without blinking. | Confirmed |
@@ -55,7 +54,7 @@ and software the descriptive names **`Operation Mode LED`** and
 |---|---|---|---|
 | **Output** | Utgång | The mains outlet that the connected equipment is supplied from. | Confirmed |
 | **Output State** | Utgångstillstånd | `ON` or `OFF` for the `Output`. | Confirmed |
-| **Load** | Last | The equipment connected to the `Output`. | Confirmed |
+| **Load** | Utrustning | The equipment connected to the `Output`. | Confirmed |
 | **Toggle** | Växla | Change `Output State` between `ON` and `OFF`. | Confirmed |
 
 ### Connectivity
@@ -65,7 +64,7 @@ and software the descriptive names **`Operation Mode LED`** and
 | **Commissioning** | Idrifttagning / parkoppling | The Matter process by which the device is added to a `Fabric`. | Confirmed |
 | **Pairing Timeout** | Parkopplingstimeout | Time limit that ends `PAIRING` and returns to `LOCAL` if no connection succeeded. 3 minutes per the manual; verification against the Matter specification is open (`TBD-C13`). | TBD |
 | **Fabric** | Fabric | Matter domain that a device belongs to; created by e.g. Home Assistant. | Confirmed |
-| **Matter Server** | Matter-server | Home Assistant component required for the Matter connection. | Confirmed |
+| **Matter Server** | Matter Server | Home Assistant component required for the Matter connection. | Confirmed |
 | **Home Assistant (HA)** | Home Assistant | The system PSMD can be integrated with. | Confirmed |
 | **Decommissioning** | Avregistrering | Leaving `PAIRING` with `Long Press` should also remove the device information in Home Assistant. **To be investigated** – exact method and responsibility per the Matter specification. | TBD |
 
@@ -73,7 +72,7 @@ and software the descriptive names **`Operation Mode LED`** and
 
 | Term (EN) | Swedish (manual.md) | Definition | Status |
 |---|---|---|---|
-| **Power-up** | Spänningssättning | When the device is supplied with power from the wall outlet. | Confirmed |
+| **Power-up** | `Power-up` (spänningssättning) | When the device is supplied with power from the wall outlet. | Confirmed |
 | **Power-loss Recovery** | Återstart efter strömavbrott | `Output State` is **always set to `OFF`** at `Power-up`, regardless of the previous state. | Confirmed |
 | **Factory Reset** | Fabriksåterställning | Reset of configuration and `Fabric` membership. **No decision taken** on whether it exists or how it is triggered. | TBD |
 
@@ -135,4 +134,4 @@ wording.
 | "status" on its own | `Output State`, `Operation Mode` or `Connection Status` | "Status" can mean several different things. |
 | "mode" on its own | `Operation Mode` plus the value (`LOCAL`/`PAIRING`/`OPERATIONAL`) | Makes clear which kind of mode is meant. |
 | "on/off" in technical text | `ON` / `OFF` | Consistent with the software nomenclature. |
-| "lamp", "LED1", "LED2" in running text | `Operation Mode LED` / `Output State LED` | Descriptive names; LED1/LED2 are physical marking only. |
+| "lamp" | `Operation Mode LED` / `Output State LED` | Descriptive names; `LED1`/`LED2` name the same LEDs. |
