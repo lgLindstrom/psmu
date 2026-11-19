@@ -33,7 +33,7 @@ change to the manual is a change to the specification.
 | [`glossary.md`](glossary.md) | Terms in the manual and internal terms are separated. | Terms follow the manual as it grows. |
 | [`decisions.md`](decisions.md) | Open questions and gaps with IDs and sources. | The IDs move to **Decided questions** as they are closed. |
 | [`hardware.md`](hardware.md) | Stub. Scope is set; the values are open (`TBD-13`–`TBD-15`, `TBD-23`, `TBD-25`–`TBD-27`). | Filled in from K4 (`GAP-07`). |
-| [`main/`](../main/), [`components/`](../components/) | M0 and M1 done: the ESP-IDF project is the repository root and builds for `esp32c6` with `esp_matter` 1.6.1; one On/Off Plug-in Unit endpoint switches the `Output` GPIO. Flashing is not verified – no board is connected (`TBD-C17`). | M2–M7. |
+| [`main/`](../main/), [`components/`](../components/) | M0 and M1 done: the ESP-IDF project is the repository root and builds, flashes and boots on the ESP32-C6 dev board with `esp_matter` 1.6.1; one On/Off Plug-in Unit endpoint switches the `Output` GPIO and the commissioning window opens. | M2–M7. |
 
 ## 3. Phases
 
