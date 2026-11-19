@@ -13,8 +13,8 @@ in English.
 | Project | [`decisions.md`](decisions.md) | Decisions, open questions and known gaps. |
 | Plan | [`project.md`](project.md) | What is done when: phases, order, dependencies, exit criteria. |
 | Hardware | [`hardware.md`](hardware.md) | Connectors, electrical safety, environment, technical data. |
-| Source code | [`../firmware/`](../firmware/) | ESP32 firmware (ESP-IDF + ESP-Matter). Built via the `esp-idf` MCP. |
-| Firmware | [`../firmware/README.md`](../firmware/README.md) | Build, flash, debug and logging rules for the firmware. |
+| Source code | [`../main/`](../main/), [`../components/`](../components/) | ESP32 firmware (ESP-IDF + ESP-Matter). Built via the `esp-idf` MCP. |
+| Firmware | [`../README.md`](../README.md) | Build, flash, debug, logging and the ESP-IDF project standard for the firmware. |
 | Reference | [`glossary.md`](glossary.md) | Terminology, approved terms and their Swedish wording in the manual. |
 | Lookup | [`lookup/matter-1.6.1/`](lookup/matter-1.6.1/) | Matter 1.6.1 extracts (read-only). |
 | Lookup | [`lookup/esp-idf.md`](lookup/esp-idf.md) | Where the ESP-IDF 6.1 and ESP-Matter documentation lives. |
@@ -39,7 +39,7 @@ is needed.
 | Getting started, usage, troubleshooting, technical data | [`manual.md`](manual.md) |
 | Attribute ID, cluster, device type, cluster revision | [`lookup/matter-1.6.1/INDEX.md`](lookup/matter-1.6.1/INDEX.md), then `grep` in `text/*.txt` |
 | ESP-IDF, ESP-Matter, GPIO, NVS, OTA, path in `$IDF_PATH` | [`lookup/esp-idf.md`](lookup/esp-idf.md) |
-| Firmware, source code, logging, `psmd_`, `TAG` | [`../firmware/README.md`](../firmware/README.md), [`specification.md`](specification.md) §14 |
+| Firmware, source code, logging, `psmd_`, `TAG`, ESP-IDF layout, components, managed components, target | [`../README.md`](../README.md), [`specification.md`](specification.md) §14 |
 | Branch, commit, pull request | [Workflow](#workflow) |
 
 ## Working method

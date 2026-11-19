@@ -1,0 +1,11 @@
+menu "PSMD"
+
+    config PSMD_OUTPUT_GPIO
+        int "GPIO connected to the simulated Output"
+        range 0 30
+        default 2
+        help
+            GPIO that stands in for the relay until the real Power Unit exists.
+            The final pin map is owned by GAP-02.
+
+endmenu

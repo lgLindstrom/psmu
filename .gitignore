@@ -9,7 +9,13 @@ __pycache__/
 docs/lookup/matter-1.6.1/*.pdf
 docs/lookup/matter-1.6.1/text/
 
-# ESP-IDF build artifacts (firmware/)
-firmware/build/
-firmware/sdkconfig
-firmware/managed_components/
+# ESP-IDF build artifacts (project root)
+/build/
+/sdkconfig
+/sdkconfig.old
+/managed_components/
+
+# esp-idf MCP logs
+/.esp_build.log
+/.esp_flash.log
+/.esp_monitor_full.log

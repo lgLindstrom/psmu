@@ -1,0 +1,26 @@
+# Matter needs 4 MB flash and the partition table below.
+CONFIG_ESPTOOLPY_FLASHSIZE_4MB=y
+
+# BLE for commissioning
+CONFIG_BT_ENABLED=y
+CONFIG_BT_NIMBLE_ENABLED=y
+CONFIG_BT_NIMBLE_ENABLE_CONN_REATTEMPT=n
+
+# IPv6 for Matter
+CONFIG_LWIP_IPV6_AUTOCONFIG=y
+
+# Custom partition table
+CONFIG_PARTITION_TABLE_CUSTOM=y
+CONFIG_PARTITION_TABLE_FILENAME="partitions.csv"
+CONFIG_PARTITION_TABLE_OFFSET=0xC000
+
+# No SoftAP: commissioning is over BLE
+CONFIG_ESP_WIFI_SOFTAP_SUPPORT=n
+
+# lwIP route hooks, required by the Matter stack
+CONFIG_LWIP_HOOK_IP6_ROUTE_DEFAULT=y
+CONFIG_LWIP_HOOK_ND6_GET_GW_DEFAULT=y
+
+# Increase the LwIP IPv6 address count to MAX_FABRIC + 1: one unique local
+# address per fabric and one link-local address
+CONFIG_LWIP_IPV6_NUM_ADDRESSES=6

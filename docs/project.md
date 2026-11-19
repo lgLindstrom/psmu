@@ -24,7 +24,7 @@ The manual is not finished: functions can still be added and removed. Until it
 is, the specification is derived from what the manual states today, and every
 change to the manual is a change to the specification.
 
-## 2. State (2026-11-16)
+## 2. State (2026-11-19)
 
 | Document | State | Remains |
 |---|---|---|
@@ -33,7 +33,7 @@ change to the manual is a change to the specification.
 | [`glossary.md`](glossary.md) | Terms in the manual and internal terms are separated. | Terms follow the manual as it grows. |
 | [`decisions.md`](decisions.md) | Open questions and gaps with IDs and sources. | The IDs move to **Decided questions** as they are closed. |
 | [`hardware.md`](hardware.md) | Stub. Scope is set; the values are open (`TBD-13`–`TBD-15`, `TBD-23`, `TBD-25`–`TBD-27`). | Filled in from K4 (`GAP-07`). |
-| [`firmware/`](../firmware/) | Empty. The development and verification target is an ESP32-C6 dev board (`TBD-C17`); ESP-Matter is not fetched. | M0–M7. |
+| [`main/`](../main/), [`components/`](../components/) | M0 and M1 done: the ESP-IDF project is the repository root and builds, flashes and boots on the ESP32-C6 dev board with `esp_matter` 1.6.1; one On/Off Plug-in Unit endpoint switches the `Output` GPIO and the commissioning window opens. | M2–M7. |
 
 ## 3. Phases
 
@@ -61,8 +61,8 @@ updated.
 
 | # | Increment | What | Exit criteria |
 |---|---|---|---|
-| **M0** | Environment | ESP-Matter `release/v1.6.1` fetched and `ESP_MATTER_PATH` set; ESP-IDF 6.1 with target `esp32c6`; `TBD-21` settled. | `hello_world` and an ESP-Matter example build via the `esp-idf` MCP. |
-| **M1** | Matter on/off | ESP-IDF project in [`firmware/`](../firmware/): one endpoint, On/Off Plug-in Unit (`0x010A`), `OnOff`, `Output State` on a GPIO. No PSMD logic yet. | Builds and flashes; the device boots and opens the commissioning window. |
+| **M0** (done 2026-11-19) | Environment | ESP-IDF 6.1 with target `esp32c6`; ESP-Matter 1.6.1 as the component `espressif/esp_matter` from the ESP Component Registry; `TBD-21` settled. | The `psmd` project builds via the `esp-idf` MCP. |
+| **M1** (done 2026-11-19) | Matter on/off | ESP-IDF project at the repository root: one endpoint, On/Off Plug-in Unit (`0x010A`), `OnOff`, `Output State` on a GPIO. No PSMD logic yet. | Builds and flashes; the device boots and opens the commissioning window. |
 | **M2** | Pairing with Home Assistant | `Commissioning` over BLE into the Matter Server on the test network (`TBD-29`). | Home Assistant switches `Output State`; the device reconnects after a reboot; decommissioning works. |
 | **M3** | Simulated `PU` | `Operation Mode`, transitions, button, LEDs and `Power-up`; `Persisted State` in NVS; the `Output` is a GPIO instead of a relay. | The behavior in `manual.md` §4–§7 is reproducible on the dev board, including the 3 s `Press Threshold`, the 3 min `Pairing Timeout` and `Output State = OFF` at `Power-up`. |
 | **M4** | Simulated `MU` | One interface for the `MU` (`mu_init`, `mu_read`) and a simulated backend (`CONFIG_PSMD_MU_SIM`): 5 s cycle, deterministic load, 0 with no `Load`, measurement only in `OPERATIONAL`. | The simulated values appear in the log; a host test covers scaling and energy accumulation. |
