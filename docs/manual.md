@@ -24,6 +24,9 @@ Handboken vänder sig till [målgrupp, t.ex. slutanvändare, installatörer och
 administratörer] och förutsätter [förkunskaper, t.ex. inga särskilda
 förkunskaper].
 
+Begrepp som `Operation Mode` och `Output State` skrivs med sina engelska
+mjukvarutermer och förklaras i ordlistan (avsnitt 10).
+
 - **Version:** [dokumentversion]
 - **Gäller produktversion:** [hårdvaruversion / mjukvaruversion]
 - **Senast uppdaterad:** [datum]
@@ -34,7 +37,7 @@ PSMD är en smart plugg som placeras mellan vägguttaget och den utrustning du v
 styra. Med PSMD kan du:
 
 - **Slå på och stänga av** ansluten utrustning – lokalt eller via Home Assistant.
-- **Mäta spänning och ström** i den anslutna lasten (endast i `OPERATIONAL`).
+- **Mäta spänning och ström** i den anslutna utrustningen (endast i `OPERATIONAL`).
 - **Följa effekt och energiförbrukning** över tid i Home Assistant (se avsnitt 6).
 - **Integrera med Home Assistant** via Matter för automationer och gemensam
   styrning (se avsnitt 4.4).
@@ -56,6 +59,9 @@ PSMD kan användas på två sätt:
 > Matter-integrationen kräver att Home Assistant har en Matter Server installerad
 > och att PSMD och Home Assistant finns i samma nätverk.
 
+I `OPERATIONAL` fungerar knappen fortfarande, så lokal manövrering finns kvar
+även när enheten är parkopplad.
+
 ### 2.2 Ingår i förpackningen
 
 | Del | Antal | Kommentar |
@@ -71,11 +77,12 @@ PSMD kan användas på två sätt:
 | Användning lokalt | Ingen extra mjukvara | – |
 | Home Assistant | Version [ ] med Matter Server | Senaste version |
 | Wi-Fi | [ 2,4 GHz ] | [ ] |
-| Nätverk | PSMD och Home Assistant i samma nät | – |
+| Nätverk | PSMD och Home Assistant i samma nätverk | – |
 
 ## 3. Säkerhet och viktig information
 
-Läs igenom detta innan PSMD tas i bruk.
+Läs igenom detta innan PSMD tas i bruk. Anvisningarna gäller både vid
+installation och vid daglig användning.
 
 - PSMD är avsedd för **[inomhusbruk]** och ansluts till ett jordat vägguttag.
 - Anslut inte en last som överstiger **[max belastning, t.ex. 16 A / 3680 W]**.
@@ -98,7 +105,8 @@ utrustning du vill styra och mäta ansluts till.
 
 1. Sätt PSMD:s ena anslutning i **vägguttaget**.
 2. Anslut den **utrustning** som ska styras och mätas i PSMD:s andra anslutning.
-3. Kontrollera att PSMD får spänning. `Output State` är alltid `OFF` vid `Power-up`.
+3. Kontrollera att PSMD får spänning. `Output State` är alltid `OFF` vid
+   `Power-up`, oavsett hur det stod innan strömavbrottet (`Power-loss Recovery`).
 
 > Anslutningsdonens typ och utförande dokumenteras separat tills de är fastställda.
 
@@ -108,15 +116,22 @@ PSMD fungerar direkt efter anslutning och kräver ingen molntjänst. Vid första
 `Power-up` startar enheten i `LOCAL`.
 
 1. Kontrollera att PSMD får spänning.
-2. Tryck **kort** på knappen för att växla `Output State` mellan `ON` och `OFF`.
+2. Tryck kort på knappen (`Short Press`) för att växla `Output State` mellan
+   `ON` och `OFF`.
 3. `Output State LED` visar aktuellt `Output State`.
 
-I `LOCAL` mäts inga elektriska värden.
+Mätvärdena visas i Home Assistant. I `LOCAL` finns ingen anslutning dit, så
+mätning sker bara i `OPERATIONAL` (avsnitt 4.4).
 
 ### 4.4 Ansluta till Home Assistant via Matter
 
 Förutsättning: Home Assistant med **Matter Server** installerad och ett Wi-Fi-nät
 som PSMD kan ansluta till.
+
+Matter är standarden som Home Assistant använder för att hitta och styra PSMD,
+och **Matter Server** är den del av Home Assistant som sköter Matter-anslutningen.
+Under `PAIRING` blinkar `Operation Mode LED` långsamt medan enheten väntar på att
+läggas till.
 
 1. Håll knappen intryckt (`Long Press`, > 3 s) tills `Operation Mode LED` börjar
    blinka långsamt. Enheten är nu i `PAIRING`.
@@ -151,7 +166,7 @@ PSMD har två anslutningar:
 På enheten finns dessutom:
 
 - en **knapp** för lokal manövrering,
-- **`Operation Mode LED`** (LED1) som visar driftläge,
+- **`Operation Mode LED`** (LED1) som visar `Operation Mode`,
 - **`Output State LED`** (LED2) som visar om utgången är `ON` eller `OFF`.
 
 [Anslutningsdonens typ och utförande dokumenteras när de är fastställda.]
@@ -160,13 +175,20 @@ På enheten finns dessutom:
 
 | Komponent | Beteende |
 |---|---|
-| **Button** | `Short Press` (≤ 3 s) växlar `Output State` i `LOCAL` och `OPERATIONAL`. `Long Press` (> 3 s) växlar `Operation Mode` till `PAIRING` från `LOCAL` och `OPERATIONAL`, och från `PAIRING` tillbaka till `LOCAL`. |
+| **`Button`** | `Short Press` (≤ 3 s) växlar `Output State` i `LOCAL` och `OPERATIONAL`. `Long Press` (> 3 s) växlar `Operation Mode` till `PAIRING` från `LOCAL` och `OPERATIONAL`, och från `PAIRING` tillbaka till `LOCAL`. |
 | **`Operation Mode LED`** | Blinkar snabbt i 5 s vid `Power-up` (2 Hz: 0,25 s tänd / 0,25 s släckt), både i `LOCAL` och `OPERATIONAL`. Därefter släckt i `LOCAL`, långsamt blinkande i `PAIRING` (0,5 s tänd / 0,5 s släckt) och fast sken i `OPERATIONAL`. |
 | **`Output State LED`** | Följer `Output State` oberoende av `Operation Mode`: tänd vid `ON`, släckt vid `OFF`. |
 
+Blinkmönstren anges som tänd tid / släckt tid: `Fast Blink` är 2 Hz och
+`Slow Blink` 1 Hz. Endast `Operation Mode LED` skiljer driftlägena åt;
+`Output State LED` visar bara utgången.
+
 ### 5.3 Driftlägen (Operation Modes)
 
-| Läge | Beskrivning | Lämnas genom |
+Driftläget beskriver enhetens förhållande till Home Assistant – inte om utgången
+är på eller av.
+
+| Driftläge | Beskrivning | Lämnas genom |
 |---|---|---|
 | **`LOCAL`** | Standardläge vid första `Power-up`. Ingen Home Assistant-anslutning. `Operation Mode LED` blinkar snabbt i 5 s vid `Power-up` och är därefter släckt. `Short Press` växlar `Output State`. | `Long Press` → `PAIRING` |
 | **`PAIRING`** | Enheten är tillgänglig för Matter-`Commissioning`. `Operation Mode LED` blinkar långsamt (0,5 s tänd / 0,5 s släckt). `Short Press` har ingen effekt. | Lyckad `Commissioning` → `OPERATIONAL`, `Pairing Timeout`/misslyckande → `LOCAL`, eller `Long Press` → `LOCAL` |
@@ -196,18 +218,21 @@ På enheten finns dessutom:
 ### 6.1 Slå på och stänga av
 
 - **Lokalt (`LOCAL`):** ett `Short Press` på knappen växlar `Output State`.
-  `Output State LED` följer tillståndet.
+  `Output State LED` följer `Output State`.
 - **Via Home Assistant (`OPERATIONAL`):** utgången styrs från Home Assistant.
   `Short Press` växlar även `Output State` lokalt.
-- **I `PAIRING`:** `Short Press` har ingen effekt. Utgången behåller sitt
-  aktuella tillstånd.
+- **I `PAIRING`:** `Short Press` har ingen effekt. Utgången behåller aktuellt
+  `Output State`.
+
+Efter ett strömavbrott är utgången alltid `OFF` när PSMD får spänning igen
+(`Power-loss Recovery`).
 
 ### 6.2 Läsa av mätvärden
 
 Mätning sker **endast i `OPERATIONAL`**. Inget mäts i `LOCAL` eller `PAIRING`.
 Mätningen är aktiv även när `Output State` är `OFF`.
 
-PSMD mäter den anslutna lasten och kan presentera följande värden:
+PSMD mäter den anslutna utrustningen och kan presentera följande värden:
 
 - Spänning
 - Ström
@@ -218,7 +243,12 @@ PSMD mäter den anslutna lasten och kan presentera följande värden:
 - Frekvens
 - Energiförbrukning
 
-Mätvärdena beräknas även när ingen last är ansluten, och visas då som 0.
+Spänning och ström är grundvärdena. Effektvärdena och fasförskjutningen
+beskriver hur den anslutna utrustningen tar effekt, och energiförbrukningen är
+effekt över tid. I `OPERATIONAL` förmedlas värdena via Matter till Home
+Assistant.
+
+Mätvärdena beräknas även när ingen utrustning är ansluten, och visas då som 0.
 Mätvärdena uppdateras var 5:e sekund.
 
 ### 6.3 Automationer i Home Assistant
@@ -239,10 +269,14 @@ Home Assistants automationer och scener.
 
 ## 8. Felsökning
 
+Börja med att kontrollera `Operation Mode LED`: ett snabbt blink vid `Power-up`
+visar att enheten får spänning, och därefter visar den vilket driftläge enheten
+är i.
+
 | Symtom | Möjlig orsak | Åtgärd |
 |---|---|---|
-| Ingen statusindikering | PSMD saknar spänning | Kontrollera att PSMD sitter i vägguttaget |
-| Går inte att lägga till i Home Assistant | Matter Server saknas eller PSMD är inte i parkopplingsläge | Kontrollera Matter Server och upprepa parkopplingen |
+| Ingen av lysdioderna lyser | PSMD saknar spänning | Kontrollera att PSMD sitter i vägguttaget |
+| Går inte att lägga till i Home Assistant | Matter Server saknas eller PSMD är inte i `PAIRING` | Kontrollera Matter Server och upprepa parkopplingen |
 | Inga mätvärden visas | Enheten är inte i `OPERATIONAL`, eller Home Assistant når den inte | Kontrollera driftläget och anslutningen till Home Assistant |
 | [ ] | [ ] | [ ] |
 
@@ -256,13 +290,14 @@ Home Assistants automationer och scener.
 ## 10. Ordlista
 
 Fullständig terminologi med engelska mjukvarutermer finns i
-[`glossary.md`](glossary.md).
+[`glossary.md`](glossary.md). Termerna är engelska eftersom de används
+oförändrade i programvara och dokumentation.
 
 | Term (EN) | Svenska | Kort förklaring |
 |---|---|---|
 | `Operation Mode` | Driftläge | `LOCAL`, `PAIRING` eller `OPERATIONAL` |
-| `LOCAL` | Lokalt läge | Standardläge, ingen HA-anslutning |
-| `PAIRING` | Parkopplingsläge | Tillgänglig för Matter-commissioning |
+| `LOCAL` | Lokalt läge | Standardläge, ingen anslutning till Home Assistant |
+| `PAIRING` | Parkopplingsläge | Tillgänglig för Matter-`Commissioning` |
 | `OPERATIONAL` | Anslutet läge | Ansluten till Home Assistant via Matter |
 | `Output State` | Utgångstillstånd | `ON` eller `OFF` |
 | `Short Press` / `Long Press` | Kort/långt tryck | ≤ 3 s respektive > 3 s |
