@@ -61,8 +61,8 @@ updated.
 
 | # | Increment | What | Exit criteria |
 |---|---|---|---|
-| **M0** | Environment | ESP-IDF 6.1 with target `esp32c6`; ESP-Matter 1.6.1 as the component `espressif/esp_matter` from the ESP Component Registry; `TBD-21` settled. | The `psmd` project builds via the `esp-idf` MCP. |
-| **M1** | Matter on/off | ESP-IDF project at the repository root: one endpoint, On/Off Plug-in Unit (`0x010A`), `OnOff`, `Output State` on a GPIO. No PSMD logic yet. | Builds and flashes; the device boots and opens the commissioning window. |
+| **M0** (done 2026-11-19) | Environment | ESP-IDF 6.1 with target `esp32c6`; ESP-Matter 1.6.1 as the component `espressif/esp_matter` from the ESP Component Registry; `TBD-21` settled. | The `psmd` project builds via the `esp-idf` MCP. |
+| **M1** (done 2026-11-19) | Matter on/off | ESP-IDF project at the repository root: one endpoint, On/Off Plug-in Unit (`0x010A`), `OnOff`, `Output State` on a GPIO. No PSMD logic yet. | Builds and flashes; the device boots and opens the commissioning window. |
 | **M2** | Pairing with Home Assistant | `Commissioning` over BLE into the Matter Server on the test network (`TBD-29`). | Home Assistant switches `Output State`; the device reconnects after a reboot; decommissioning works. |
 | **M3** | Simulated `PU` | `Operation Mode`, transitions, button, LEDs and `Power-up`; `Persisted State` in NVS; the `Output` is a GPIO instead of a relay. | The behavior in `manual.md` §4–§7 is reproducible on the dev board, including the 3 s `Press Threshold`, the 3 min `Pairing Timeout` and `Output State = OFF` at `Power-up`. |
 | **M4** | Simulated `MU` | One interface for the `MU` (`mu_init`, `mu_read`) and a simulated backend (`CONFIG_PSMD_MU_SIM`): 5 s cycle, deterministic load, 0 with no `Load`, measurement only in `OPERATIONAL`. | The simulated values appear in the log; a host test covers scaling and energy accumulation. |
