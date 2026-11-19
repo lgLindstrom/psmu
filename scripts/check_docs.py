@@ -21,7 +21,12 @@ EXTERNAL_HEADING = re.compile(
     r"|Standard Namespaces)\s*$"
 )
 
-MD_FILES = sorted(p for p in ROOT.rglob("*.md") if ".codegraph" not in p.parts)
+# Generated and third-party trees are not steering documents: ESP-IDF build
+# output and downloaded components bring their own READMEs.
+SKIP_DIRS = {".codegraph", ".git", "build", "managed_components"}
+MD_FILES = sorted(
+    p for p in ROOT.rglob("*.md") if not SKIP_DIRS.intersection(p.relative_to(ROOT).parts)
+)
 ID = re.compile(r"\b(K[1-9]|GAP-\d{2}|TBD-(?:C)?\d{1,2})\b")
 LINK = re.compile(r"\]\(([^)\s]+)\)")
 CODE_PATH = re.compile(r"`([\w./-]+\.md)`")
@@ -58,7 +63,11 @@ def resolve(source, target):
     for candidate in (ROOT / target, source.parent / target):
         if candidate.exists():
             return candidate
-    by_name = [p for p in ROOT.rglob(Path(target).name) if ".codegraph" not in p.parts]
+    by_name = [
+        p
+        for p in ROOT.rglob(Path(target).name)
+        if not SKIP_DIRS.intersection(p.relative_to(ROOT).parts)
+    ]
     return by_name[0] if len(by_name) == 1 else None
 
 

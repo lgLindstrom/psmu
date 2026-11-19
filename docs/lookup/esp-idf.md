@@ -10,9 +10,12 @@
 > Matter-specific clusters and attributes.
 
 The firmware is built with **ESP-IDF 6.1** (decision `TBD-C8`) and the Matter
-part with **ESP-Matter** on the branch `release/v1.6.1`. None of Espressif's
-material is copied into this repository: the documentation is read from the
-installed checkout, which always has the same version as the compiler.
+part with the component `espressif/esp_matter` 1.6.1 from the ESP Component
+Registry, declared in `main/idf_component.yml`. The component is the same code
+as ESP-Matter `release/v1.6.1` (esp-matter `4c9dd7aa80`, connectedhomeip
+`b1902b39ac`) but needs no clone and no `ESP_MATTER_PATH`. None of Espressif's
+material is copied into this repository: the source is read from the
+downloaded component, which always has the version that is compiled.
 
 ## Where the documentation is
 
@@ -21,8 +24,8 @@ installed checkout, which always has the same version as the compiler.
 | ESP-IDF, source | `$IDF_PATH/docs/en/**/*.rst` | Primary source. The version is the one we build against. |
 | ESP-IDF, HTML | `https://docs.espressif.com/projects/esp-idf/en/v6.1/` | When no checkout exists on the machine |
 | ESP-IDF, generated HTML | `idf.py docs` in a project, then `build/docs/` | Offline, with the right target |
-| ESP-Matter | `$ESP_MATTER_PATH/docs/en/**/*.rst` | Matter clusters, device types, provisioning |
-| ESP-Matter, HTML | `https://docs.espressif.com/projects/esp-matter/en/latest/` | Overview; the *Getting the Repositories* section |
+| ESP-Matter, source | `managed_components/espressif__esp_matter/` | Clusters, device types, Kconfig and the API headers that are compiled. Downloaded by the component manager on build. |
+| ESP-Matter, HTML | `https://docs.espressif.com/projects/esp-matter/en/latest/` | Overview and the conceptual guide; the component ships no `docs/` |
 
 ESP-IDF 6.1 is installed with **ESP-IDF Installation Manager (EIM)**, not as a
 git clone in the home directory:
@@ -69,10 +72,23 @@ a banner to stdout – the MCP protocol runs over stdout and would be broken.
 `eim run` is unsuitable as a general wrapper for agent commands for the same
 reason.
 
-**ESP-Matter is not fetched yet** on the machine: `$ESP_MATTER_PATH` is not set
-and there is no `esp-matter` checkout. The branch `release/v1.6.1` is fetched
-according to the *Getting the Repositories* section of ESP-Matter's Programming
-Guide when the firmware work begins.
+The MCP server (1.1.0) assumes the Windows venv layout and runs
+`$IDF_PYTHON_ENV_PATH/Scripts/python.exe`, which does not exist in a Linux venv.
+The EIM venv has one extra symlink to bridge it:
+
+```sh
+ln -sfn ../bin/python "$IDF_PYTHON_ENV_PATH/Scripts/python.exe"
+```
+
+Repeat it after an IDF reinstall; without it every `set_target`, `build_project`
+and `flash_project` fails with `No such file or directory`.
+
+**ESP-Matter is a registry component**, not a checkout: `main/idf_component.yml`
+asks for `espressif/esp_matter: "~1.6.1"`, and the component manager downloads it
+into `managed_components/espressif__esp_matter/` (114 MB, includes the
+connectedhomeip sources) and pins it in `dependencies.lock`. Update the version
+by changing the manifest, then rebuild; the directory is generated and is never
+edited. `ESP_MATTER_PATH` is neither needed nor set.
 
 ## Where in the documentation PSMD needs to look
 
@@ -88,7 +104,7 @@ versions.
 | Measurement (`TBD-10`, `TBD-C11`) | Peripherals API → ADC, or an external measurement circuit over I2C/SPI/UART | `api-reference/peripherals/` |
 | Stored `Output State`, `Power-up` | Storage API → Non-Volatile Storage Library | `api-reference/storage/` |
 | Wi-Fi and provisioning (`TBD-C13`) | Networking APIs → Wi-Fi; Provisioning API | `api-reference/network/`, `api-reference/provisioning/` |
-| Matter endpoints and clusters | ESP-Matter, not ESP-IDF | `$ESP_MATTER_PATH/docs/en/` |
+| Matter endpoints and clusters | ESP-Matter, not ESP-IDF | `managed_components/espressif__esp_matter/components/` |
 | OTA (`TBD-12`) | System API → ESP HTTPS OTA, Over The Air Updates | `api-reference/system/` |
 | Logging and troubleshooting | System API → Logging library, Console, Watchdogs | `api-reference/system/` |
 | Partition table and app format | API Guides → Partition Tables; System API → App Image Format | `api-guides/`, `api-reference/system/` |
@@ -119,13 +135,13 @@ compiled.
 | Component | Version | Source |
 |---|---|---|
 | ESP-IDF | **6.1** | Decision `TBD-C8` |
-| ESP-Matter | `release/v1.6.1` (Matter 1.6.1) | [`matter-1.6.1/INDEX.md`](matter-1.6.1/INDEX.md) |
+| ESP-Matter | `espressif/esp_matter` **1.6.1** (Matter 1.6.1) | `main/idf_component.yml`, `dependencies.lock` |
 | Matter specification | 1.6.1 | [`matter-1.6.1/INDEX.md`](matter-1.6.1/INDEX.md) |
 
-**Known deviation:** ESP-Matter's README for both `release/v1.6.1` and `main`
-recommends ESP-IDF **v6.0.2**, not 6.1. We are thus one step ahead of what
-Espressif tests against. The question is registered as `TBD-21` in
-[`decisions.md`](../decisions.md).
+**Deviation that was closed:** ESP-Matter recommends ESP-IDF **v6.0.2**, not
+6.1. The combination 6.1.0 + `esp_matter` 1.6.1 is built for `esp32c6` and the
+image fits the application partition, so 6.1 is kept (`TBD-21` in
+[`decisions.md`](../decisions.md)).
 
 ## Files here
 

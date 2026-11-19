@@ -299,8 +299,10 @@ unreachable are handled by ESP-Matter according to the Matter specification
 ## 14. Build environment and runtime
 
 - The software is built with **ESP-IDF 6.1** (`TBD-C8`) and **ESP-Matter**
-  `release/v1.6.1` for Matter 1.6.1. The firmware source is in `firmware/` in
-  this repository and is built and flashed through the `esp-idf` MCP.
+  1.6.1 for Matter 1.6.1, taken as the component `espressif/esp_matter` from the
+  ESP Component Registry. The ESP-IDF project is the repository root
+  (`CMakeLists.txt`, `main/`, `components/`) and is built and flashed through
+  the `esp-idf` MCP; the project standard is in [`../README.md`](../README.md).
 - Where the Espressif documentation lives and how to look it up:
   [`lookup/esp-idf.md`](lookup/esp-idf.md).
 - The development and verification target is an ESP32-C6 dev board
@@ -309,9 +311,10 @@ unreachable are handled by ESP-Matter according to the Matter specification
   runs without the real hardware (`TBD-C18`). The `MU` is simulated until the
   interface in `TBD-28` is implemented behind the same interface; the product
   build uses the I2C backend.
-- Practical build, flash and debug steps and logging conventions are in
-  [`../firmware/README.md`](../firmware/README.md).
-- ESP-Matter recommends ESP-IDF v6.0.2; the deviation is examined in `TBD-21`.
+- Practical build, flash and debug steps, logging conventions and the ESP-IDF
+  project standard are in [`../README.md`](../README.md).
+- The Matter component recommends ESP-IDF v6.0.2; 6.1 is built and fits the
+  partition, so the deviation is kept (`TBD-21`).
 - Firmware and application versions are stored according to the data model
   above.
 

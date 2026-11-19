@@ -3,7 +3,7 @@
 This repository contains the user manual for **PSMD (Power Switch and
 Measurement Device)**, a Matter-enabled smart plug that switches and measures
 connected equipment, and the firmware source for it: C/C++ for ESP32 built on
-ESP-IDF 6.1 and ESP-Matter, under `firmware/`.
+ESP-IDF 6.1 and ESP-Matter, at the repository root (`main/`, `components/`).
 
 ## Layout
 
@@ -46,8 +46,8 @@ magnitude more than reading too few.
 | Manual text | `docs/manual.md` | `specification.md` §3–9, `decisions.md` (unknown values), `grep` on the term in `glossary.md` | Matter extracts |
 | Specification (all) | `docs/specification.md` | `decisions.md` | `manual.md`, Matter extracts |
 | Architecture / Matter | `specification.md` §2, §11–15, `docs/lookup/matter-1.6.1/INDEX.md` | targeted `grep` in `text/*.txt` | whole `text/*.txt`, PDFs, `manual.md` |
-| ESP-IDF / ESP-Matter API | `docs/lookup/esp-idf.md` | targeted `grep` in `$IDF_PATH/docs/en/` or `$ESP_MATTER_PATH/docs/en/` | whole doc trees, `$IDF_PATH` in a codegraph index (734 MB) |
-| Firmware / C code | the `firmware/` files the task touches | `specification.md` §3–9 and §14 (behavior, build), the `esp-idf` skill | `manual.md`, Matter extracts |
+| ESP-IDF / ESP-Matter API | `docs/lookup/esp-idf.md` | targeted `grep` in `$IDF_PATH/docs/en/` or in `managed_components/espressif__esp_matter/` | whole doc trees, `$IDF_PATH` in a codegraph index (734 MB) |
+| Firmware / C code | the `main/` and `components/` files the task touches | `specification.md` §3–9 and §14 (behavior, build), the ESP-IDF project standard in `README.md`, the `esp-idf` skill | `manual.md`, Matter extracts |
 | Requirements | `specification.md` §10 | `decisions.md` | Matter extracts, `manual.md` |
 | Decision / open question | `decisions.md` (grep on the ID or topic) | the document the question concerns | everything else |
 | Gap (what is missing) | `decisions.md` (gaps) | `specification.md` §2, §11–15 (where the gap gets filled in) | `manual.md`, Matter extracts |

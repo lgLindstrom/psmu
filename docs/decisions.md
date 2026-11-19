@@ -74,7 +74,6 @@ questions** when a decision is made, and the affected documents are updated.
 |---|---|---|---|---|
 | TBD-19 | What do `PSMD`, `MDCB`, `MDB` and `DPS` stand for, and where are their responsibilities? | K5 | `specification.md` §11, data model | To investigate |
 | TBD-20 | Should the data model's fields, types and scaling (e.g. `int64` for measured values) be confirmed and documented per field? | K5 | `specification.md` §11–12, Matter reporting | To investigate |
-| TBD-21 | ESP-Matter `release/v1.6.1` recommends ESP-IDF v6.0.2, but PSMD builds on 6.1 (`TBD-C8`). Does the combination work, or should the IDF version be lowered? | K2 | Build environment, `specification.md` §14 | To investigate |
 
 ## Decided questions (closed)
 
@@ -87,7 +86,7 @@ questions** when a decision is made, and the affected documents are updated.
 | TBD-C5 | Should `Long Press` go to `PAIRING` from `OPERATIONAL` as well? | Yes. | K1 |
 | TBD-C6 | Should `Long Press` in `PAIRING` return to `LOCAL`? | Yes. | K1 |
 | TBD-C7 | `Output State` at `Power-up`? | Always `OFF`. | K1 |
-| TBD-C8 | Which ESP-IDF version is the firmware built against? | ESP-IDF 6.1, with ESP-Matter `release/v1.6.1` for Matter 1.6.1. See [`lookup/esp-idf.md`](lookup/esp-idf.md). | K1 |
+| TBD-C8 | Which ESP-IDF version is the firmware built against? | ESP-IDF 6.1.0, with Matter 1.6.1 from the component `espressif/esp_matter` 1.6.1 in the ESP Component Registry. See [`lookup/esp-idf.md`](lookup/esp-idf.md). | K1 |
 | TBD-C9 | Which Matter device types are used? | On/Off Plug-in Unit (`0x010A`) and Electrical Sensor (`0x0510`) on the same endpoint. See [`specification.md`](specification.md) §12.1. The mounting is examined in `TBD-23`. | K4 |
 | TBD-C10 | How is `phase_delay` reported? | As `PowerFactor` in Electrical Power Measurement. Unit and scaling are decided in `TBD-C19`. | K4 |
 | TBD-C11 | Which `Measurement Interval` should be used? | 5 s, driven by the MU measurement cycle; all 8 measured values are synchronous and MC reports one value at a time to HA. | K4 |
@@ -99,6 +98,7 @@ questions** when a decision is made, and the affected documents are updated.
 | TBD-C17 | Which hardware is the firmware developed and verified on? | An ESP32-C6 dev board. The product's own board follows the hardware (`GAP-07`). | K1 |
 | TBD-C18 | How is PSMD developed before the hardware exists? | A simulated `PU` and `MU` behind the same interfaces as the real ones. Everything works simulated before the real MU replaces the simulated backend, and the simulator stays as a backend for tests. | K1 |
 | TBD-C19 | Which unit and scaling should the `PowerFactor` reporting of `phase_delay` use? | Percent100ths, the unit `PowerFactor` has in Electrical Power Measurement (`0x0011`, −10000…10000). `phase_delay` is not reported in degrees. | K2 |
+| TBD-21 | ESP-Matter recommends ESP-IDF v6.0.2, but PSMD builds on 6.1 (`TBD-C8`). Does the combination work, or should the IDF version be lowered? | The combination works: `espressif/esp_matter` 1.6.1 builds and links on ESP-IDF 6.1.0 for `esp32c6`, and the image fits the application partition. 6.1 is kept; it is rechecked when the component is updated. | K2 |
 
 ## Gaps and next steps
 
