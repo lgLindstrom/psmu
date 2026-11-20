@@ -1,9 +1,11 @@
 # PSMD – firmware
 
-The ESP-IDF project for PSMD (ESP32-C6 dev board, ESP-IDF 6.1 + ESP-Matter
-1.6.1). The project root is the repository root: `CMakeLists.txt`, `main/`,
-`components/`, `sdkconfig.defaults*` and `partitions.csv`. The documentation
-index is in [`docs/README.md`](docs/README.md).
+The ESP-IDF project for PSMD (ESP-IDF 6.1 + ESP-Matter 1.6.1). It builds and
+flashes on an ESP32-C6 dev board, which is used only to verify the build and
+flash environment; the product's own board is described in the hardware
+documentation. The project root is the repository root: `CMakeLists.txt`,
+`main/`, `components/`, `sdkconfig.defaults*` and `partitions.csv`. The
+documentation index is in [`docs/README.md`](docs/README.md).
 
 ## ESP-IDF project standard
 

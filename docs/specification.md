@@ -156,6 +156,9 @@ measured values are synchronous (the same measurement cycle). `MC` sends one
 value at a time to Home Assistant. `MC` reaches `MU` over I2C; the interface is
 `TBD-28`.
 
+A **measured value** is produced by the `MU`. `MC` never measures or derives
+one: it reads the values from `MU` and republishes them as Matter attributes.
+
 `Measurement Interval` is therefore decided at 5 s (`TBD-C11`), but which values
 are reported to Matter is decided in `TBD-10`. Field names and scaling are in
 §11.
@@ -252,6 +255,10 @@ Whether energy measurement accumulates across `Power-up` is open (`TBD-12`).
   Home Assistant's standard mapping is used. Correlation between values from
   the same sample happens at application level, not through a struct
   (`TBD-C12`).
+- The mandatory Basic Information attributes (`VendorName`, `VendorID`,
+  `ProductName`, `ProductID`, hardware and software version,
+  `SerialNumber`/`UniqueID`) and the `NodeLabel`/`Location` defaults are open in
+  `TBD-30`. The firmware currently reports the esp-matter defaults.
 - `Pairing`/`Commissioning` Timeout, `Decommissioning`, `Factory Reset`,
   Wi-Fi provisioning, behavior when Home Assistant is unreachable, `Reconnect`,
   handling of multiple `Fabric` and the HA/Matter Server version are handled by
@@ -306,7 +313,9 @@ unreachable are handled by ESP-Matter according to the Matter specification
 - Where the Espressif documentation lives and how to look it up:
   [`lookup/esp-idf.md`](lookup/esp-idf.md).
 - The development and verification target is an ESP32-C6 dev board
-  (`TBD-C17`). The product's own board follows the hardware (`GAP-07`).
+  (`TBD-C17`). It is chosen only to verify the build and flash environment: it
+  says nothing about the product's electrical design, pin map or enclosure. The
+  product's own board follows the hardware (`GAP-07`).
 - `PU` and `MU` sit behind interfaces with a simulated backend, so the firmware
   runs without the real hardware (`TBD-C18`). The `MU` is simulated until the
   interface in `TBD-28` is implemented behind the same interface; the product

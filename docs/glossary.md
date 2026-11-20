@@ -85,6 +85,7 @@ power are then expected to be 0).
 | Term (EN) | Swedish (manual.md) | Definition | Status |
 |---|---|---|---|
 | **Measurement** | Mätning | Collection of electrical quantities from the `Load`. Only in `OPERATIONAL`, also at `Output State = OFF`. | Confirmed |
+| **Measured Value** | Mätvärde | A quantity produced by the `MU` and republished by `MC` as a Matter attribute. `MC` never measures or derives one. | Confirmed |
 | **Voltage** | Spänning | Measured voltage across the `Load` (V). | Proposed |
 | **Current** | Ström | Measured current through the `Load` (A). | Proposed |
 | **Apparent Power** | Skenbar effekt | Voltage times current (VA). | Proposed |
@@ -105,7 +106,7 @@ wording.
 |---|---|---|
 | **Matter Controller** | Functional unit that handles the interface to Home Assistant through the Matter protocol. | Confirmed |
 | **MC** | Abbreviation for `Matter Controller`. | Confirmed |
-| **Measurement Unit** | Functional unit that performs the measurement. | Confirmed |
+| **Measurement Unit** | Functional unit that performs the measurement and produces the measured values. | Confirmed |
 | **MU** | Abbreviation for `Measurement Unit`. | Confirmed |
 | **Power Unit** | Functional unit that is the interface to the input and output signals. | Confirmed |
 | **PU** | Abbreviation for `Power Unit`. | Confirmed |

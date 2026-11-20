@@ -39,6 +39,7 @@ questions** when a decision is made, and the affected documents are updated.
 |---|---|---|---|---|
 | TBD-24 | Where does the commissioning code/QR come from, and when can it be printed in the manual? | K1 | `manual.md` §4.4, `specification.md` §12 | Awaiting decision |
 | TBD-29 | Which Home Assistant and Matter Server versions run on the test network? | K1, K3 | `specification.md` §12–13 | To investigate at M2 |
+| TBD-30 | Which values do the mandatory Basic Information attributes carry: `VendorName`, `VendorID`, `ProductName`, `ProductID`, `HardwareVersion`/`HardwareVersionString`, `SoftwareVersion`/`SoftwareVersionString`, `SerialNumber`/`UniqueID`, and the defaults for `NodeLabel`/`Location`? | K1 | `specification.md` §12, `main/app_main.cpp` | Awaiting decision. The firmware uses the esp-matter defaults (`0xFFF1`/`0x8000`, versions 0), which cannot ship: the attestation must match the assigned `VendorID`/`ProductID`. |
 
 ### Measurement
 
@@ -95,7 +96,7 @@ questions** when a decision is made, and the affected documents are updated.
 | TBD-C14 | Should PSMD be a plug-in or permanently mounted unit? | Plug-in (On/Off Plug-in Unit, `0x010A`). Mounted On/Off Control (`0x010F`) is not needed. | K4 |
 | TBD-C15 | Does `LOCAL` require a cloud service or an internet connection? | No. `LOCAL` switches the `Output` without a cloud service or an internet connection, and no data leaves the local network. | K1 |
 | TBD-C16 | Are measured values computed when no `Load` is connected? | Yes, always. They are then 0 and are reported if the device is in `OPERATIONAL`. | K1 |
-| TBD-C17 | Which hardware is the firmware developed and verified on? | An ESP32-C6 dev board. The product's own board follows the hardware (`GAP-07`). | K1 |
+| TBD-C17 | Which hardware is the firmware developed and verified on? | An ESP32-C6 dev board, chosen only to verify the build and flash environment. Nothing about the product's hardware follows from it; the product's own board follows [`hardware.md`](hardware.md) (`GAP-07`). | K1 |
 | TBD-C18 | How is PSMD developed before the hardware exists? | A simulated `PU` and `MU` behind the same interfaces as the real ones. Everything works simulated before the real MU replaces the simulated backend, and the simulator stays as a backend for tests. | K1 |
 | TBD-C19 | Which unit and scaling should the `PowerFactor` reporting of `phase_delay` use? | Percent100ths, the unit `PowerFactor` has in Electrical Power Measurement (`0x0011`, −10000…10000). `phase_delay` is not reported in degrees. | K2 |
 | TBD-21 | ESP-Matter recommends ESP-IDF v6.0.2, but PSMD builds on 6.1 (`TBD-C8`). Does the combination work, or should the IDF version be lowered? | The combination works: `espressif/esp_matter` 1.6.1 builds and links on ESP-IDF 6.1.0 for `esp32c6`, and the image fits the application partition. 6.1 is kept; it is rechecked when the component is updated. | K2 |
