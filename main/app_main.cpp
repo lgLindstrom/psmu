@@ -10,6 +10,9 @@
 
 #include <esp_matter.h>
 
+#include <app/server/Server.h>
+#include <setup_payload/OnboardingCodesUtil.h>
+
 #include "psmd_output.h"
 
 static const char *TAG = "psmd_main";
@@ -73,4 +76,10 @@ extern "C" void app_main()
     ESP_LOGI(TAG, "On/Off Plug-in Unit on endpoint %u", endpoint::get_id(endpoint));
 
     ESP_ERROR_CHECK(esp_matter::start(app_event_cb));
+
+    // The commissioning window is open only while no fabric exists, so the
+    // onboarding payload is printed from the values the device uses, then.
+    if (chip::Server::GetInstance().GetFabricTable().FabricCount() == 0) {
+        PrintOnboardingCodes(chip::RendezvousInformationFlags(chip::RendezvousInformationFlag::kBLE));
+    }
 }
