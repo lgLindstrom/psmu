@@ -246,8 +246,13 @@ Whether energy measurement accumulates across `Power-up` is open (`TBD-12`).
 
 - `Commissioning` puts PSMD in a `Fabric` and makes the device controllable from
   Home Assistant.
-- The commissioning code and its QR come from ESP-Matter and are printed in the
-  manual ([manual.md §4.4](manual.md)) once they exist (`TBD-24`).
+- The commissioning QR is the Matter onboarding payload, built from
+  `VendorID`/`ProductID`, the discriminator and passcode, and the BLE rendezvous
+  flag. The device prints it and the manual pairing code at every `Power-up`
+  while it has no `Fabric` (`main/app_main.cpp`); the commissioning window lasts
+  900 s. Every unit currently carries chip's test values, so all units share one
+  code (`TBD-24`).
+- [`manual.md` §4.4](manual.md) shows the code of the dev board as an example.
 - `Operation Mode` and transitions are specified in §3–4.
 - Measurement runs only in `OPERATIONAL`. Which measured values are exposed is
   partly decided (`TBD-10`).

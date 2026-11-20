@@ -136,11 +136,18 @@ läggas till.
 1. Håll knappen intryckt (`Long Press`, > 3 s) tills `Operation Mode LED` börjar
    blinka långsamt. Enheten är nu i `PAIRING`.
 2. Öppna Home Assistant och välj att lägga till en enhet via Matter.
-3. [Ange parkopplingskod/QR från PSMD]
+3. Ange parkopplingskoden från PSMD: skanna QR-koden nedan eller skriv den
+   manuella koden. Enheten skriver båda i loggen vid `Power-up`.
 4. Välj rum och namn, och slutför guiden.
 5. När anslutningen lyckas övergår enheten till `OPERATIONAL` och `Operation Mode LED`
    lyser fast.
 6. Kontrollera att PSMD visas med sina mätvärden i Home Assistant.
+
+![QR-kod för parkoppling](images/qr-pairing-example.png)
+
+*Exempel: QR-koden som utvecklingskortet skriver i loggen vid `Power-up`
+(`MT:Y.K9042C00KA0648G00`, manuell kod `34970112332`). [Var koden för en färdig
+enhet finns]*
 
 Om anslutningen misslyckas, eller om `Pairing Timeout` (preliminärt 3 minuter)
 löser ut, återgår enheten till `LOCAL`.

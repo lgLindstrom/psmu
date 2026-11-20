@@ -37,7 +37,7 @@ questions** when a decision is made, and the affected documents are updated.
 
 | ID | Question | Source | Affects | Status / next step |
 |---|---|---|---|---|
-| TBD-24 | Where does the commissioning code/QR come from, and when can it be printed in the manual? | K1 | `manual.md` §4.4, `specification.md` §12 | Awaiting decision |
+| TBD-24 | Where does the commissioning code/QR come from, and when can it be printed in the manual? | K1 | `manual.md` §4.4, `specification.md` §12 | Where it comes from is established: `main/app_main.cpp` prints the onboarding payload (QR and manual code) at every `Power-up` while the device has no `Fabric`. Still open: what a shipped unit carries. Every unit uses chip's test discriminator (3840) and passcode (20202021), so all units share one code and cannot be told apart while unprovisioned; the manual shows the dev board's code as an example only. A per-unit pair needs a custom commissionable data provider (`TBD-30`). |
 | TBD-29 | Which Home Assistant and Matter Server versions run on the test network? | K1, K3 | `specification.md` §12–13 | To investigate at M2 |
 | TBD-30 | Which values do the mandatory Basic Information attributes carry: `VendorName`, `VendorID`, `ProductName`, `ProductID`, `HardwareVersion`/`HardwareVersionString`, `SoftwareVersion`/`SoftwareVersionString`, `SerialNumber`/`UniqueID`, and the defaults for `NodeLabel`/`Location`? | K1 | `specification.md` §12, `main/app_main.cpp` | Awaiting decision. The firmware uses the esp-matter defaults (`0xFFF1`/`0x8000`, versions 0), which cannot ship: the attestation must match the assigned `VendorID`/`ProductID`. |
 
