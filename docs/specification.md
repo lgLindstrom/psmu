@@ -255,6 +255,10 @@ Whether energy measurement accumulates across `Power-up` is open (`TBD-12`).
   Home Assistant's standard mapping is used. Correlation between values from
   the same sample happens at application level, not through a struct
   (`TBD-C12`).
+- The mandatory Basic Information attributes (`VendorName`, `VendorID`,
+  `ProductName`, `ProductID`, hardware and software version,
+  `SerialNumber`/`UniqueID`) and the `NodeLabel`/`Location` defaults are open in
+  `TBD-30`. The firmware currently reports the esp-matter defaults.
 - `Pairing`/`Commissioning` Timeout, `Decommissioning`, `Factory Reset`,
   Wi-Fi provisioning, behavior when Home Assistant is unreachable, `Reconnect`,
   handling of multiple `Fabric` and the HA/Matter Server version are handled by
