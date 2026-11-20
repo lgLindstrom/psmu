@@ -313,7 +313,9 @@ unreachable are handled by ESP-Matter according to the Matter specification
 - Where the Espressif documentation lives and how to look it up:
   [`lookup/esp-idf.md`](lookup/esp-idf.md).
 - The development and verification target is an ESP32-C6 dev board
-  (`TBD-C17`). The product's own board follows the hardware (`GAP-07`).
+  (`TBD-C17`). It is chosen only to verify the build and flash environment: it
+  says nothing about the product's electrical design, pin map or enclosure. The
+  product's own board follows the hardware (`GAP-07`).
 - `PU` and `MU` sit behind interfaces with a simulated backend, so the firmware
   runs without the real hardware (`TBD-C18`). The `MU` is simulated until the
   interface in `TBD-28` is implemented behind the same interface; the product
