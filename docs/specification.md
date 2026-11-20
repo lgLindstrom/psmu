@@ -156,6 +156,9 @@ measured values are synchronous (the same measurement cycle). `MC` sends one
 value at a time to Home Assistant. `MC` reaches `MU` over I2C; the interface is
 `TBD-28`.
 
+A **measured value** is produced by the `MU`. `MC` never measures or derives
+one: it reads the values from `MU` and republishes them as Matter attributes.
+
 `Measurement Interval` is therefore decided at 5 s (`TBD-C11`), but which values
 are reported to Matter is decided in `TBD-10`. Field names and scaling are in
 §11.
