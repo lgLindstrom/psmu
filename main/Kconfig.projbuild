@@ -1,11 +1,17 @@
 menu "PSMD"
 
-    config PSMD_OUTPUT_GPIO
-        int "GPIO connected to the simulated Output"
-        range 0 30
-        default 2
+    choice PSMD_BOARD
+        prompt "Board variant"
+        default PSMD_BOARD_DEV
         help
-            GPIO that stands in for the relay until the real Power Unit exists.
-            The final pin map is owned by GAP-02.
+            The board the firmware is built for. The development board is the
+            ESP32-C6 bring-up board; the production board's pin map is open
+            (GAP-02).
+
+        config PSMD_BOARD_DEV
+            bool "Development board (ESP32-C6, button and Operation Mode LED)"
+        config PSMD_BOARD_PRODUCTION
+            bool "Production board (pin map open, does not build yet)"
+    endchoice
 
 endmenu

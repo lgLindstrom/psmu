@@ -100,7 +100,9 @@ Home Assistant and the `Matter Server` are outside PSMD and are responsible for
 | **`Long Press`** | Press > 3 s. | Changes `Operation Mode` according to the table above. | [manual.md §5.2](manual.md) |
 | **`Press Threshold`** | 3 s. | Boundary between `Short Press` and `Long Press`. | [manual.md §5.3](manual.md) |
 
-Debounce time and the exact reading of the button are not decided.
+The production board's debounce and exact reading of the button are not decided
+(`GAP-02`). The development board reads the button with a 30 ms debounce and the
+GPIO's internal pull-up (`TBD-C20`).
 
 ## 6. LEDs
 
@@ -121,11 +123,17 @@ only indication that the device is powered.
 
 Source: [manual.md §5.2](manual.md), [manual.md §8](manual.md).
 
+The development board has only an `Operation Mode LED` (`TBD-C20`); `Output
+State` is observed in Home Assistant and in the log there (§14).
+
 ## 7. Power-up and persistence
 
 - `Output State` is **always set to `OFF`** at `Power-up` (`Power-loss Recovery`).
+  The `OnOff` cluster's `StartUpOnOff` is `Off` (§12).
 - `Operation Mode` at `Power-up` follows `Boot Mode`: `LOCAL` the first time,
-  otherwise `OPERATIONAL`.
+  otherwise `OPERATIONAL`. `Boot Mode` is read from the `Fabric` table: a device
+  that has a `Fabric` starts in `OPERATIONAL`, so no `Persisted State` is needed
+  for it.
 - Which state is otherwise stored and restored is not decided (`TBD-12`).
 - `Factory Reset` is handled by ESP-Matter (`TBD-C13`).
 
@@ -248,10 +256,19 @@ Whether energy measurement accumulates across `Power-up` is open (`TBD-12`).
   Home Assistant's standard mapping is used. Correlation between values from
   the same sample happens at application level, not through a struct
   (`TBD-C12`).
-- The mandatory Basic Information attributes (`VendorName`, `VendorID`,
-  `ProductName`, `ProductID`, hardware and software version,
-  `SerialNumber`/`UniqueID`) and the `NodeLabel`/`Location` defaults are open in
-  `TBD-30`. The firmware currently reports the esp-matter defaults.
+- The mandatory Basic Information attributes carry development values until the
+  product has its own (`TBD-30`): `VendorName` and `ProductName` are `PSMD`,
+  `VendorID` is `0xFFF1` and `ProductID` `0x8000` (the CSA test IDs, which the
+  test attestation carries), `HardwareVersion` 1/`1.0`, `SoftwareVersion`
+  1/`0.1.0` and `SerialNumber` `PSMD-DEV`; `NodeLabel` and `Location` keep their
+  defaults. They are set in `CMakeLists.txt` and `sdkconfig.defaults`, and read
+  through CHIP's device instance info provider.
+- `OnOff` (`0x0006`) mirrors `Output State` in both directions: a write from
+  Home Assistant sets the `Output`, and a `Short Press` reports the new state.
+  Its `StartUpOnOff` is `Off`, which matches `Power-loss Recovery` (§7).
+- `Operation Mode`, its transitions and the button are §3–5; the LEDs are §6.
+  `PAIRING` is entered with `Long Press`; the `Pairing Timeout` is open
+  (`TBD-31`).
 - `Pairing`/`Commissioning` Timeout, `Decommissioning`, `Factory Reset`,
   Wi-Fi provisioning, behavior when Home Assistant is unreachable, `Reconnect`,
   handling of multiple `Fabric` and the HA/Matter Server version are handled by
@@ -310,6 +327,14 @@ unreachable are handled by ESP-Matter according to the Matter specification
   (`TBD-C17`). It is chosen only to verify the build and flash environment: it
   says nothing about the product's electrical design, pin map or enclosure. The
   product's own board follows the hardware (`GAP-07`).
+- The board is chosen at build time with `CONFIG_PSMD_BOARD`. The development
+  board variant (`CONFIG_PSMD_BOARD_DEV`, default) is the ESP32-C6 with the
+  button on GPIO3 and the `Operation Mode LED` on GPIO2, both active low. It has
+  no `Output State LED`; `Output State` is on GPIO10, active high, standing in
+  for the relay (`TBD-C20`). The production board variant
+  (`CONFIG_PSMD_BOARD_PRODUCTION`) has no pin map yet (`GAP-02`): selecting it
+  stops the build with a message, so no pin is invented. Each board's pins and
+  active levels are in `components/psmd_board/include/psmd_board.h`.
 - `PU` and `MU` sit behind interfaces with a simulated backend, so the firmware
   runs without the real hardware (`TBD-C18`). The `MU` is simulated until the
   interface in `TBD-28` is implemented behind the same interface; the product

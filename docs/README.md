@@ -39,7 +39,7 @@ is needed.
 | Getting started, usage, troubleshooting, technical data | [`manual.md`](manual.md) |
 | Attribute ID, cluster, device type, cluster revision | [`lookup/matter-1.6.1/INDEX.md`](lookup/matter-1.6.1/INDEX.md), then `grep` in `text/*.txt` |
 | ESP-IDF, ESP-Matter, GPIO, NVS, OTA, path in `$IDF_PATH` | [`lookup/esp-idf.md`](lookup/esp-idf.md) |
-| Firmware, source code, logging, `psmd_`, `TAG`, ESP-IDF layout, components, managed components, target | [`../README.md`](../README.md), [`specification.md`](specification.md) §14 |
+| Firmware, source code, logging, `psmd_`, `TAG`, ESP-IDF layout, components, board variant, pin map, managed components, target | [`../README.md`](../README.md), [`specification.md`](specification.md) §14 |
 | Branch, commit, pull request | [Workflow](#workflow) |
 
 ## Working method
