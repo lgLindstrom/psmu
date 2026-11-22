@@ -1,8 +1,11 @@
 # Decisions, open questions and gaps – PSMD
 
 Collected decisions, open questions and known gaps, with **where they come
-from**. The document is working material: open questions move to **Decided
-questions** when a decision is made, and the affected documents are updated.
+from**. The document is working material: every new open question gets an ID
+(`TBD-NN`) and a source, and moves to **Decided questions** when a decision is
+made – the affected documents are updated at the same time. External sources
+(Matter, Home Assistant) are completed with a link or a version when they are
+verified.
 
 > Related: [`manual.md`](manual.md), [`glossary.md`](glossary.md),
 > [`specification.md`](specification.md)
@@ -109,84 +112,13 @@ sections above.
 
 | ID | Prio | Area | What is missing | Document |
 |---|---|---|---|---|
-| GAP-01 | High | Matter | Device type, endpoints, clusters, attributes, units and reporting intervals. | [`specification.md`](specification.md) §12 |
-| GAP-02 | High | Hardware/software | Pin map for the button, the LEDs and the `Output`, active level, debounce, the MU I2C interface (`TBD-28`), measurement ranges and calibration. | [`specification.md`](specification.md) §14 |
-| GAP-03 | High | Data model | Units, scaling, intervals, `timestamp`, energy at `Power-up`/overflow and which fields are `Persisted State`. | [`specification.md`](specification.md) §11 |
-| GAP-04 | Medium | Verification | Non-functional requirements and concrete acceptance tests tied to each requirement. | [`specification.md`](specification.md) §10 |
+| GAP-01 | High | Matter | Device type and number of endpoints, clusters, attributes, units, reporting intervals, and which values are reported when `Output State = OFF`. | [`specification.md`](specification.md) §12 |
+| GAP-02 | High | Hardware/software | Pin map for the button, the LEDs and the `Output`, active level, pull-up/pull-down, debounce, the MU I2C interface (`TBD-28`), measurement ranges and calibration. | [`specification.md`](specification.md) §14 |
+| GAP-03 | High | Data model | Units and scaling per field, intervals, `timestamp`, sign convention for `preact` and `phase_delay`, energy at `Power-up`/overflow and which fields are `Persisted State`. | [`specification.md`](specification.md) §11 |
+| GAP-04 | Medium | Verification | Non-functional requirements (performance, memory, robustness, power; electrical safety and EMC if they belong in this repository) and concrete acceptance tests tied to each requirement. | [`specification.md`](specification.md) §10 |
 | GAP-05 | Medium | User manual | Section 5.4 assumes a local UI with views and screenshots. Clarify whether PSMD has any interface of its own beyond the button, the LEDs and Home Assistant. | [`manual.md`](manual.md) |
 | GAP-06 | Medium | Manual → specification | The network requirements in the manual (`manual.md` §2.3: Wi-Fi band, PSMD and Home Assistant in the same network, Home Assistant version with a Matter Server) have no equivalent in the specification. The band follows the hardware implementation. | [`specification.md`](specification.md) §13 |
 | GAP-07 | Medium | Hardware document | [`hardware.md`](hardware.md) is a stub: connectors, electrical safety, environment and technical data are open (`TBD-13`–`TBD-15`, `TBD-23`, `TBD-25`–`TBD-27`). | [`hardware.md`](hardware.md) |
 
-### GAP-01 – Matter interface
-
-`specification.md` §12 says that endpoints and clusters are TBD. It needs:
-
-- device type and number of endpoints,
-- which clusters are used, e.g. On/Off and the measurement clusters,
-- attributes, units and reporting intervals,
-- which values are reported when `Output State = OFF`.
-
-Without this, the firmware, the Home Assistant integration and the acceptance
-tests cannot be specified.
-
-### GAP-02 – Hardware/software
-
-A description of the interface between hardware and software is missing:
-
-- pin map for the button, `Operation Mode LED`, `Output State LED` and the `Output`,
-- active level, pull-up/pull-down and debounce,
-- the I2C bus and interface to the `MU` (`TBD-28`), calibration and measurement
-  ranges.
-
-### GAP-03 – Semantics of the data model
-
-The data model in `specification.md` §11 has field names and types, but lacks:
-
-- units and scaling for `vac`, `iac`, `pact` and `energy`,
-- interval and sign convention for `preact` and `phase_delay`,
-- what `timestamp` represents,
-- how `energy` is handled at `Power-up` and overflow,
-- which fields are actually `Persisted State`.
-
-### GAP-04 – Verification
-
-`specification.md` §10 has five functional requirements. Missing:
-
-- non-functional requirements within performance, memory, robustness and power consumption,
-- electrical safety and EMC, if they are to be handled in this repository,
-- concrete acceptance tests for each requirement.
-
-### GAP-05 – The UI section of the user manual
-
-Section 5.4 of `manual.md` describes "main views, menus and key functions –
-preferably with screenshots". That assumes a local interface that does not
-appear anywhere else. PSMD appears to have a button, two LEDs and Home
-Assistant – no screen of its own. The section should be removed or clarified.
-
-### GAP-06 – Network requirements in the manual
-
-`manual.md` §2.3 states network requirements – Wi-Fi band, PSMD and Home
-Assistant in the same network, a minimum Home Assistant version with a Matter
-Server – that the network section of `specification.md` does not have. The band
-(2.4 or 5 GHz) follows the hardware implementation and is open until it is
-decided ([`hardware.md`](hardware.md)).
-
-### GAP-07 – The hardware document
-
-[`hardware.md`](hardware.md) owns what the specification does not: connectors,
-electrical safety, environment and technical data. The values are open; the
-questions with IDs are in the tables above.
-
-### Order of work
-
-The order, the phases and the exit criteria are in [`project.md`](project.md).
-This document only defines the IDs.
-
-## How the document is used
-
-1. Every new open question gets an ID (`TBD-NN`) and a source.
-2. When the question is decided it moves to **Decided questions** and the
-   relevant document (`manual.md` / `glossary.md` / the specification) is
-   updated.
-3. External sources (Matter, HA) should preferably be completed with a link or
-   a version when they are verified.
+The order the gaps are worked in, with phases and exit criteria, is in
+[`project.md`](project.md). This document only defines the IDs.
