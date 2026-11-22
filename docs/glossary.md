@@ -14,9 +14,10 @@ Status: `Confirmed` = established, `Proposed` = proposed term, `TBD` = to
 investigate/decide. Open questions with source are in
 [`decisions.md`](decisions.md).
 
-`LED1` and `LED2` are the two LEDs on PSMD. In text and software the
-descriptive names **`Operation Mode LED`** and **`Output State LED`** are used.
-Approved abbreviations where they fit: **`Mode LED`** and **`Output LED`**.
+`LED1` and `LED2` are the two LEDs on PSMD; the descriptive names
+**`Operation Mode LED`** and **`Output State LED`** are used in text and
+software. Approved abbreviations where they fit: **`Mode LED`** and
+**`Output LED`**.
 
 > **Owner:** terminology and approved terms.
 > **Read when needed:** [`decisions.md`](decisions.md) for terminology
@@ -29,22 +30,22 @@ Approved abbreviations where they fit: **`Mode LED`** and **`Output LED`**.
 | Term (EN) | Swedish (manual.md) | Definition | Status |
 |---|---|---|---|
 | **Operation Mode** | Driftläge | The overall state of the device: `LOCAL`, `PAIRING` or `OPERATIONAL`. | Confirmed |
-| **`LOCAL`** (Local Mode) | Lokalt läge | Default mode at the first `Power-up`. No connection to Home Assistant. `Operation Mode LED` blinks fast for 5 s at `Power-up` and is then off. `Short Press` toggles `Output State`. | Confirmed |
-| **`PAIRING`** (Pairing Mode) | Parkopplingsläge | Mode where the device is available for Matter `Commissioning`. `Operation Mode LED` blinks slowly. `Short Press` has no effect. Left on a successful connection, on `Pairing Timeout` or through `Long Press` → `LOCAL`. | Confirmed |
-| **`OPERATIONAL`** (Operational Mode) | Anslutet läge | Mode after a successful Matter `Commissioning`. The device belongs to a `Fabric` and can be controlled from Home Assistant. `Operation Mode LED` is solid. `Short Press` toggles `Output State`. The device starts in this mode at `Power-up` if it was previously connected; `Operation Mode LED` then blinks fast for 5 s before it becomes solid. `Long Press` returns to `PAIRING`. | Confirmed |
+| **`LOCAL`** (Local Mode) | Lokalt läge | Default mode at the first `Power-up`; no connection to Home Assistant. See `manual.md` §5.3. | Confirmed |
+| **`PAIRING`** (Pairing Mode) | Parkopplingsläge | Mode where the device is available for Matter `Commissioning`. See `manual.md` §5.3. | Confirmed |
+| **`OPERATIONAL`** (Operational Mode) | Anslutet läge | Mode after a successful Matter `Commissioning`; the device belongs to a `Fabric` and can be controlled from Home Assistant. See `manual.md` §5.3. | Confirmed |
 
 ### Controls and Indicators
 
 | Term (EN) | Swedish (manual.md) | Definition | Status |
 |---|---|---|---|
 | **Button** | Knapp | The device's only physical control. | Confirmed |
-| **Short Press** | Kort tryck | Press ≤ 3 s. Toggles `Output State` in `LOCAL` and `OPERATIONAL`. Has no effect in `PAIRING`. | Confirmed |
-| **Long Press** | Långt tryck | Press > 3 s. Changes `Operation Mode` to `PAIRING` from `LOCAL` and `OPERATIONAL`. In `PAIRING`, `Long Press` returns to `LOCAL`. | Confirmed |
+| **Short Press** | Kort tryck | Press ≤ 3 s. | Confirmed |
+| **Long Press** | Långt tryck | Press > 3 s. | Confirmed |
 | **Press Threshold** | Trycktröskel | 3 s – the boundary between `Short Press` and `Long Press`. | Confirmed |
-| **`Operation Mode LED`** | Lägeslysdiod | Shows `Operation Mode`: fast blink for 5 s at `Power-up` (both `LOCAL` and `OPERATIONAL`), then off in `LOCAL`, slow blink in `PAIRING` and solid in `OPERATIONAL`. Also called `LED1`. | Confirmed |
-| **`Output State LED`** | Utgångslysdiod | Mirrors `Output State`: on when `ON`, off when `OFF`, independent of `Operation Mode`. Also called `LED2`. | Confirmed |
-| **Slow Blink** | Långsamt blink | Blink pattern that indicates `PAIRING`: 0.5 s on / 0.5 s off (1 Hz). | Confirmed |
-| **Fast Blink** | Snabbt blink | Blink pattern that indicates `Power-up` for 5 s: 0.25 s on / 0.25 s off (2 Hz). | Confirmed |
+| **`Operation Mode LED`** | Lägeslysdiod | Shows `Operation Mode`; also called `LED1`. See `manual.md` §5.2. | Confirmed |
+| **`Output State LED`** | Utgångslysdiod | Mirrors `Output State`; also called `LED2`. See `manual.md` §5.2. | Confirmed |
+| **Slow Blink** | Långsamt blink | 0.5 s on / 0.5 s off (1 Hz). | Confirmed |
+| **Fast Blink** | Snabbt blink | 0.25 s on / 0.25 s off (2 Hz). | Confirmed |
 | **Solid** | Fast sken | An LED that is on without blinking. | Confirmed |
 | **Off** | Släckt | An LED that is not lit. | Confirmed |
 
@@ -66,7 +67,7 @@ Approved abbreviations where they fit: **`Mode LED`** and **`Output LED`**.
 | **Fabric** | Fabric | Matter domain that a device belongs to; created by e.g. Home Assistant. | Confirmed |
 | **Matter Server** | Matter Server | Home Assistant component required for the Matter connection. | Confirmed |
 | **Home Assistant (HA)** | Home Assistant | The system PSMD can be integrated with. | Confirmed |
-| **Decommissioning** | Avregistrering | Leaving `PAIRING` with `Long Press` should also remove the device information in Home Assistant. **To be investigated** – exact method and responsibility per the Matter specification. | TBD |
+| **Decommissioning** | Avregistrering | Removing the device from its `Fabric` and from Home Assistant. Handled by ESP-Matter (`TBD-C13`); the user-facing method is to be confirmed. | TBD |
 
 ### Lifecycle and Persistence
 
@@ -74,17 +75,15 @@ Approved abbreviations where they fit: **`Mode LED`** and **`Output LED`**.
 |---|---|---|---|
 | **Power-up** | `Power-up` (spänningssättning) | When the device is supplied with power from the wall outlet. | Confirmed |
 | **Power-loss Recovery** | Återstart efter strömavbrott | `Output State` is **always set to `OFF`** at `Power-up`, regardless of the previous state. | Confirmed |
-| **Factory Reset** | Fabriksåterställning | Reset of configuration and `Fabric` membership. **No decision taken** on whether it exists or how it is triggered. | TBD |
+| **Factory Reset** | Fabriksåterställning | Reset of configuration and `Fabric` membership. Handled by ESP-Matter (`TBD-C13`); how it is described in the manual is open. | TBD |
 
 ### Measurement
 
-Measurement runs **only in `OPERATIONAL`**. Nothing is measured in `LOCAL` or
-`PAIRING`. Measurement is active also when `Output State` is `OFF` (current and
-power are then expected to be 0).
+The behavior is in `manual.md` §6.2.
 
 | Term (EN) | Swedish (manual.md) | Definition | Status |
 |---|---|---|---|
-| **Measurement** | Mätning | Collection of electrical quantities from the `Load`. Only in `OPERATIONAL`, also at `Output State = OFF`. | Confirmed |
+| **Measurement** | Mätning | Collection of electrical quantities from the `Load`. | Confirmed |
 | **Measured Value** | Mätvärde | A quantity produced by the `MU` and republished by `MC` as a Matter attribute. `MC` never measures or derives one. | Confirmed |
 | **Voltage** | Spänning | Measured voltage across the `Load` (V). | Proposed |
 | **Current** | Ström | Measured current through the `Load` (A). | Proposed |

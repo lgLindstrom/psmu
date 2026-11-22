@@ -210,7 +210,8 @@ Driftläget beskriver enhetens förhållande till Home Assistant – inte om utg
 > även tas bort i Home Assistant. Exakt metod och ansvar enligt Matter-standarden
 > är inte fastställt (`Decommissioning`).
 
-> **Att undersöka:** om och hur `Factory Reset` ska finnas. Inget beslut taget.
+> **Att undersöka:** `Factory Reset` hanteras av ESP-Matter (`TBD-C13`), men om
+> och hur den ska beskrivas i handboken är inte fastställt.
 
 > Termerna förklaras i [ordlistan](glossary.md). Beteendet vid `Power-up` i
 > `OPERATIONAL` när Home Assistant inte nås är ännu inte fastställt – ska

@@ -14,11 +14,20 @@ starts and what it must produce before the next one starts.
 
 ## 1. How work flows
 
-[`manual.md`](manual.md) owns the behavior. A function that is added or removed
-starts in the manual; the specification and the glossary are updated from it in
-the same change. A statement in the manual that has no equivalent in the
-specification is a gap in [`decisions.md`](decisions.md) – it is not filled in
-with an invented behavior.
+[`manual.md`](manual.md) owns the behavior; the specification and the glossary
+are derived from it. A function that is added or removed starts in the manual,
+and the same change updates the documents it reaches:
+
+1. Change [`manual.md`](manual.md) first: what the user sees and does.
+2. If a value is unknown, leave the placeholder and add or update the entry in
+   [`decisions.md`](decisions.md). Do not guess.
+3. Derive the change in [`specification.md`](specification.md) §3–10 and fill in
+   the `Manual` column, and in [`glossary.md`](glossary.md) when a term is
+   involved.
+4. Update requirements and acceptance criteria in `specification.md` §10 when
+   the behavior changed.
+5. If the manual states something the specification cannot hold yet, record a
+   gap. It is filled in later, not invented now.
 
 The manual is not finished: functions can still be added and removed. Until it
 is, the specification is derived from what the manual states today, and every
@@ -26,21 +35,24 @@ change to the manual is a change to the specification.
 
 ## 2. State (2026-11-22)
 
-| Document | State | Remains |
-|---|---|---|
-| [`manual.md`](manual.md) | Draft. Button, LEDs, `Operation Mode` and `Power-up` are settled. About 40 placeholders. | §1, §2.2–2.3, §3, §4.1, §4.4–4.5, §5.1 (connectors), §5.4, §6.2–6.3, §7, §8 (last row), §9, §11. |
-| [`specification.md`](specification.md) | Behavior derived from the manual, with a `Manual` column in §3–10. Architecture, data model and Matter device types in place. | Implementation detail: `GAP-01`–`GAP-04`, `GAP-06`. |
-| [`glossary.md`](glossary.md) | Terms in the manual and internal terms are separated. | Terms follow the manual as it grows. |
-| [`decisions.md`](decisions.md) | Open questions and gaps with IDs and sources. | The IDs move to **Decided questions** as they are closed. |
-| [`hardware.md`](hardware.md) | Stub. Scope is set; the values are open (`TBD-13`–`TBD-15`, `TBD-23`, `TBD-25`–`TBD-27`). | Filled in from K4 (`GAP-07`). |
-| [`main/`](../main/), [`components/`](../components/) | M0 and M1 done: the ESP-IDF project is the repository root and builds, flashes and boots on the ESP32-C6 dev board with `esp_matter` 1.6.1; one On/Off Plug-in Unit endpoint switches the `Output` GPIO and the commissioning window opens. The device prints its onboarding code at `Power-up`, and pairing into the Matter Server on the test network works (tested 2026-11-22). | M2's last two checks (reconnect after reboot, decommissioning) and `TBD-29`; M3–M7. |
+| Document | State |
+|---|---|
+| [`manual.md`](manual.md) | Draft. Button, LEDs, `Operation Mode` and `Power-up` are settled. About 40 placeholders, in §1, §2.2–2.3, §3, §4.1, §4.4–4.5, §5.1 (connectors), §5.4, §6.2–6.3, §7, §8 (last row), §9 and §11. |
+| [`specification.md`](specification.md) | Behavior derived from the manual, with a `Manual` column in §3–10. Architecture, data model and Matter device types in place. |
+| [`glossary.md`](glossary.md) | Terms in the manual and internal terms are separated; terms follow the manual as it grows. |
+| [`decisions.md`](decisions.md) | Open questions and gaps with IDs and sources; the IDs move to **Decided questions** as they are closed. |
+| [`hardware.md`](hardware.md) | Stub. Scope is set; the values are open. |
+| [`main/`](../main/), [`components/`](../components/) | M0 and M1 done: the ESP-IDF project is the repository root and builds, flashes and boots on the ESP32-C6 dev board with `esp_matter` 1.6.1; one On/Off Plug-in Unit endpoint switches the `Output` GPIO and the commissioning window opens. The device prints its onboarding code at `Power-up`, and pairing into the Matter Server on the test network works (tested 2026-11-22). M2's last two checks (reconnect after reboot, decommissioning) remain, then M3–M7. |
+
+What remains in each document is its open questions and gaps, defined in
+[`decisions.md`](decisions.md); the firmware increments are in the table below.
 
 ## 3. Phases
 
 | # | Phase | Goal | Exit criteria | Depends on |
 |---|---|---|---|---|
 | 1 | Steering | The manual owns the behavior and the other documents derive from it. | No document contradicts the order in §1; `scripts/check_docs.py` passes. | – (done 2026-11-16) |
-| 2 | Manual v1 | The manual covers the first version of the product. | No placeholder that waits for an answer from the product owner remains in chapters 1–8 and 11. | Answers from K1 and K4 |
+| 2 | Manual v1 | The manual covers the first version of the product. | No placeholder that waits for an answer from the product owner remains in chapters 1–8 and 11. `GAP-05` closed: the UI section is removed or clarified. | Answers from K1 and K4 |
 | 3 | Specification detail | The specification is implementable. | `GAP-01` and `GAP-03` closed: endpoints, clusters, attributes, units, reporting, and the data model per field. `GAP-06` filled in. | 1, and the manual sections involved |
 | 4 | Hardware interface | The interface between hardware and software is fixed. | `GAP-02` closed: the MU I2C interface (`TBD-28`), pin map for the button, the LEDs and the `Output`, active level, debounce and calibration. `GAP-07` closed: connectors, ratings, environment and technical data. | MU interface specification, hardware from K4 |
 | 5 | Verification | Every requirement has an acceptance test. | `GAP-04` closed: non-functional requirements and one concrete test per requirement. | 3 |
@@ -74,28 +86,8 @@ The simulator is not deleted in M7: it stays as a backend for tests.
 
 ## 5. Work items
 
-| ID | What | Phase |
-|---|---|---|
-| `GAP-01` | Matter interface: device type, endpoints, clusters, attributes, units, reporting. | 3 |
-| `GAP-03` | Semantics of the data model: units, scaling, interval, energy at `Power-up`, `Persisted State`. | 3 |
-| `GAP-06` | Manual statements with no equivalent in the specification: network requirements, privacy in `LOCAL`. | 3 |
-| `GAP-02` | Hardware/software interface: pin map, active level, debounce, ADC, calibration. | 4 |
-| `GAP-07` | The hardware document: connectors, electrical safety, environment, technical data. | 4 |
-| `GAP-04` | Verification: non-functional requirements and acceptance tests. | 5 |
-| `GAP-05` | The UI section of the user manual assumes an interface PSMD does not have. | 2 |
-
+The gap IDs (`GAP-NN`) are defined in [`decisions.md`](decisions.md); the phase
+each one is closed in is given by its exit criterion in the phase table above.
 Open questions (`TBD-NN`) are worked in the phase of the document they affect
-and are defined in [`decisions.md`](decisions.md); they are not repeated here.
-
-## 6. Adding or removing a function
-
-1. Change [`manual.md`](manual.md) first: what the user sees and does.
-2. If a value is unknown, leave the placeholder and add or update the entry in
-   [`decisions.md`](decisions.md). Do not guess.
-3. Derive the change in [`specification.md`](specification.md) §3–10 and fill in
-   the `Manual` column, and in [`glossary.md`](glossary.md) when a term is
-   involved.
-4. Update requirements and acceptance criteria in `specification.md` §10 when
-   the behavior changed.
-5. If the manual states something the specification cannot hold yet, record a
-   gap. It is filled in later, not invented now.
+and are defined in [`decisions.md`](decisions.md) too; they are not repeated
+here.

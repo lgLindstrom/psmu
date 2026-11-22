@@ -10,7 +10,7 @@ in English.
 |---|---|---|
 | Users | [`manual.md`](manual.md) | User manual for PSMD (Swedish). |
 | Specification | [`specification.md`](specification.md) | Behavior, requirements, architecture, data model, Matter and Home Assistant. |
-| Project | [`decisions.md`](decisions.md) | Decisions, open questions and known gaps. |
+| Decisions | [`decisions.md`](decisions.md) | Decisions, open questions and known gaps. |
 | Plan | [`project.md`](project.md) | What is done when: phases, order, dependencies, exit criteria. |
 | Hardware | [`hardware.md`](hardware.md) | Connectors, electrical safety, environment, technical data. |
 | Source code | [`../main/`](../main/), [`../components/`](../components/) | ESP32 firmware (ESP-IDF + ESP-Matter). Built via the `esp-idf` MCP. |
@@ -32,7 +32,7 @@ is needed.
 | Requirements, acceptance criterion, traceability, test strategy | [`specification.md`](specification.md) §10 |
 | Component, data model, Matter, Home Assistant, provisioning, security | [`specification.md`](specification.md) §2, §11–15 |
 | Decision, open question, source `K1`–`K6` | [`decisions.md`](decisions.md) |
-| Gap, next step, `GAP-01`–`GAP-06` | [`decisions.md`](decisions.md) |
+| Gap, next step, `GAP-01`–`GAP-07` | [`decisions.md`](decisions.md) |
 | Plan, phase, order, milestone, simulation, dev board, ESP32-C6, what comes next | [`project.md`](project.md) |
 | Connector, electrical safety, environment, temperature, supply, dimension, weight | [`hardware.md`](hardware.md) |
 | Term, naming, `Operation Mode LED`, `Output State LED` | [`glossary.md`](glossary.md) |

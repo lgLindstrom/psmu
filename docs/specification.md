@@ -24,12 +24,10 @@ The document describes the firmware for the **Matter Controller (MC)** and the
 interface to the **Measurement Unit (MU)**.
 
 [`manual.md`](manual.md) owns the behavior: it describes what PSMD does from the
-user's point of view, and this document is derived from it. The specification
-adds what the manual does not describe – implementation, data model and the
-Matter integration. Behavior that the manual states and this document lacks is a
-gap: it is recorded in [`decisions.md`](decisions.md) and added here. The
-`Manual` column in the behavior tables shows which part of the manual each
-behavior comes from.
+user's point of view, and this document is derived from it. The `Manual` column
+in the behavior tables (§3–10) shows which part of the manual each behavior comes
+from. Behavior the manual states and this document lacks is a gap: it is
+recorded in [`decisions.md`](decisions.md) and added here.
 
 The document describes the **intended architecture**. Exact implementation,
 software version and hardware target are not decided yet. Electrical safety,
@@ -151,25 +149,17 @@ are computed and reported also when no `Load` is connected; they are then 0
 | Frequency | Decided as a measured value; whether it is exposed is decided in `TBD-10`. |
 | Energy | Decided as a measured value, but accumulation across `Power-up` is not decided (`TBD-12`). |
 
-The measurement is performed by **MU** at a fixed interval of **5 s**. All 8
-measured values are synchronous (the same measurement cycle). `MC` sends one
-value at a time to Home Assistant. `MC` reaches `MU` over I2C; the interface is
-`TBD-28`.
+The measurement is performed by **MU** at a fixed `Measurement Interval` of
+**5 s** (`TBD-C11`); all 8 measured values are synchronous (the same measurement
+cycle). `MC` reads them over I2C (`TBD-28`) and republishes them as Matter
+attributes, one value per attribute, so that Home Assistant can use its standard
+mapping. No custom struct with all values is used (`TBD-C12`).
 
 A **measured value** is produced by the `MU`. `MC` never measures or derives
-one: it reads the values from `MU` and republishes them as Matter attributes.
+one.
 
-`Measurement Interval` is therefore decided at 5 s (`TBD-C11`), but which values
-are reported to Matter is decided in `TBD-10`. Field names and scaling are in
-§11.
-
-Measured values are reported as **standard attributes** (one value per Matter
-attribute) so that Home Assistant can use its standard mapping. No custom
-struct with all values is used (`TBD-C12`).
-
-`phase_delay` is reported as `PowerFactor` in percent100ths (`TBD-C10`,
-`TBD-C19`). The mapping between the data model's fields and the Matter
-attributes is in §11.
+Which values are reported to Matter is decided in `TBD-10`. Field names, scaling
+and the mapping to the Matter attributes are in §11.
 
 Source: [manual.md §6.2](manual.md).
 
@@ -235,8 +225,7 @@ be confirmed (`TBD-20`).
 `Editable = yes` means that the value can be changed through the interface.
 
 The table is a proposal. Which measured values are actually exposed is decided
-in `TBD-10`. That `phase_delay` is reported as `PowerFactor` in percent100ths is
-decided (`TBD-C10`, `TBD-C19`).
+in `TBD-10`.
 
 Matter scales measured values in mV, mA, mW and mHz, while the data model
 specifies `int64` without a unit. The scaling has to be decided (`TBD-20`).
@@ -253,9 +242,8 @@ Whether energy measurement accumulates across `Power-up` is open (`TBD-12`).
   900 s. Every unit currently carries chip's test values, so all units share one
   code (`TBD-24`).
 - [`manual.md` §4.4](manual.md) shows the code of the dev board as an example.
-- `Operation Mode` and transitions are specified in §3–4.
-- Measurement runs only in `OPERATIONAL`. Which measured values are exposed is
-  partly decided (`TBD-10`).
+- `Operation Mode` and transitions: §3–4. Measurement: §8.
+- Which measured values are exposed is partly decided (`TBD-10`).
 - `MC` uses the standard attributes in Electrical Power/Energy Measurement;
   Home Assistant's standard mapping is used. Correlation between values from
   the same sample happens at application level, not through a struct
@@ -314,9 +302,10 @@ unreachable are handled by ESP-Matter according to the Matter specification
   1.6.1 for Matter 1.6.1, taken as the component `espressif/esp_matter` from the
   ESP Component Registry. The ESP-IDF project is the repository root
   (`CMakeLists.txt`, `main/`, `components/`) and is built and flashed through
-  the `esp-idf` MCP; the project standard is in [`../README.md`](../README.md).
-- Where the Espressif documentation lives and how to look it up:
-  [`lookup/esp-idf.md`](lookup/esp-idf.md).
+  the `esp-idf` MCP.
+- Build, flash and debug steps, logging conventions and the ESP-IDF project
+  standard are in [`../README.md`](../README.md); where the Espressif
+  documentation lives is in [`lookup/esp-idf.md`](lookup/esp-idf.md).
 - The development and verification target is an ESP32-C6 dev board
   (`TBD-C17`). It is chosen only to verify the build and flash environment: it
   says nothing about the product's electrical design, pin map or enclosure. The
@@ -325,8 +314,6 @@ unreachable are handled by ESP-Matter according to the Matter specification
   runs without the real hardware (`TBD-C18`). The `MU` is simulated until the
   interface in `TBD-28` is implemented behind the same interface; the product
   build uses the I2C backend.
-- Practical build, flash and debug steps, logging conventions and the ESP-IDF
-  project standard are in [`../README.md`](../README.md).
 - The Matter component recommends ESP-IDF v6.0.2; 6.1 is built and fits the
   partition, so the deviation is kept (`TBD-21`).
 - Firmware and application versions are stored according to the data model
