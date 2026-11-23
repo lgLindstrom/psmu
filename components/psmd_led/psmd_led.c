@@ -1,5 +1,6 @@
 #include "psmd_led.h"
 
+#include <stdbool.h>
 #include <stdint.h>
 
 #include <driver/gpio.h>
@@ -19,10 +20,10 @@ static const char *TAG = "psmd_led";
 /* Written by psmd_led_set_pattern() from other tasks, read by led_task(). */
 static volatile psmd_led_pattern_t s_pattern = PSMD_LED_PATTERN_OFF;
 
-static void set_level(int gpio, int on_level, bool on)
+static void set_level(bool on)
 {
-    if (gpio >= 0) {
-        gpio_set_level(gpio, on ? on_level : !on_level);
+    if (PSMD_MODE_LED_GPIO >= 0) {
+        gpio_set_level(PSMD_MODE_LED_GPIO, on ? PSMD_MODE_LED_ON_LEVEL : !PSMD_MODE_LED_ON_LEVEL);
     }
 }
 
@@ -44,7 +45,7 @@ static bool level_for(psmd_led_pattern_t pattern, int64_t now_us)
 static void led_task(void *arg)
 {
     for (;;) {
-        set_level(PSMD_MODE_LED_GPIO, PSMD_MODE_LED_ON_LEVEL, level_for(s_pattern, esp_timer_get_time()));
+        set_level(level_for(s_pattern, esp_timer_get_time()));
         vTaskDelay(pdMS_TO_TICKS(LED_POLL_INTERVAL_MS));
     }
 }
@@ -55,13 +56,7 @@ esp_err_t psmd_led_init(void)
         ESP_RETURN_ON_ERROR(gpio_reset_pin(PSMD_MODE_LED_GPIO), TAG, "GPIO %d: reset failed", PSMD_MODE_LED_GPIO);
         ESP_RETURN_ON_ERROR(gpio_set_direction(PSMD_MODE_LED_GPIO, GPIO_MODE_OUTPUT), TAG,
                             "GPIO %d: output mode failed", PSMD_MODE_LED_GPIO);
-        set_level(PSMD_MODE_LED_GPIO, PSMD_MODE_LED_ON_LEVEL, false);
-    }
-    if (PSMD_OUTPUT_LED_GPIO >= 0) {
-        ESP_RETURN_ON_ERROR(gpio_reset_pin(PSMD_OUTPUT_LED_GPIO), TAG, "GPIO %d: reset failed", PSMD_OUTPUT_LED_GPIO);
-        ESP_RETURN_ON_ERROR(gpio_set_direction(PSMD_OUTPUT_LED_GPIO, GPIO_MODE_OUTPUT), TAG,
-                            "GPIO %d: output mode failed", PSMD_OUTPUT_LED_GPIO);
-        set_level(PSMD_OUTPUT_LED_GPIO, PSMD_OUTPUT_LED_ON_LEVEL, false);
+        set_level(false);
     }
     return xTaskCreate(led_task, "psmd_led", 2048, NULL, 5, NULL) == pdPASS ? ESP_OK : ESP_ERR_NO_MEM;
 }
@@ -69,13 +64,5 @@ esp_err_t psmd_led_init(void)
 esp_err_t psmd_led_set_pattern(psmd_led_pattern_t pattern)
 {
     s_pattern = pattern;
-    return ESP_OK;
-}
-
-esp_err_t psmd_led_output(bool on)
-{
-    if (PSMD_OUTPUT_LED_GPIO >= 0) {
-        set_level(PSMD_OUTPUT_LED_GPIO, PSMD_OUTPUT_LED_ON_LEVEL, on);
-    }
     return ESP_OK;
 }

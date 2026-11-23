@@ -1,12 +1,10 @@
-/* PSMD – LEDs
+/* PSMD – Operation Mode LED
  *
- * The Operation Mode LED pattern and the Output State LED. Both are plain
- * GPIOs; the board decides whether they exist (psmd_board.h).
+ * The Operation Mode LED only: its pattern shows `Operation Mode` (specification
+ * §6). The Output State LED, on a board that has one, belongs to psmd_output.
  */
 
 #pragma once
-
-#include <stdbool.h>
 
 #include <esp_err.h>
 
@@ -23,14 +21,11 @@ typedef enum {
     PSMD_LED_PATTERN_SLOW_BLINK,
 } psmd_led_pattern_t;
 
-/** Configure the LEDs and start their driver. Both start off. */
+/** Configure the Operation Mode LED and start its driver. It starts off. */
 esp_err_t psmd_led_init(void);
 
 /** Set the Operation Mode LED pattern. */
 esp_err_t psmd_led_set_pattern(psmd_led_pattern_t pattern);
-
-/** Set the Output State LED; it follows Output State. A no-op without one. */
-esp_err_t psmd_led_output(bool on);
 
 #ifdef __cplusplus
 }
