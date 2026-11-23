@@ -12,6 +12,7 @@ in English.
 | Specification | [`specification.md`](specification.md) | Behavior, requirements, architecture, data model, Matter and Home Assistant. |
 | Decisions | [`decisions.md`](decisions.md) | Decisions, open questions and known gaps. |
 | Plan | [`project.md`](project.md) | What is done when: phases, order, dependencies, exit criteria. |
+| Tests | [`tests/`](tests/) | Manual test plans for the development board, e.g. M2 and M3. |
 | Hardware | [`hardware.md`](hardware.md) | Connectors, electrical safety, environment, technical data. |
 | Source code | [`../main/`](../main/), [`../components/`](../components/) | ESP32 firmware (ESP-IDF + ESP-Matter). Built via the `esp-idf` MCP. |
 | Firmware | [`../README.md`](../README.md) | Build, flash, debug, logging and the ESP-IDF project standard for the firmware. |
@@ -34,6 +35,7 @@ is needed.
 | Decision, open question, source `K1`–`K6` | [`decisions.md`](decisions.md) |
 | Gap, next step, `GAP-01`–`GAP-07` | [`decisions.md`](decisions.md) |
 | Plan, phase, order, milestone, simulation, dev board, ESP32-C6, what comes next | [`project.md`](project.md) |
+| Test plan, test case, `TC-NN`, manual test on the board, M2, M3 | [`tests/`](tests/) |
 | Connector, electrical safety, environment, temperature, supply, dimension, weight | [`hardware.md`](hardware.md) |
 | Term, naming, `Operation Mode LED`, `Output State LED` | [`glossary.md`](glossary.md) |
 | Getting started, usage, troubleshooting, technical data | [`manual.md`](manual.md) |
