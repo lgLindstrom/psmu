@@ -33,13 +33,25 @@ documentation index is in [`docs/README.md`](docs/README.md).
 - Built and flashed through the `esp-idf` MCP, never by hand.
 - Target: `esp32c6` (`TBD-C17`).
 
+## Board variants
+
+- The board is chosen with `CONFIG_PSMD_BOARD` (`main/Kconfig.projbuild`); the
+  pins and active levels of each board are in
+  `components/psmd_board/include/psmd_board.h`.
+- `CONFIG_PSMD_BOARD_DEV` (default) is the ESP32-C6 development board: button
+  GPIO3 (active low), `Operation Mode LED` GPIO1 (active high) and `Output
+  State` on GPIO2 (active high). It has no `Output State LED`.
+- `CONFIG_PSMD_BOARD_PRODUCTION` is a placeholder: its pin map is open
+  (`GAP-02`), so selecting it stops the build with a message instead of
+  inventing pins.
+
 ## Simulation
 
 - `PU` and `MU` sit behind interfaces with a simulated backend, so the firmware
   runs without the real hardware (`TBD-C18`). The increments are in
   [`docs/project.md`](docs/project.md) §4.
-- Until the real `PU` exists, `Output State` is the GPIO in
-  `CONFIG_PSMD_OUTPUT_GPIO` (default 2). The final pin map is owned by `GAP-02`.
+- Until the real `PU` exists, `Output State` is the board's `Output` GPIO: on
+  the development board GPIO2.
 - `CONFIG_PSMD_MU_SIM` selects the simulated `MU` (M4); the tests keep using it
   after the real `MU` is connected (M7).
 

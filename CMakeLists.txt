@@ -12,3 +12,9 @@ idf_build_set_property(C_COMPILE_OPTIONS "-Os" APPEND)
 # For RISCV chips, project_include.cmake sets -Wno-format, but does not clear
 # various flags that depend on -Wformat
 idf_build_set_property(COMPILE_OPTIONS "-Wno-format-nonliteral;-Wno-format-security" APPEND)
+# Matter device identity (TBD-30), read by CHIP's device instance info
+# provider. The IDs stay at the CSA test values (CONFIG_DEVICE_VENDOR_ID and
+# CONFIG_DEVICE_PRODUCT_ID) because the test attestation carries them.
+idf_build_set_property(COMPILE_OPTIONS
+    "-DCHIP_DEVICE_CONFIG_DEVICE_VENDOR_NAME=\"PSMD\";-DCHIP_DEVICE_CONFIG_DEVICE_PRODUCT_NAME=\"PSMD\";-DCHIP_DEVICE_CONFIG_DEFAULT_DEVICE_HARDWARE_VERSION_STRING=\"1.0\";-DCHIP_DEVICE_CONFIG_DEVICE_SOFTWARE_VERSION_STRING=\"0.1.0\""
+    APPEND)
