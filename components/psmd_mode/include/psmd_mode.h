@@ -29,6 +29,8 @@ typedef struct {
     void (*on_output_changed)(bool on);
     /** PAIRING entered (open) or left (close) the commissioning window. */
     void (*on_commissioning_window)(bool open);
+    /** Long Press in PAIRING: decommission the device (erase Fabric and Wi-Fi). */
+    void (*on_decommission)(void);
 } psmd_mode_callbacks_t;
 
 /** Start in OPERATIONAL when commissioned, otherwise in LOCAL. */

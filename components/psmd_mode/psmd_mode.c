@@ -103,9 +103,13 @@ void psmd_mode_button_event(psmd_button_event_t event)
         break;
     case PSMD_BUTTON_EVENT_LONG_PRESS:
         if (s_mode == PSMD_MODE_PAIRING) {
+            // Leaving PAIRING with Long Press is decommissioning (TBD-C21).
             set_mode(PSMD_MODE_LOCAL);
             if (s_callbacks.on_commissioning_window != NULL) {
                 s_callbacks.on_commissioning_window(false);
+            }
+            if (s_callbacks.on_decommission != NULL) {
+                s_callbacks.on_decommission();
             }
         } else {
             set_mode(PSMD_MODE_PAIRING);

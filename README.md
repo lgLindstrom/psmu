@@ -39,8 +39,8 @@ documentation index is in [`docs/README.md`](docs/README.md).
   pins and active levels of each board are in
   `components/psmd_board/include/psmd_board.h`.
 - `CONFIG_PSMD_BOARD_DEV` (default) is the ESP32-C6 development board: button
-  GPIO3, `Operation Mode LED` GPIO2, both active low, and `Output State` on
-  GPIO10 (active high). It has no `Output State LED`.
+  GPIO3 (active low), `Operation Mode LED` GPIO1 (active high) and `Output
+  State` on GPIO2 (active high). It has no `Output State LED`.
 - `CONFIG_PSMD_BOARD_PRODUCTION` is a placeholder: its pin map is open
   (`GAP-02`), so selecting it stops the build with a message instead of
   inventing pins.
@@ -51,7 +51,7 @@ documentation index is in [`docs/README.md`](docs/README.md).
   runs without the real hardware (`TBD-C18`). The increments are in
   [`docs/project.md`](docs/project.md) §4.
 - Until the real `PU` exists, `Output State` is the board's `Output` GPIO: on
-  the development board GPIO10.
+  the development board GPIO2.
 - `CONFIG_PSMD_MU_SIM` selects the simulated `MU` (M4); the tests keep using it
   after the real `MU` is connected (M7).
 

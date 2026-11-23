@@ -86,7 +86,8 @@ Home Assistant and the `Matter Server` are outside PSMD and are responsible for
 | `LOCAL` | `Long Press` | `PAIRING` | | [manual.md §5.3](manual.md) |
 | `PAIRING` | Successful `Commissioning` | `OPERATIONAL` | The device is added to a `Fabric`. | [manual.md §5.3](manual.md) |
 | `PAIRING` | `Pairing Timeout` or failed connection | `LOCAL` | `Pairing Timeout` is 3 min; verification against ESP-Matter/Matter is open (`TBD-C13`). | [manual.md §4.4](manual.md) |
-| `PAIRING` | `Long Press` | `LOCAL` | `Decommissioning` per ESP-Matter (`TBD-C13`). | [manual.md §5.3](manual.md) |
+| `PAIRING` | `Long Press` | `LOCAL` | `Decommissioning`: the window closes and the device factory-resets (`TBD-C21`). | [manual.md §5.3](manual.md) |
+| `OPERATIONAL` | The last `Fabric` is removed | `LOCAL` | The commissioning window opens again and the onboarding code is printed (`TBD-C21`). | [manual.md §4.4](manual.md) |
 | `OPERATIONAL` | `Long Press` | `PAIRING` | | [manual.md §5.3](manual.md) |
 
 `Short Press` never changes `Operation Mode`; it only toggles `Output State` in
@@ -247,7 +248,8 @@ Whether energy measurement accumulates across `Power-up` is open (`TBD-12`).
   `VendorID`/`ProductID`, the discriminator and passcode, and the BLE rendezvous
   flag. The device prints it and the manual pairing code at every `Power-up`
   while it has no `Fabric` (`main/app_main.cpp`); the commissioning window lasts
-  900 s. Every unit currently carries chip's test values, so all units share one
+  900 s. It is printed again whenever the window is opened later: with `Long
+  Press` into `PAIRING`, and after the last `Fabric` is removed (`TBD-C21`). Every unit currently carries chip's test values, so all units share one
   code (`TBD-24`).
 - [`manual.md` §4.4](manual.md) shows the code of the dev board as an example.
 - `Operation Mode` and transitions: §3–4. Measurement: §8.
@@ -329,9 +331,9 @@ unreachable are handled by ESP-Matter according to the Matter specification
   product's own board follows the hardware (`GAP-07`).
 - The board is chosen at build time with `CONFIG_PSMD_BOARD`. The development
   board variant (`CONFIG_PSMD_BOARD_DEV`, default) is the ESP32-C6 with the
-  button on GPIO3 and the `Operation Mode LED` on GPIO2, both active low. It has
-  no `Output State LED`; `Output State` is on GPIO10, active high, standing in
-  for the relay (`TBD-C20`). The production board variant
+  button on GPIO3, active low; the `Operation Mode LED` on GPIO1, active high. It
+  has no `Output State LED`; `Output State` is on GPIO2, active high, standing
+  in for the relay (`TBD-C20`). The production board variant
   (`CONFIG_PSMD_BOARD_PRODUCTION`) has no pin map yet (`GAP-02`): selecting it
   stops the build with a message, so no pin is invented. Each board's pins and
   active levels are in `components/psmd_board/include/psmd_board.h`.

@@ -7,10 +7,16 @@
 
 #include <esp_err.h>
 #include <esp_log.h>
+#include <esp_mac.h>
 #include <nvs_flash.h>
+
+#include <cstdio>
+#include <cstring>
 
 #include <esp_matter.h>
 #include <platform/CHIPDeviceLayer.h>
+#include <platform/ConfigurationManager.h>
+#include <platform/DeviceInstanceInfoProvider.h>
 
 #include <app/server/Server.h>
 #include <setup_payload/OnboardingCodesUtil.h>
@@ -30,6 +36,11 @@ using namespace esp_matter::attribute;
 using namespace chip::app::Clusters;
 
 static uint16_t s_endpoint_id;
+
+static void print_onboarding_codes(void)
+{
+    PrintOnboardingCodes(chip::RendezvousInformationFlags(chip::RendezvousInformationFlag::kBLE));
+}
 
 static esp_err_t app_identification_cb(identification::callback_type_t type, uint16_t endpoint_id,
                                        uint8_t effect_id, uint8_t effect_variant, void *priv_data)
@@ -69,12 +80,21 @@ static void commissioning_window_work(intptr_t open)
         CHIP_ERROR err = manager.OpenBasicCommissioningWindow(chip::System::Clock::Seconds32(PSMD_PAIRING_TIMEOUT_S));
         if (err == CHIP_NO_ERROR) {
             ESP_LOGI(TAG, "Commissioning window opened");
+            print_onboarding_codes();
         } else {
             ESP_LOGE(TAG, "Commissioning window: %" CHIP_ERROR_FORMAT, err.Format());
         }
     } else if (manager.IsCommissioningWindowOpen()) {
         manager.CloseCommissioningWindow();
         ESP_LOGI(TAG, "Commissioning window closed");
+    }
+}
+
+static void on_commissioning_window(bool open)
+{
+    CHIP_ERROR err = chip::DeviceLayer::PlatformMgr().ScheduleWork(commissioning_window_work, open ? 1 : 0);
+    if (err != CHIP_NO_ERROR) {
+        ESP_LOGE(TAG, "ScheduleWork: %" CHIP_ERROR_FORMAT, err.Format());
     }
 }
 
@@ -95,6 +115,11 @@ static void app_event_cb(const ChipDeviceEvent *event, intptr_t arg)
     case chip::DeviceLayer::DeviceEventType::kFabricRemoved:
         ESP_LOGI(TAG, "Fabric removed");
         psmd_mode_fabric_removed();
+        // An uncommissioned device is commissionable again; CHIP does not
+        // reopen the window on its own after the last Fabric is removed.
+        if (chip::Server::GetInstance().GetFabricTable().FabricCount() == 0) {
+            on_commissioning_window(true);
+        }
         break;
     default:
         break;
@@ -106,11 +131,38 @@ static void on_output_changed(bool on)
     publish_output_state(on);
 }
 
-static void on_commissioning_window(bool open)
+static void on_decommission(void)
 {
-    CHIP_ERROR err = chip::DeviceLayer::PlatformMgr().ScheduleWork(commissioning_window_work, open ? 1 : 0);
-    if (err != CHIP_NO_ERROR) {
-        ESP_LOGE(TAG, "ScheduleWork: %" CHIP_ERROR_FORMAT, err.Format());
+    ESP_LOGW(TAG, "Decommissioning");
+    esp_err_t err = esp_matter::factory_reset();
+    if (err != ESP_OK) {
+        ESP_LOGE(TAG, "Factory reset failed: %s", esp_err_to_name(err));
+    }
+}
+
+/* Per-unit `SerialNumber` (`TBD-30`): the board's base MAC, stored once. */
+static void store_serial_number(void)
+{
+    uint8_t mac[6];
+    esp_err_t mac_err = esp_read_mac(mac, ESP_MAC_BASE);
+    if (mac_err != ESP_OK) {
+        ESP_LOGE(TAG, "Base MAC: %s", esp_err_to_name(mac_err));
+        return;
+    }
+    char serial[32];
+    snprintf(serial, sizeof(serial), "PSMD-DEV-%02X%02X%02X%02X%02X%02X",
+             mac[0], mac[1], mac[2], mac[3], mac[4], mac[5]);
+
+    char stored[32] = {};
+    CHIP_ERROR err = chip::DeviceLayer::GetDeviceInstanceInfoProvider()->GetSerialNumber(stored, sizeof(stored));
+    if (err == CHIP_NO_ERROR && strcmp(stored, serial) == 0) {
+        return;
+    }
+    err = chip::DeviceLayer::ConfigurationMgr().StoreSerialNumber(serial, strlen(serial));
+    if (err == CHIP_NO_ERROR) {
+        ESP_LOGI(TAG, "SerialNumber = %s", serial);
+    } else {
+        ESP_LOGE(TAG, "StoreSerialNumber: %" CHIP_ERROR_FORMAT, err.Format());
     }
 }
 
@@ -136,6 +188,7 @@ extern "C" void app_main()
     ESP_LOGI(TAG, "On/Off Plug-in Unit on endpoint %u", s_endpoint_id);
 
     ESP_ERROR_CHECK(esp_matter::start(app_event_cb));
+    store_serial_number();
 
     // Power-loss Recovery: OnOff is non-volatile and esp-matter restores the
     // stored value at Power-up, so Output State is set to OFF again.
@@ -148,12 +201,13 @@ extern "C" void app_main()
     psmd_mode_callbacks_t callbacks = {};
     callbacks.on_output_changed = on_output_changed;
     callbacks.on_commissioning_window = on_commissioning_window;
+    callbacks.on_decommission = on_decommission;
     ESP_ERROR_CHECK(psmd_mode_init(commissioned, &callbacks));
     ESP_ERROR_CHECK(psmd_button_init(psmd_mode_button_event));
 
     // The commissioning window is open only while no fabric exists, so the
     // onboarding payload is printed from the values the device uses, then.
     if (!commissioned) {
-        PrintOnboardingCodes(chip::RendezvousInformationFlags(chip::RendezvousInformationFlag::kBLE));
+        print_onboarding_codes();
     }
 }

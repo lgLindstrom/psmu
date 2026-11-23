@@ -126,7 +126,7 @@ wording.
 | **Wi-Fi Provisioning** | How PSMD gets its Wi-Fi credentials: follows the method prescribed by Matter and Home Assistant. Exact flow TBD. | TBD |
 | **Power Factor** | The ratio between active and apparent power. Not measured; `phase_delay` is reported as `PowerFactor` (`TBD-C10`, `TBD-C19`). | Confirmed |
 | **Measurement Interval** | How often values are updated: 5 s, one value at a time to Home Assistant. | Confirmed |
-| **Development Board** | The ESP32-C6 board the firmware is brought up on: button GPIO3, `Operation Mode LED` GPIO2, `Output State` GPIO10, no `Output State LED` (`TBD-C20`). | Confirmed |
+| **Development Board** | The ESP32-C6 board the firmware is brought up on: button GPIO3 (active low), `Operation Mode LED` GPIO1 (active high), `Output State` GPIO2 (active high), no `Output State LED` (`TBD-C20`). | Confirmed |
 | **Production Board** | PSMD's own board. Its pin map and electrical design are open (`GAP-02`, [`hardware.md`](hardware.md)). | Proposed |
 | **Board Variant** | The board a build is made for, chosen with `CONFIG_PSMD_BOARD`. | Confirmed |
 

@@ -15,18 +15,18 @@
 
 #if CONFIG_PSMD_BOARD_DEV
 
-/* Button and Operation Mode LED are active low. */
+/* Operation Mode LED is active high; the button is active low. */
 #define PSMD_BUTTON_GPIO          3
 #define PSMD_BUTTON_PRESSED_LEVEL 0
-#define PSMD_MODE_LED_GPIO        2
-#define PSMD_MODE_LED_ON_LEVEL    0
+#define PSMD_MODE_LED_GPIO        1
+#define PSMD_MODE_LED_ON_LEVEL    1
 
 /* The dev board has no Output State LED. */
 #define PSMD_OUTPUT_LED_GPIO      (-1)
 #define PSMD_OUTPUT_LED_ON_LEVEL  1
 
 /* Stands in for the relay (active high) until the real PU exists. */
-#define PSMD_OUTPUT_GPIO          10
+#define PSMD_OUTPUT_GPIO          2
 #define PSMD_OUTPUT_ON_LEVEL      1
 
 #elif CONFIG_PSMD_BOARD_PRODUCTION
