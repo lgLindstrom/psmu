@@ -9,7 +9,7 @@ menu "PSMD"
             (GAP-02).
 
         config PSMD_BOARD_DEV
-            bool "Development board (ESP32-C6, button and Operation Mode LED)"
+            bool "Development board (ESP32-C6, button and both LEDs)"
         config PSMD_BOARD_PRODUCTION
             bool "Production board (pin map open, does not build yet)"
     endchoice

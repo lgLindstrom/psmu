@@ -74,24 +74,35 @@ Home Assistant and the `Matter Server` are outside PSMD and are responsible for
 | `Operation Mode` | Description | `Operation Mode LED` | Manual |
 |---|---|---|---|
 | **`LOCAL`** | Default mode at the first `Power-up`. No connection to Home Assistant. `Short Press` toggles `Output State`. | Fast blink for 5 s at `Power-up`, then off. | [manual.md §5.3](manual.md) |
-| **`PAIRING`** | The device is available for Matter `Commissioning`. `Short Press` has no effect. | Slow blink. | [manual.md §5.3](manual.md) |
+| **`PAIRING`** | A commissioning window is open: after a `Long Press`, or when the last `Fabric` is removed. The device is available for Matter `Commissioning`. `Short Press` has no effect. | Slow blink. | [manual.md §5.3](manual.md) |
 | **`OPERATIONAL`** | The device belongs to a `Fabric` and can be controlled from Home Assistant. `Short Press` toggles `Output State`. | Fast blink for 5 s at `Power-up`, then solid. | [manual.md §5.3](manual.md) |
 
 ## 4. Transitions
 
 | From | Event | To | Comment | Manual |
 |---|---|---|---|---|
-| – | `Power-up`, first time | `LOCAL` | Default mode. | [manual.md §5.3](manual.md) |
+| – | `Power-up`, first time | `LOCAL` | Default mode; pairing starts with `Long Press`. | [manual.md §5.3](manual.md) |
 | – | `Power-up`, previously connected | `OPERATIONAL` | Behavior when Home Assistant is unreachable is handled by ESP-Matter (`TBD-C13`). | [manual.md §5.3](manual.md) |
 | `LOCAL` | `Long Press` | `PAIRING` | | [manual.md §5.3](manual.md) |
 | `PAIRING` | Successful `Commissioning` | `OPERATIONAL` | The device is added to a `Fabric`. | [manual.md §5.3](manual.md) |
-| `PAIRING` | `Pairing Timeout` or failed connection | `LOCAL` | `Pairing Timeout` is 3 min; verification against ESP-Matter/Matter is open (`TBD-C13`). | [manual.md §4.4](manual.md) |
+| `PAIRING` | `Pairing Timeout` or failed connection | `OPERATIONAL` or `LOCAL` | `OPERATIONAL` when a `Fabric` remains, otherwise `LOCAL`. `Pairing Timeout` is 3 min; verification against ESP-Matter/Matter is open (`TBD-C13`). | [manual.md §4.4](manual.md) |
 | `PAIRING` | `Long Press` | `LOCAL` | `Decommissioning`: the window closes and the device factory-resets (`TBD-C21`). | [manual.md §5.3](manual.md) |
-| `OPERATIONAL` | The last `Fabric` is removed | `LOCAL` | The commissioning window opens again and the onboarding code is printed (`TBD-C21`). | [manual.md §4.4](manual.md) |
+| `OPERATIONAL` | The last `Fabric` is removed | `PAIRING` | The window opens again, the onboarding code is printed and the Wi-Fi credentials are erased (`TBD-C21`, `TBD-36`). | [manual.md §4.4](manual.md) |
 | `OPERATIONAL` | `Long Press` | `PAIRING` | | [manual.md §5.3](manual.md) |
 
 `Short Press` never changes `Operation Mode`; it only toggles `Output State` in
 `LOCAL` and `OPERATIONAL`.
+
+A device can belong to several `Fabric`s (multi-admin), and the `SupportedFabrics`
+attribute is mandatory with the range 5–254, so PSMD must support at least five
+`Fabric`s and must not delete one it did not create. What a removal of one of
+several means for `Operation Mode`, the LEDs and whether the device should be
+commissionable again is open (`TBD-32`).
+
+ESP-Matter opens a window at `Power-up` when the device has no `Fabric`; PSMD closes it again, so the device does not advertise for pairing until `Long Press` (`TBD-33`). The window also closes when the PASE session is established,
+before `Commissioning` has finished; the mode stays `PAIRING` until
+`CommissioningComplete` gives `OPERATIONAL`, and a close without an armed
+fail-safe gives `LOCAL` (`TBD-34`).
 
 ## 5. Button
 
@@ -110,12 +121,12 @@ GPIO's internal pull-up (`TBD-C20`).
 | LED | Behavior | Manual |
 |---|---|---|
 | **`Operation Mode LED`** (`LED1`) | Shows `Operation Mode`: fast blink for 5 s at `Power-up` (both `LOCAL` and `OPERATIONAL`), off in `LOCAL`, slow blink in `PAIRING`, solid in `OPERATIONAL`. | [manual.md §5.2](manual.md) |
-| **`Output State LED`** (`LED2`) | Mirrors `Output State`: on when `ON`, off when `OFF`, independent of `Operation Mode`. | [manual.md §5.2](manual.md) |
+| **`Output State LED`** (`LED2`) | Mirrors `Output State`: on when `ON`, off when `OFF`, independent of `Operation Mode`. It is on the `Output State` line, so it has no pin of its own. | [manual.md §5.2](manual.md) |
 
 | Pattern | On / off | Frequency |
 |---|---|---|
 | **`Fast Blink`** | 0.25 s / 0.25 s | 2 Hz, for 5 s at `Power-up`. |
-| **`Slow Blink`** | 0.5 s / 0.5 s | 1 Hz. |
+| **`Slow Blink`** | 1 s / 1 s | 0.5 Hz. |
 | **`Solid`** | On | – |
 | **`Off`** | Off | – |
 
@@ -124,17 +135,20 @@ only indication that the device is powered.
 
 Source: [manual.md §5.2](manual.md), [manual.md §8](manual.md).
 
-The development board has only an `Operation Mode LED` (`TBD-C20`); `Output
-State` is observed in Home Assistant and in the log there (§14).
+The development board has both LEDs (`TBD-C20`). The `Output State LED` is on the
+`Output State` line and has no pin of its own, so it shows the state and follows
+the relay; `Output State` is also observed in Home Assistant and in the log
+(§14).
 
 ## 7. Power-up and persistence
 
 - `Output State` is **always set to `OFF`** at `Power-up` (`Power-loss Recovery`).
   The `OnOff` cluster's `StartUpOnOff` is `Off` (§12).
-- `Operation Mode` at `Power-up` follows `Boot Mode`: `LOCAL` the first time,
-  otherwise `OPERATIONAL`. `Boot Mode` is read from the `Fabric` table: a device
-  that has a `Fabric` starts in `OPERATIONAL`, so no `Persisted State` is needed
-  for it.
+- `Operation Mode` at `Power-up`: `LOCAL` while the device has no `Fabric` (no
+  window is open), otherwise `OPERATIONAL`. Pairing starts with `Long Press`.
+- The Wi-Fi credentials are erased when the last `Fabric` is removed
+  (`TBD-36`), so the device leaves the network with its last administrator. A
+  controller-side removal is not a factory reset; everything else is kept.
 - Which state is otherwise stored and restored is not decided (`TBD-12`).
 - `Factory Reset` is handled by ESP-Matter (`TBD-C13`).
 
@@ -247,9 +261,11 @@ Whether energy measurement accumulates across `Power-up` is open (`TBD-12`).
 - The commissioning QR is the Matter onboarding payload, built from
   `VendorID`/`ProductID`, the discriminator and passcode, and the BLE rendezvous
   flag. The device prints it and the manual pairing code at every `Power-up`
-  while it has no `Fabric` (`main/app_main.cpp`); the commissioning window lasts
-  900 s. It is printed again whenever the window is opened later: with `Long
-  Press` into `PAIRING`, and after the last `Fabric` is removed (`TBD-C21`). Every unit currently carries chip's test values, so all units share one
+  whenever a commissioning window opens: with `Long Press` into `PAIRING`, and
+  after the last `Fabric` is removed (`TBD-C21`); the window lasts 3 min and the
+  `Operation Mode LED` slow-blinks while it is open (`TBD-33`). The window
+  ESP-Matter opens at `Power-up` is closed again, so no code is printed and the
+  device does not advertise for pairing then. Every unit currently carries chip's test values, so all units share one
   code (`TBD-24`).
 - [`manual.md` §4.4](manual.md) shows the code of the dev board as an example.
 - `Operation Mode` and transitions: §3–4. Measurement: §8.
@@ -259,7 +275,7 @@ Whether energy measurement accumulates across `Power-up` is open (`TBD-12`).
   the same sample happens at application level, not through a struct
   (`TBD-C12`).
 - The mandatory Basic Information attributes carry development values until the
-  product has its own (`TBD-30`): `VendorName` and `ProductName` are `PSMD`,
+  product has its own (`TBD-30`): `VendorName` is `Consius AB` and `ProductName` is `PSMD`,
   `VendorID` is `0xFFF1` and `ProductID` `0x8000` (the CSA test IDs, which the
   test attestation carries), `HardwareVersion` 1/`1.0`, `SoftwareVersion`
   1/`0.1.0` and `SerialNumber` `PSMD-DEV`; `NodeLabel` and `Location` keep their
@@ -329,14 +345,19 @@ unreachable are handled by ESP-Matter according to the Matter specification
   (`TBD-C17`). It is chosen only to verify the build and flash environment: it
   says nothing about the product's electrical design, pin map or enclosure. The
   product's own board follows the hardware (`GAP-07`).
-- The board is chosen at build time with `CONFIG_PSMD_BOARD`. The development
-  board variant (`CONFIG_PSMD_BOARD_DEV`, default) is the ESP32-C6 with the
-  button on GPIO3, active low; the `Operation Mode LED` on GPIO1, active high. It
-  has no `Output State LED`; `Output State` is on GPIO2, active high, standing
-  in for the relay (`TBD-C20`). The production board variant
-  (`CONFIG_PSMD_BOARD_PRODUCTION`) has no pin map yet (`GAP-02`): selecting it
-  stops the build with a message, so no pin is invented. Each board's pins and
-  active levels are in `components/psmd_board/include/psmd_board.h`.
+- The board is chosen at build time with `CONFIG_PSMD_BOARD` (the Kconfig lives
+  in `components/psmd_board/`). The development board variant
+  (`CONFIG_PSMD_BOARD_DEV`, default) is the ESP32-C6 with the button on GPIO3,
+  active low; the `Operation Mode LED` on GPIO2, active high; and `Output State`
+  on GPIO1, active high, standing in for the relay (`TBD-C20`). The `Output
+  State LED` is on the `Output State` line and has no pin of its own. The
+  production board variant (`CONFIG_PSMD_BOARD_PRODUCTION`) has no pin map yet
+  (`GAP-02`): selecting it stops the build with a message, so no pin is
+  invented. Each board's pins and active levels are in
+  `components/psmd_board/include/psmd_board.h`.
+- The tests are a separate ESP-IDF project in [`../test/`](../test) (Unity),
+  built and flashed the same way as the application. The manual test plans are
+  in [`../test/manual/`](../test/manual/).
 - `PU` and `MU` sit behind interfaces with a simulated backend, so the firmware
   runs without the real hardware (`TBD-C18`). The `MU` is simulated until the
   interface in `TBD-28` is implemented behind the same interface; the product

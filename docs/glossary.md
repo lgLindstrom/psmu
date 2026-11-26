@@ -44,7 +44,7 @@ software. Approved abbreviations where they fit: **`Mode LED`** and
 | **Press Threshold** | Trycktröskel | 3 s – the boundary between `Short Press` and `Long Press`. | Confirmed |
 | **`Operation Mode LED`** | Lägeslysdiod | Shows `Operation Mode`; also called `LED1`. See `manual.md` §5.2. | Confirmed |
 | **`Output State LED`** | Utgångslysdiod | Mirrors `Output State`; also called `LED2`. See `manual.md` §5.2. | Confirmed |
-| **Slow Blink** | Långsamt blink | 0.5 s on / 0.5 s off (1 Hz). | Confirmed |
+| **Slow Blink** | Långsamt blink | 1 s on / 1 s off (0.5 Hz). | Confirmed |
 | **Fast Blink** | Snabbt blink | 0.25 s on / 0.25 s off (2 Hz). | Confirmed |
 | **Solid** | Fast sken | An LED that is on without blinking. | Confirmed |
 | **Off** | Släckt | An LED that is not lit. | Confirmed |
@@ -126,7 +126,7 @@ wording.
 | **Wi-Fi Provisioning** | How PSMD gets its Wi-Fi credentials: follows the method prescribed by Matter and Home Assistant. Exact flow TBD. | TBD |
 | **Power Factor** | The ratio between active and apparent power. Not measured; `phase_delay` is reported as `PowerFactor` (`TBD-C10`, `TBD-C19`). | Confirmed |
 | **Measurement Interval** | How often values are updated: 5 s, one value at a time to Home Assistant. | Confirmed |
-| **Development Board** | The ESP32-C6 board the firmware is brought up on: button GPIO3 (active low), `Operation Mode LED` GPIO1 (active high), `Output State` GPIO2 (active high), no `Output State LED` (`TBD-C20`). | Confirmed |
+| **Development Board** | The ESP32-C6 board the firmware is brought up on: button GPIO3 (active low), `Operation Mode LED` GPIO2 (active high), `Output State` GPIO1 (active high) with the `Output State LED` on the same line (`TBD-C20`). | Confirmed |
 | **Production Board** | PSMD's own board. Its pin map and electrical design are open (`GAP-02`, [`hardware.md`](hardware.md)). | Proposed |
 | **Board Variant** | The board a build is made for, chosen with `CONFIG_PSMD_BOARD`. | Confirmed |
 

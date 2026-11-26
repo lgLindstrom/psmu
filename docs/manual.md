@@ -137,7 +137,7 @@ läggas till.
    blinka långsamt. Enheten är nu i `PAIRING`.
 2. Öppna Home Assistant och välj att lägga till en enhet via Matter.
 3. Ange parkopplingskoden från PSMD: skanna QR-koden nedan eller skriv den
-   manuella koden. Enheten skriver båda i loggen vid `Power-up`.
+   manuella koden. Enheten skriver båda i loggen när `PAIRING` öppnas.
 4. Välj rum och namn, och slutför guiden.
 5. När anslutningen lyckas övergår enheten till `OPERATIONAL` och `Operation Mode LED`
    lyser fast.
@@ -145,7 +145,7 @@ läggas till.
 
 ![QR-kod för parkoppling](images/qr-pairing-example.png)
 
-*Exempel: QR-koden som utvecklingskortet skriver i loggen vid `Power-up`
+*Exempel: QR-koden som utvecklingskortet skriver i loggen när `PAIRING` öppnas
 (`MT:Y.K9042C00KA0648G00`, manuell kod `34970112332`). [Var koden för en färdig
 enhet finns]*
 
@@ -183,11 +183,11 @@ På enheten finns dessutom:
 | Komponent | Beteende |
 |---|---|
 | **`Button`** | `Short Press` (≤ 3 s) växlar `Output State` i `LOCAL` och `OPERATIONAL`. `Long Press` (> 3 s) växlar `Operation Mode` till `PAIRING` från `LOCAL` och `OPERATIONAL`, och från `PAIRING` tillbaka till `LOCAL`. |
-| **`Operation Mode LED`** | Blinkar snabbt i 5 s vid `Power-up` (2 Hz: 0,25 s tänd / 0,25 s släckt), både i `LOCAL` och `OPERATIONAL`. Därefter släckt i `LOCAL`, långsamt blinkande i `PAIRING` (0,5 s tänd / 0,5 s släckt) och fast sken i `OPERATIONAL`. |
+| **`Operation Mode LED`** | Blinkar snabbt i 5 s vid `Power-up` (2 Hz: 0,25 s tänd / 0,25 s släckt), både i `LOCAL` och `OPERATIONAL`. Därefter släckt i `LOCAL`, långsamt blinkande i `PAIRING` (1 s tänd / 1 s släckt) och fast sken i `OPERATIONAL`. |
 | **`Output State LED`** | Följer `Output State` oberoende av `Operation Mode`: tänd vid `ON`, släckt vid `OFF`. |
 
 Blinkmönstren anges som tänd tid / släckt tid: `Fast Blink` är 2 Hz och
-`Slow Blink` 1 Hz. Endast `Operation Mode LED` skiljer driftlägena åt;
+`Slow Blink` 0,5 Hz. Endast `Operation Mode LED` skiljer driftlägena åt;
 `Output State LED` visar bara utgången.
 
 ### 5.3 Driftlägen (Operation Modes)
@@ -197,8 +197,8 @@ Driftläget beskriver enhetens förhållande till Home Assistant – inte om utg
 
 | Driftläge | Beskrivning | Lämnas genom |
 |---|---|---|
-| **`LOCAL`** | Standardläge vid första `Power-up`. Ingen Home Assistant-anslutning. `Operation Mode LED` blinkar snabbt i 5 s vid `Power-up` och är därefter släckt. `Short Press` växlar `Output State`. | `Long Press` → `PAIRING` |
-| **`PAIRING`** | Enheten är tillgänglig för Matter-`Commissioning`. `Operation Mode LED` blinkar långsamt (0,5 s tänd / 0,5 s släckt). `Short Press` har ingen effekt. | Lyckad `Commissioning` → `OPERATIONAL`, `Pairing Timeout`/misslyckande → `LOCAL`, eller `Long Press` → `LOCAL` |
+| **`LOCAL`** | Standardläge vid första `Power-up` och när inget parningsfönster är öppet. Ingen Home Assistant-anslutning. `Operation Mode LED` blinkar snabbt i 5 s vid `Power-up` och är därefter släckt. `Short Press` växlar `Output State`. | `Long Press` → `PAIRING` |
+| **`PAIRING`** | Ett parningsfönster är öppet: efter `Long Press`, och när sista `Fabric` tas bort. Enheten är tillgänglig för Matter-`Commissioning`. `Operation Mode LED` blinkar långsamt (1 s tänd / 1 s släckt). `Short Press` har ingen effekt. | Lyckad `Commissioning` → `OPERATIONAL`, `Pairing Timeout`/misslyckande → `OPERATIONAL` om en `Fabric` finns, annars `LOCAL`, eller `Long Press` → `LOCAL` |
 | **`OPERATIONAL`** | Enheten är ansluten till en `Fabric` och kan styras via Home Assistant. `Operation Mode LED` blinkar snabbt i 5 s vid `Power-up` och lyser därefter fast. `Short Press` växlar `Output State`. Enheten startar i detta läge vid `Power-up` om den tidigare varit ansluten. | `Long Press` → `PAIRING` |
 
 **Tidsgränser:**
@@ -304,15 +304,15 @@ oförändrade i programvara och dokumentation.
 | Term (EN) | Svenska | Kort förklaring |
 |---|---|---|
 | `Operation Mode` | Driftläge | `LOCAL`, `PAIRING` eller `OPERATIONAL` |
-| `LOCAL` | Lokalt läge | Standardläge, ingen anslutning till Home Assistant |
-| `PAIRING` | Parkopplingsläge | Tillgänglig för Matter-`Commissioning` |
+| `LOCAL` | Lokalt läge | Standardläge, inget parningsfönster och ingen anslutning till Home Assistant |
+| `PAIRING` | Parkopplingsläge | Parningsfönster öppet, tillgänglig för Matter-`Commissioning` |
 | `OPERATIONAL` | Anslutet läge | Ansluten till Home Assistant via Matter |
 | `Output State` | Utgångstillstånd | `ON` eller `OFF` |
 | `Short Press` / `Long Press` | Kort/långt tryck | ≤ 3 s respektive > 3 s |
 | `Operation Mode LED` / `Output State LED` | Lägeslysdiod / utgångslysdiod | Visar driftläge respektive utgångstillstånd |
 | `Commissioning` | Idrifttagning | Matter-processen för att lägga till enheten |
 | `Pairing Timeout` | Parkopplingstimeout | Preliminärt 3 min, sedan återgång till `LOCAL` |
-| `Slow Blink` | Långsamt blink | 0,5 s tänd / 0,5 s släckt |
+| `Slow Blink` | Långsamt blink | 1 s tänd / 1 s släckt |
 | `Fast Blink` | Snabbt blink | 0,25 s tänd / 0,25 s släckt (2 Hz) |
 | `Power-loss Recovery` | Återstart efter strömavbrott | `Output State` sätts alltid till `OFF` |
 | `Measurement` | Mätning | Endast i `OPERATIONAL`, även vid `OFF` |

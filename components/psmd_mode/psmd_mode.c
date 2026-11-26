@@ -13,6 +13,7 @@ static const char *TAG = "psmd_mode";
 
 static psmd_mode_t s_mode = PSMD_MODE_LOCAL;
 static psmd_mode_callbacks_t s_callbacks;
+static bool s_initialized;
 static bool s_startup = false;   /* Fast Blink for 5 s at Power-up. */
 static esp_timer_handle_t s_startup_timer;
 
@@ -29,6 +30,7 @@ static const char *mode_name(psmd_mode_t mode)
     }
 }
 
+/* The startup blink is not a mode: it overrides the mode's pattern for 5 s. */
 static void apply_pattern(void)
 {
     if (s_startup) {
@@ -81,7 +83,18 @@ esp_err_t psmd_mode_init(bool commissioned, const psmd_mode_callbacks_t *callbac
 
     s_startup = true;
     apply_pattern();
+    s_initialized = true;
     return esp_timer_start_once(s_startup_timer, STARTUP_BLINK_US);
+}
+
+void psmd_mode_pairing(void)
+{
+    // A window opened before this module is initialized belongs to the boot
+    // sequence that app_main closes again.
+    if (!s_initialized) {
+        return;
+    }
+    set_mode(PSMD_MODE_PAIRING);
 }
 
 psmd_mode_t psmd_mode_get(void)
@@ -126,10 +139,10 @@ void psmd_mode_commissioned(void)
     set_mode(PSMD_MODE_OPERATIONAL);
 }
 
-void psmd_mode_window_closed(void)
+void psmd_mode_window_closed(bool commissioned)
 {
     if (s_mode == PSMD_MODE_PAIRING) {
-        set_mode(PSMD_MODE_LOCAL);
+        set_mode(commissioned ? PSMD_MODE_OPERATIONAL : PSMD_MODE_LOCAL);
     }
 }
 

@@ -15,7 +15,7 @@ static const char *TAG = "psmd_led";
 
 #define LED_POLL_INTERVAL_MS 10
 #define FAST_BLINK_HALF_US   (250 * 1000)
-#define SLOW_BLINK_HALF_US   (500 * 1000)
+#define SLOW_BLINK_HALF_US   (1000 * 1000)
 
 /* Written by psmd_led_set_pattern() from other tasks, read by led_task(). */
 static volatile psmd_led_pattern_t s_pattern = PSMD_LED_PATTERN_OFF;
@@ -27,6 +27,8 @@ static void set_level(bool on)
     }
 }
 
+/* The phase comes from the absolute time, so changing the pattern does not
+ * restart a blink that is already running. */
 static bool level_for(psmd_led_pattern_t pattern, int64_t now_us)
 {
     switch (pattern) {

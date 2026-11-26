@@ -17,14 +17,14 @@ typedef enum {
     PSMD_LED_PATTERN_SOLID,
     /** Fast Blink: 0.25 s on / 0.25 s off (2 Hz). */
     PSMD_LED_PATTERN_FAST_BLINK,
-    /** Slow Blink: 0.5 s on / 0.5 s off (1 Hz). */
+    /** Slow Blink: 1 s on / 1 s off (0.5 Hz). */
     PSMD_LED_PATTERN_SLOW_BLINK,
 } psmd_led_pattern_t;
 
-/** Configure the Operation Mode LED and start its driver. It starts off. */
+/** Configure the Operation Mode LED and start its task (priority 5, 2 KB stack). It starts off. Call once; there is no deinit. */
 esp_err_t psmd_led_init(void);
 
-/** Set the Operation Mode LED pattern. */
+/** Set the pattern: any task may call it, and the task draws it within 10 ms. Returns ESP_OK. */
 esp_err_t psmd_led_set_pattern(psmd_led_pattern_t pattern);
 
 #ifdef __cplusplus

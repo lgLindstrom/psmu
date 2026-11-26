@@ -31,12 +31,15 @@ static void button_task(void *arg)
     bool pressed = false;          /* debounced state */
     int64_t raw_since = esp_timer_get_time();
     int64_t pressed_at = 0;
-    bool long_press_sent = false;
+    bool long_press_sent = false;  /* Long Press is reported once per press */
 
     for (;;) {
         int64_t now = esp_timer_get_time();
         bool reading = is_pressed();
 
+        /* A raw change restarts the 30 ms window; only a level that stays put
+         * becomes the debounced state. A release after Long Press reports
+         * nothing. */
         if (reading != raw) {
             raw = reading;
             raw_since = now;

@@ -2,14 +2,20 @@
 
 **Power Switch and Measurement Device (PSMD)**
 
-> Related: [`../project.md`](../project.md), [`../specification.md`](../specification.md),
-> [`../decisions.md`](../decisions.md), [`../manual.md`](../manual.md)
+> Related: [`../../docs/project.md`](../../docs/project.md), [`../../docs/specification.md`](../../docs/specification.md),
+> [`../../docs/decisions.md`](../../docs/decisions.md), [`../../docs/manual.md`](../../docs/manual.md)
 
 > **Owner:** the manual tests that verify M2 (pairing with Home Assistant) and
 > M3 (development board, `Operation Mode`, button and LEDs) on the development
 > board.
 > **Read when needed:** before and while testing a build on the development
 > board, and when recording the result of M2 or M3.
+
+> **Status:** historical, kept as the M2/M3 record with its `TC-NN` IDs. The
+> live plans are [`manual-power-up.md`](manual-power-up.md),
+> [`manual-local-control.md`](manual-local-control.md) and
+> [`manual-matter.md`](manual-matter.md); the mapping is in
+> [`README.md`](README.md).
 
 ## 1. Scope
 
@@ -88,9 +94,9 @@ Run them in order; each one starts from the state the previous case left.
 | TC-01 – TC-15 | pass / fail / not run, with a note per failure |
 
 A failed case is recorded as an open question or gap in
-[`../decisions.md`](../decisions.md) when it needs a decision, and the result of
+[`../../docs/decisions.md`](../../docs/decisions.md) when it needs a decision, and the result of
 M2 and M3 is recorded in the firmware increment table in
-[`../project.md`](../project.md) §4.
+[`../../docs/project.md`](../../docs/project.md) §4.
 
 ## 6. Known pitfalls
 

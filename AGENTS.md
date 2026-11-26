@@ -47,7 +47,7 @@ magnitude more than reading too few.
 | Specification (all) | `docs/specification.md` | `decisions.md` | `manual.md`, Matter extracts |
 | Architecture / Matter | `specification.md` §2, §11–15, `docs/lookup/matter-1.6.1/INDEX.md` | targeted `grep` in `text/*.txt` | whole `text/*.txt`, PDFs, `manual.md` |
 | ESP-IDF / ESP-Matter API | `docs/lookup/esp-idf.md` | targeted `grep` in `$IDF_PATH/docs/en/` or in `managed_components/espressif__esp_matter/` | whole doc trees, `$IDF_PATH` in a codegraph index (734 MB) |
-| Firmware / C code | the `main/` and `components/` files the task touches | `specification.md` §3–9 and §14 (behavior, build), the ESP-IDF project standard in `README.md`, the `esp-idf` skill | `manual.md`, Matter extracts |
+| Firmware / C code | the `main/`, `components/` and `test/` files the task touches | `specification.md` §3–9 and §14 (behavior, build), the ESP-IDF project standard in `README.md`, the `esp-idf` skill | `manual.md`, Matter extracts |
 | Requirements | `specification.md` §10 | `decisions.md` | Matter extracts, `manual.md` |
 | Decision / open question | `decisions.md` (grep on the ID or topic) | the document the question concerns | everything else |
 | Gap (what is missing) | `decisions.md` (gaps) | `specification.md` §2, §11–15 (where the gap gets filled in) | `manual.md`, Matter extracts |
@@ -88,7 +88,8 @@ Rules:
   `docs/README.md` §Workflow: short-lived branches from `main`, pull request,
   merge, delete branch.
 - Firmware code logs with the ESP-IDF macros and sets a per-module `TAG` that
-  always starts with `psmd_` – see `docs/specification.md` §15.
+  always starts with `psmd_` (`README.md` §Logging), and documents its API in
+  the headers rather than in the `.c` files (`README.md` §Code documentation).
 - Keep the manual's numbered section structure (`## 1.`, `### 4.4`, …) intact
   when editing; do not renumber sections without updating cross-references.
 - Placeholders look like `[text]`. Do **not** invent values to fill them. If a

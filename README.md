@@ -35,12 +35,13 @@ documentation index is in [`docs/README.md`](docs/README.md).
 
 ## Board variants
 
-- The board is chosen with `CONFIG_PSMD_BOARD` (`main/Kconfig.projbuild`); the
+- The board is chosen with `CONFIG_PSMD_BOARD` (`components/psmd_board/Kconfig`); the
   pins and active levels of each board are in
   `components/psmd_board/include/psmd_board.h`.
 - `CONFIG_PSMD_BOARD_DEV` (default) is the ESP32-C6 development board: button
-  GPIO3 (active low), `Operation Mode LED` GPIO1 (active high) and `Output
-  State` on GPIO2 (active high). It has no `Output State LED`.
+  GPIO3 (active low), `Operation Mode LED` GPIO2 (active high) and `Output
+  State` on GPIO1 (active high). The `Output State LED` is on the `Output State`
+  line, so there is no separate LED pin.
 - `CONFIG_PSMD_BOARD_PRODUCTION` is a placeholder: its pin map is open
   (`GAP-02`), so selecting it stops the build with a message instead of
   inventing pins.
@@ -50,8 +51,8 @@ documentation index is in [`docs/README.md`](docs/README.md).
 - `PU` and `MU` sit behind interfaces with a simulated backend, so the firmware
   runs without the real hardware (`TBD-C18`). The increments are in
   [`docs/project.md`](docs/project.md) §4.
-- Until the real `PU` exists, `Output State` is the board's `Output` GPIO: on
-  the development board GPIO2.
+- Until the real `PU` exists, `Output State` is the board's output line: on
+  the development board GPIO1.
 - `CONFIG_PSMD_MU_SIM` selects the simulated `MU` (M4); the tests keep using it
   after the real `MU` is connected (M7).
 
@@ -62,6 +63,21 @@ documentation index is in [`docs/README.md`](docs/README.md).
 - Every module that logs defines `static const char *TAG`. `TAG` always starts
   with `psmd_` followed by the module name, e.g. `psmd_meas`, so that PSMD's own
   logs can be filtered out of the ESP-IDF and ESP-Matter libraries' output.
+
+## Code documentation
+
+- The headers are the API: every `include/*.h` opens with a short comment saying
+  what the module is and why it exists, and every exported function, type and
+  enum value has a `/** ... */` comment stating its contract – what it does,
+  what it returns, units, ranges and caller constraints (task, ISR). It does not
+  restate the signature.
+- The code is self-documenting: small functions and names from
+  [`docs/glossary.md`](docs/glossary.md) and the specification (`Output State`,
+  not `led1`). A comment that repeats the code is a rename waiting to happen.
+- A comment in a `.c` file says only what the code cannot: why, hardware
+  behaviour, timing, an error contract. One line, in English.
+- No commented-out code, and no `TODO` without a decision ID from
+  [`docs/decisions.md`](docs/decisions.md).
 
 ## Troubleshooting
 
