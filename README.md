@@ -52,8 +52,17 @@ documentation index is in [`docs/README.md`](docs/README.md).
   [`docs/project.md`](docs/project.md) §4.
 - Until the real `PU` exists, `Output State` is the board's `Output` GPIO: on
   the development board GPIO2.
-- `CONFIG_PSMD_MU_SIM` selects the simulated `MU` (M4); the tests keep using it
-  after the real `MU` is connected (M7).
+- `CONFIG_PSMD_MU_SIM` selects the simulated `MU` (M4); `CONFIG_PSMD_MU_I2C`
+  selects the real backend and stops the build until the interface in `TBD-28`
+  exists. The simulated `MU` measures on its own 5 s cycle, independent of
+  `Operation Mode`; `MC` reads it only in `OPERATIONAL`. The tests keep using
+  the simulator after M7.
+- The simulated `MU` models a fixed 180 W load while `Output State` is `ON`;
+  `OFF` gives 0 instantaneous values and the accumulated energy stays.
+- The simulated accumulator is in RAM, so a dev-board power cycle resets it.
+  The real `MU` owns the value across `MC` power-up (`TBD-12`).
+- `components/psmd_mu/test/host/run.sh` checks the simulated values and energy
+  accumulation on the host.
 
 ## Logging
 

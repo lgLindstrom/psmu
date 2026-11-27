@@ -60,7 +60,7 @@ flowchart LR
 PSMD is responsible for:
 
 - switching `Output State` (`ON`/`OFF`),
-- measuring voltage, current and power in `OPERATIONAL`,
+- measuring voltage, current and power, and reporting them in `OPERATIONAL`,
 - handling `Operation Mode` and local operation,
 - storing the configuration and state that `Power-up` requires,
 - working without a cloud service or an internet connection in `LOCAL`, sending
@@ -135,34 +135,42 @@ State` is observed in Home Assistant and in the log there (§14).
   otherwise `OPERATIONAL`. `Boot Mode` is read from the `Fabric` table: a device
   that has a `Fabric` starts in `OPERATIONAL`, so no `Persisted State` is needed
   for it.
-- Which state is otherwise stored and restored is not decided (`TBD-12`).
+- Which state is otherwise stored and restored is not decided; accumulated
+  energy is owned by `MU` (`TBD-C22`).
 - `Factory Reset` is handled by ESP-Matter (`TBD-C13`).
 
 Source: [manual.md §4.2](manual.md), [manual.md §5.3](manual.md), [manual.md §6.1](manual.md).
 
 ## 8. Measurement
 
-Measurement runs **only in `OPERATIONAL`**. Nothing is measured in `LOCAL` or
-`PAIRING`. Measurement is active also when `Output State` is `OFF`. The values
-are computed and reported also when no `Load` is connected; they are then 0
-(`TBD-C16`).
+The `MU` measures continuously on its own `Measurement Interval` and has no
+knowledge of `Operation Mode`. `MC` reads the latest sample and reports measured
+values only in `OPERATIONAL`; nothing is published in `LOCAL` or `PAIRING`.
+Measurement is active also when `Output State` is `OFF`. The instantaneous
+values are 0 when no `Load` is connected (`TBD-C16`); accumulated energy keeps
+its value.
 
-| Quantity | Status |
-|---|---|
-| Voltage | Decided as a measured value. |
-| Current | Decided as a measured value. |
-| Apparent power | Decided as a measured value. |
-| Active power | Decided as a measured value. |
-| Reactive power | Decided as a measured value. |
-| Phase delay (`phase_delay`) | Decided as a measured value; reported as `PowerFactor` in percent100ths (`TBD-C10`, `TBD-C19`). |
-| Frequency | Decided as a measured value; whether it is exposed is decided in `TBD-10`. |
-| Energy | Decided as a measured value, but accumulation across `Power-up` is not decided (`TBD-12`). |
+| Quantity | Type | Status |
+|---|---|---|
+| Voltage | Instantaneous | Decided as a measured value. |
+| Current | Instantaneous | Decided as a measured value. |
+| Apparent power | Instantaneous | Decided as a measured value. |
+| Active power | Instantaneous | Decided as a measured value. |
+| Reactive power | Instantaneous | Decided as a measured value. |
+| Phase delay (`phase_delay`) | Instantaneous | Decided as a measured value; reported as `PowerFactor` in percent100ths (`TBD-C10`, `TBD-C19`). |
+| Frequency | Instantaneous | Decided as a measured value; whether it is exposed is decided in `TBD-10`. |
+| Energy | Accumulated | Decided as a measured value; owned by `MU`. It continues across `MC` power-up; across `MU` power loss it is open (`TBD-12`). Reset from Home Assistant is open (`TBD-32`). |
 
 The measurement is performed by **MU** at a fixed `Measurement Interval` of
-**5 s** (`TBD-C11`); all 8 measured values are synchronous (the same measurement
-cycle). `MC` reads them over I2C (`TBD-28`) and republishes them as Matter
-attributes, one value per attribute, so that Home Assistant can use its standard
-mapping. No custom struct with all values is used (`TBD-C12`).
+**5 s** (`TBD-C11`); all 8 measured values are sampled synchronously (the same
+measurement cycle). `MC` reads the latest sample over I2C (`TBD-28`) and
+republishes it as Matter attributes, one value per attribute, so that Home
+Assistant can use its standard mapping. No custom struct with all values is used
+(`TBD-C12`).
+
+`MU` owns the accumulated energy. It continues to count while `MC` is in
+`LOCAL` or `PAIRING` or is powered off, so the value read when `OPERATIONAL`
+resumes includes that period. `MC` never accumulates or derives energy.
 
 A **measured value** is produced by the `MU`. `MC` never measures or derives
 one.
@@ -192,10 +200,11 @@ specification in this document.
 | REQ-F-001 | `Short Press` shall toggle `Output State` in `LOCAL` and `OPERATIONAL`. | K1 | The output toggles on a press ≤ 3 s. | §5 | [manual.md §5.2](manual.md) [manual.md §6.1](manual.md) | [ ] | Confirmed |
 | REQ-F-002 | `Long Press` shall change `Operation Mode` according to the specification. | K1 | `LOCAL`/`OPERATIONAL` → `PAIRING`; `PAIRING` → `LOCAL`. | §4–5 | [manual.md §5.2](manual.md) [manual.md §5.3](manual.md) | [ ] | Confirmed |
 | REQ-F-003 | `Output State` shall always be `OFF` at `Power-up`. | K1 | The output is `OFF` after every power-up. | §7 | [manual.md §4.2](manual.md) [manual.md §5.3](manual.md) | [ ] | Confirmed |
-| REQ-F-004 | Measurement shall run only in `OPERATIONAL`. | K1 | No measured values are updated in `LOCAL` or `PAIRING`. | §8 | [manual.md §6.2](manual.md) | [ ] | Confirmed |
+| REQ-F-004 | `MU` shall measure continuously, independent of `Operation Mode`; `MC` shall read and report measured values only in `OPERATIONAL`. | K1 | Measured values continue to change in `LOCAL` and `PAIRING`, and no measured values are published there. | §8 | [manual.md §6.2](manual.md) | [ ] | Confirmed |
 | REQ-F-005 | `Operation Mode LED` and `Output State LED` shall follow the specified patterns. | K1 | Blink and light patterns match the specification. | §6 | [manual.md §5.2](manual.md) | [ ] | Confirmed |
 | REQ-F-006 | `LOCAL` shall work without a cloud service or an internet connection, and without sending data outside the local network. | K1 | With the network disabled, `Short Press` still toggles `Output State`. | §2, §9 | [manual.md §2.1](manual.md) [manual.md §4.3](manual.md) | [ ] | Confirmed |
-| REQ-F-007 | Measured values shall be computed and reported also when no `Load` is connected. | K1 | Values are reported as 0 with no load in `OPERATIONAL`. | §8 | [manual.md §6.2](manual.md) [manual.md §8](manual.md) | [ ] | Confirmed |
+| REQ-F-007 | Measured values shall be computed and reported also when no `Load` is connected. | K1 | Instantaneous values are reported as 0 with no load in `OPERATIONAL`; accumulated energy keeps its value. | §8 | [manual.md §6.2](manual.md) [manual.md §8](manual.md) | [ ] | Confirmed |
+| REQ-F-008 | Accumulated energy shall be owned by `MU` and continue independently of `Operation Mode` and `MC` power-up. | K1 | Energy grows while `MC` is in `LOCAL`/`PAIRING` and does not reset on an `MC` restart. | §8 | [manual.md §6.2](manual.md) | [ ] | Confirmed |
 
 Non-functional requirements and concrete acceptance tests tied to each
 requirement are still missing; see the gap in [`decisions.md`](decisions.md).
@@ -238,7 +247,7 @@ in `TBD-10`.
 
 Matter scales measured values in mV, mA, mW and mHz, while the data model
 specifies `int64` without a unit. The scaling has to be decided (`TBD-20`).
-Whether energy measurement accumulates across `Power-up` is open (`TBD-12`).
+Energy accumulates across `MC` power-up because `MU` owns it; whether it survives `MU` power loss is open (`TBD-12`).
 
 ## 12. Matter and Home Assistant
 
@@ -338,9 +347,15 @@ unreachable are handled by ESP-Matter according to the Matter specification
   stops the build with a message, so no pin is invented. Each board's pins and
   active levels are in `components/psmd_board/include/psmd_board.h`.
 - `PU` and `MU` sit behind interfaces with a simulated backend, so the firmware
-  runs without the real hardware (`TBD-C18`). The `MU` is simulated until the
-  interface in `TBD-28` is implemented behind the same interface; the product
-  build uses the I2C backend.
+  runs without the real hardware (`TBD-C18`).
+- `MU` is reached through `psmd_mu`, with two build-time backends:
+  `CONFIG_PSMD_MU_SIM` (default on the development board) and
+  `CONFIG_PSMD_MU_I2C` (the real interface, `TBD-28`; selecting it stops the
+  build until the protocol exists). The simulated `MU` measures on its own 5 s
+  cycle and does not follow `Operation Mode`; it models a fixed load while
+  `Output State` is `ON`, and 0 instantaneous values while it is `OFF`. Its
+  accumulator is in RAM, so a power cycle resets it; the real `MU` owns the
+  value across `MC` power-up (`TBD-12`). `MC` reads it only in `OPERATIONAL`.
 - The Matter component recommends ESP-IDF v6.0.2; 6.1 is built and fits the
   partition, so the deviation is kept (`TBD-21`).
 - Firmware and application versions are stored according to the data model

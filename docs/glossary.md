@@ -83,8 +83,10 @@ The behavior is in `manual.md` §6.2.
 
 | Term (EN) | Swedish (manual.md) | Definition | Status |
 |---|---|---|---|
-| **Measurement** | Mätning | Collection of electrical quantities from the `Load`. | Confirmed |
+| **Measurement** | Mätning | Continuous collection of electrical quantities from the `Load` by the `MU`, independent of `Operation Mode`. | Confirmed |
 | **Measured Value** | Mätvärde | A quantity produced by the `MU` and republished by `MC` as a Matter attribute. `MC` never measures or derives one. | Confirmed |
+| **Instantaneous Value** | Momentanvärde | A measured value for the current sample: voltage, current, apparent/active/reactive power, phase delay and frequency. | Confirmed |
+| **Accumulated Value** | Ackumulerat värde | A measured value summed over time. Energy is the only accumulated value. | Confirmed |
 | **Voltage** | Spänning | Measured voltage across the `Load` (V). | Proposed |
 | **Current** | Ström | Measured current through the `Load` (A). | Proposed |
 | **Apparent Power** | Skenbar effekt | Voltage times current (VA). | Proposed |
@@ -92,7 +94,7 @@ The behavior is in `manual.md` §6.2.
 | **Reactive Power** | Reaktiv effekt | Power that oscillates between source and `Load` (var). | Proposed |
 | **Phase Delay** | Fasförskjutning | Phase shift between voltage and current. Reported as `PowerFactor` in percent100ths (`TBD-C10`, `TBD-C19`). | Proposed |
 | **Frequency** | Frekvens | Mains frequency (Hz). | Proposed |
-| **Energy** | Energiförbrukning | Accumulated consumption over time (kWh). Accumulation across `Power-up` is open (`TBD-12`). | Proposed |
+| **Energy** | Energiförbrukning | Accumulated consumption over time, owned by the `MU`. It continues across `MC` power-up; across `MU` power loss it is open (`TBD-12`). Reset from Home Assistant is open (`TBD-32`). Reported in mWh. | Proposed |
 
 ## Internal terms
 
@@ -105,7 +107,7 @@ wording.
 |---|---|---|
 | **Matter Controller** | Functional unit that handles the interface to Home Assistant through the Matter protocol. | Confirmed |
 | **MC** | Abbreviation for `Matter Controller`. | Confirmed |
-| **Measurement Unit** | Functional unit that performs the measurement and produces the measured values. | Confirmed |
+| **Measurement Unit** | Functional unit that performs the measurement and produces the measured values. It measures continuously, independent of `Operation Mode`. | Confirmed |
 | **MU** | Abbreviation for `Measurement Unit`. | Confirmed |
 | **Power Unit** | Functional unit that is the interface to the input and output signals. | Confirmed |
 | **PU** | Abbreviation for `Power Unit`. | Confirmed |

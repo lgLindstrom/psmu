@@ -21,7 +21,7 @@ What the plan covers:
   decommissioning (M2).
 - The Matter values Home Assistant shows for PSMD.
 
-Not covered: measurement (`M5`–`M6`), the real `PU`/`MU` (`M7`), electrical
+Not covered: measurement (`M4`–`M6`), the real `PU`/`MU` (`M7`), electrical
 safety and the production board.
 
 ## 2. Preconditions

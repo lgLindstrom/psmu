@@ -27,7 +27,7 @@ verified.
 
 | ID | Source | Description |
 |---|---|---|
-| **K1** | The product owner | Answers and requirements from the project discussion (2026-11-04). |
+| **K1** | The product owner | Answers and requirements from the project discussion (2026-11-04 onwards). |
 | **K2** | The Matter specification | The Matter specification and its behavioral requirements. |
 | **K3** | Home Assistant | Home Assistant's Matter Server and integration flow. |
 | **K4** | Product requirements / electrical safety | Requirements on function, ratings and safety. |
@@ -49,8 +49,9 @@ verified.
 | ID | Question | Source | Affects | Status / next step |
 |---|---|---|---|---|
 | TBD-10 | Which of the eight measured values are exposed: voltage, current, apparent power, active power, reactive power, phase delay, frequency, energy? | K4 | Manual 6.2, Matter clusters | Awaiting decision |
-| TBD-12 | Should energy measurement accumulate across a power loss (`Persisted State`)? | K4 | Energy measurement | Awaiting decision |
+| TBD-12 | Should energy measurement accumulate across a power loss (`Persisted State`)? | K4 | Energy measurement | Partly decided: `MU` owns the energy and it continues across `MC` power-up. Open: whether `MU` keeps it across its own power loss. |
 | TBD-28 | Where is the MU interface specification, and does it cover bus, address, register or command protocol, sample format, units, cycle and error handling? | K1 | `specification.md` §2, §8, §11, `GAP-02` | Awaiting the specification from the product owner |
+| TBD-32 | How is the accumulated energy reset from Home Assistant? | K1 | `specification.md` §8, `project.md` M6 | Deferred; no increment is blocked by it. Matter 1.6.1 has no writable cumulative-energy attribute and no reset command; HA's Matter integration exposes no vendor commands. Candidates: an HA Utility Meter on `CumulativeEnergyImported`, a vendor-specific command, or a physical reset gesture. |
 
 ### Hardware and electrical safety
 
@@ -83,7 +84,7 @@ verified.
 
 | ID | Question | Decision | Source |
 |---|---|---|---|
-| TBD-C1 | Should measurement run in `LOCAL`? | No, no measurement in `LOCAL` or `PAIRING`. | K1 |
+| TBD-C1 | Should measurement run in `LOCAL`? | Yes, the `MU` measures continuously, independent of `Operation Mode`; `MC` reads and reports only in `OPERATIONAL`. | K1 |
 | TBD-C2 | Should measurement be active when `Output State = OFF`? | Yes. | K1 |
 | TBD-C3 | `Slow Blink` frequency? | 0.5 s on / 0.5 s off (1 Hz). | K1 |
 | TBD-C4 | `Fast Blink` frequency? | 0.25 s on / 0.25 s off (2 Hz), 5 s at `Power-up`. | K1 |
@@ -98,13 +99,14 @@ verified.
 | TBD-C13 | Matter, Home Assistant and provisioning (`TBD-01`–`TBD-09`): Pairing/Commissioning Timeout, Decommissioning, Factory Reset, Wi-Fi provisioning, behavior when Home Assistant is unreachable, Reconnect, multiple Fabrics and HA/Matter Server version. | Handled by ESP-Matter according to the Matter specification; PSMD uses ESP-Matter's implementation/standard behavior and assumes compatibility with the Matter specification. | K2, K3 |
 | TBD-C14 | Should PSMD be a plug-in or permanently mounted unit? | Plug-in (On/Off Plug-in Unit, `0x010A`). Mounted On/Off Control (`0x010F`) is not needed. | K4 |
 | TBD-C15 | Does `LOCAL` require a cloud service or an internet connection? | No. `LOCAL` switches the `Output` without a cloud service or an internet connection, and no data leaves the local network. | K1 |
-| TBD-C16 | Are measured values computed when no `Load` is connected? | Yes, always. They are then 0 and are reported if the device is in `OPERATIONAL`. | K1 |
+| TBD-C16 | Are measured values computed when no `Load` is connected? | Yes. The instantaneous values are then 0; accumulated energy keeps its value. They are reported if the device is in `OPERATIONAL`. | K1 |
 | TBD-C17 | Which hardware is the firmware developed and verified on? | An ESP32-C6 dev board, chosen only to verify the build and flash environment. Nothing about the product's hardware follows from it; the product's own board follows [`hardware.md`](hardware.md) (`GAP-07`). | K1 |
 | TBD-C18 | How is PSMD developed before the hardware exists? | A simulated `PU` and `MU` behind the same interfaces as the real ones. Everything works simulated before the real MU replaces the simulated backend, and the simulator stays as a backend for tests. | K1 |
 | TBD-C19 | Which unit and scaling should the `PowerFactor` reporting of `phase_delay` use? | Percent100ths, the unit `PowerFactor` has in Electrical Power Measurement (`0x0011`, −10000…10000). `phase_delay` is not reported in degrees. | K2 |
 | TBD-21 | ESP-Matter recommends ESP-IDF v6.0.2, but PSMD builds on 6.1 (`TBD-C8`). Does the combination work, or should the IDF version be lowered? | The combination works: `espressif/esp_matter` 1.6.1 builds and links on ESP-IDF 6.1.0 for `esp32c6`, and the image fits the application partition. 6.1 is kept; it is rechecked when the component is updated. | K2 |
 | TBD-C20 | Which pins does the development board use for the button, the `Operation Mode LED` and `Output State`? | Button GPIO3, active low, with the button's internal pull-up; `Operation Mode LED` GPIO1, active high; `Output State` on GPIO2, active high, standing in for the relay; no `Output State LED`. The board is chosen with `CONFIG_PSMD_BOARD_DEV`; the production board's pin map is still open (`GAP-02`). | K1 |
 | TBD-C21 | How is decommissioning done, and what happens after the last `Fabric` is removed? | `Long Press` in `PAIRING` closes the commissioning window and factory-resets the device: Fabric and Wi-Fi credentials are erased and it restarts commissionable in `LOCAL`. When an administrator removes the last `Fabric`, the device opens a commissioning window again and prints the onboarding code, so it can be paired without a restart. See [`specification.md`](specification.md) §4. | K1 |
+| TBD-C22 | Who owns the accumulated energy? | `MU` accumulates it and continues while `MC` is in another `Operation Mode` or powered off. `MC` reads it and never accumulates. | K1 |
 | TBD-30 | Which values do the mandatory Basic Information attributes carry? | Development values until the product has its own: `VendorName`/`ProductName` `PSMD`, `VendorID` `0xFFF1` and `ProductID` `0x8000` (the CSA test IDs the test attestation carries), `HardwareVersion` 1/`1.0`, `SoftwareVersion` 1/`0.1.0`, and a per-unit `SerialNumber`, `PSMD-DEV-<base MAC>`, stored in NVS at first boot; `NodeLabel`/`Location` keep their defaults. Real IDs and a matching attestation are required before shipping; they are set in `CMakeLists.txt` and `sdkconfig.defaults`. | K1 |
 
 ## Gaps and next steps

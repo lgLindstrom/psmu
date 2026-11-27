@@ -14,4 +14,18 @@ menu "PSMD"
             bool "Production board (pin map open, does not build yet)"
     endchoice
 
+    choice PSMD_MU_BACKEND
+        prompt "MU backend"
+        default PSMD_MU_SIM if PSMD_BOARD_DEV
+        default PSMD_MU_I2C
+        help
+            The Measurement Unit backend. The development board uses the
+            simulated MU until the real interface exists (TBD-28).
+
+        config PSMD_MU_SIM
+            bool "Simulated MU (no I2C)"
+        config PSMD_MU_I2C
+            bool "MU over I2C (TBD-28, does not build yet)"
+    endchoice
+
 endmenu
