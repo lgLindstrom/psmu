@@ -10,8 +10,7 @@
     }
   },
   "plugins": [
-    "@dietrichgebert/ponytail",
-    "opencode-file-editor"
+    "@dietrichgebert/ponytail"
   ],
   "skills": [
     "~/tools/awesome-esp-ai/skills",
