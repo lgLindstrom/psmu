@@ -2,7 +2,8 @@
  *
  * One endpoint, On/Off Plug-in Unit (0x010A). OnOff mirrors Output State in
  * both directions; Operation Mode, the button and the LEDs are the local
- * Power Unit simulation until the real hardware exists (M3).
+ * Power Unit simulation until the real hardware exists (M3). The Measurement
+ * Unit is simulated behind psmd_mu until M7.
  */
 
 #include <esp_err.h>
@@ -23,7 +24,9 @@
 
 #include "psmd_button.h"
 #include "psmd_led.h"
+#include "psmd_measure.h"
 #include "psmd_mode.h"
+#include "psmd_mu.h"
 #include "psmd_output.h"
 
 static const char *TAG = "psmd_main";
@@ -213,6 +216,7 @@ extern "C" void app_main()
     ESP_ERROR_CHECK(nvs_flash_init());
     ESP_ERROR_CHECK(psmd_led_init());
     ESP_ERROR_CHECK(psmd_output_init());
+    ESP_ERROR_CHECK(psmd_mu_init());
 
     node::config_t node_config;
     node_t *node = node::create(&node_config, app_attribute_update_cb, app_identification_cb);
@@ -248,6 +252,7 @@ extern "C" void app_main()
     callbacks.on_commissioning_window = on_commissioning_window;
     callbacks.on_decommission = on_decommission;
     ESP_ERROR_CHECK(psmd_mode_init(commissioned, &callbacks));
+    ESP_ERROR_CHECK(psmd_measure_start());
     ESP_ERROR_CHECK(psmd_button_init(psmd_mode_button_event));
 
     // Pair only on Long Press: close the window ESP-Matter opens at Power-up, so

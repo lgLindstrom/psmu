@@ -17,6 +17,9 @@ CONFIG_PARTITION_TABLE_OFFSET=0xC000
 # Board variant: the development board is what M3 is built and verified on.
 CONFIG_PSMD_BOARD_DEV=y
 
+# Simulated MU until the real I2C interface exists (TBD-28).
+CONFIG_PSMD_MU_SIM=y
+
 # Device identity (TBD-30). The CSA test VendorID/ProductID stay, because the
 # test attestation carries them; the versions are the dev build's.
 CONFIG_DEFAULT_DEVICE_HARDWARE_VERSION=1

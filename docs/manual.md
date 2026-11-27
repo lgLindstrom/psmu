@@ -37,7 +37,7 @@ PSMD är en smart plugg som placeras mellan vägguttaget och den utrustning du v
 styra. Med PSMD kan du:
 
 - **Slå på och stänga av** ansluten utrustning – lokalt eller via Home Assistant.
-- **Mäta spänning och ström** i den anslutna utrustningen (endast i `OPERATIONAL`).
+- **Mäta spänning och ström** i den anslutna utrustningen (värdena visas i `OPERATIONAL`).
 - **Följa effekt och energiförbrukning** över tid i Home Assistant (se avsnitt 6).
 - **Integrera med Home Assistant** via Matter för automationer och gemensam
   styrning (se avsnitt 4.4).
@@ -50,7 +50,7 @@ för att styra och läsa av enheten.
 PSMD kan användas på två sätt:
 
 - **Lokalt (fristående):** pluggen sköter styrning (`ON`/`OFF`) på egen hand, utan
-  molntjänst eller internetuppkoppling. Ingen mätning sker och ingen data lämnar
+  molntjänst eller internetuppkoppling. Inga mätvärden visas och ingen data lämnar
   den lokala miljön.
 - **Integrerat med Home Assistant:** om PSMD ansluts till Wi-Fi och du har en
   **Matter Server** i Home Assistant kan enheten läggas till där. Du kan då styra
@@ -121,7 +121,8 @@ PSMD fungerar direkt efter anslutning och kräver ingen molntjänst. Vid första
 3. `Output State LED` visar aktuellt `Output State`.
 
 Mätvärdena visas i Home Assistant. I `LOCAL` finns ingen anslutning dit, så
-mätning sker bara i `OPERATIONAL` (avsnitt 4.4).
+värdena visas först i `OPERATIONAL` (avsnitt 4.4). Mätningen pågår ändå och
+energiförbrukningen räknas vidare.
 
 ### 4.4 Ansluta till Home Assistant via Matter
 
@@ -237,8 +238,10 @@ Efter ett strömavbrott är utgången alltid `OFF` när PSMD får spänning igen
 
 ### 6.2 Läsa av mätvärden
 
-Mätning sker **endast i `OPERATIONAL`**. Inget mäts i `LOCAL` eller `PAIRING`.
-Mätningen är aktiv även när `Output State` är `OFF`.
+Mätningen pågår kontinuerligt och påverkas inte av `Operation Mode`. Mätningen är
+aktiv även när `Output State` är `OFF`. Värdena förmedlas via Matter till Home
+Assistant endast i `OPERATIONAL`; i `LOCAL` och `PAIRING` visas inga mätvärden
+där.
 
 PSMD mäter den anslutna utrustningen och kan presentera följande värden:
 
@@ -253,11 +256,12 @@ PSMD mäter den anslutna utrustningen och kan presentera följande värden:
 
 Spänning och ström är grundvärdena. Effektvärdena och fasförskjutningen
 beskriver hur den anslutna utrustningen tar effekt, och energiförbrukningen är
-effekt över tid. I `OPERATIONAL` förmedlas värdena via Matter till Home
-Assistant.
+effekt över tid. Energiförbrukningen fortsätter att räknas även när värdena inte
+visas i Home Assistant.
 
-Mätvärdena beräknas även när ingen utrustning är ansluten, och visas då som 0.
-Mätvärdena uppdateras var 5:e sekund.
+Momentanvärdena beräknas även när ingen utrustning är ansluten och visas då som
+0. Energiförbrukningen behåller sitt ackumulerade värde. Mätvärdena uppdateras
+var 5:e sekund.
 
 ### 6.3 Automationer i Home Assistant
 
@@ -315,7 +319,7 @@ oförändrade i programvara och dokumentation.
 | `Slow Blink` | Långsamt blink | 1 s tänd / 1 s släckt |
 | `Fast Blink` | Snabbt blink | 0,25 s tänd / 0,25 s släckt (2 Hz) |
 | `Power-loss Recovery` | Återstart efter strömavbrott | `Output State` sätts alltid till `OFF` |
-| `Measurement` | Mätning | Endast i `OPERATIONAL`, även vid `OFF` |
+| `Measurement` | Mätning | Kontinuerlig; värdena visas i `OPERATIONAL`, även vid `OFF` |
 | `Decommissioning` | Avregistrering | Lämna `PAIRING`/`Fabric`; metod ska undersökas |
 
 ## 11. Tekniska data
